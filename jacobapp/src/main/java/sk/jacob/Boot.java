@@ -1,12 +1,11 @@
 package sk.jacob;
 
 import sk.jacob.engine.Engine;
-import sk.jacob.mpu.business.settings.Uom;
+import sk.jacob.mpu.business.Module;
 
 public class Boot {
     public static void main(String[] args) {
-        Class[] handlers = {Uom.class};
-        Engine engine = new Engine(handlers);
+        Engine engine = new Engine(Module.getHandlers());
 
         String json = "{'type': 'business.uom.add'," +
                 " 'version': '0.1'," +
