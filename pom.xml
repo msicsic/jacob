@@ -11,6 +11,8 @@
         <module>mpu</module>
         <module>engine</module>
         <module>jpa</module>
+        <module>connector</module>
+        <module>jacobapp</module>
     </modules>
     <packaging>pom</packaging>
     

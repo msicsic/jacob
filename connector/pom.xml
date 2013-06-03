@@ -9,13 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>engine</artifactId>
+    <artifactId>connector</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>http</module>
+    </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>1.7.1</version>
-        </dependency>
-    </dependencies>
 </project>
