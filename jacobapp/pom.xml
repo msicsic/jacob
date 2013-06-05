@@ -19,6 +19,11 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>sk.jacob.connector</groupId>
+            <artifactId>http</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>sk.jacob.mpu</groupId>
             <artifactId>business</artifactId>
             <version>1.0-SNAPSHOT</version>

@@ -10,7 +10,7 @@
     <modules>
         <module>mpu</module>
         <module>engine</module>
-        <module>jpa</module>
+        <module>sql</module>
         <module>connector</module>
         <module>jacobapp</module>
     </modules>

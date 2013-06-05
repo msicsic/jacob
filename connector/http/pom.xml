@@ -12,5 +12,12 @@
     <groupId>sk.jacob.connector</groupId>
     <artifactId>http</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.0.3.v20130506</version>
+        </dependency>
+    </dependencies>
 
 </project>
