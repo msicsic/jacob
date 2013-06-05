@@ -1,6 +1,7 @@
-package sk.jacob.connector.http;
+package sk.jacob.engine;
 
 public interface Connector {
     void start();
     void stop();
+    void setBus(Bus bus);
 }

@@ -1,15 +1,17 @@
 package sk.jacob;
 
-import sk.jacob.connector.http.Connector;
 import sk.jacob.connector.http.Jetty;
+import sk.jacob.engine.Bus;
 import sk.jacob.engine.Engine;
+import sk.jacob.engine.Firmware;
 import sk.jacob.mpu.business.Module;
 
 public class Boot {
     public static void main(String[] args) {
         Engine engine = new Engine(Module.getHandlers());
-        Connector connector = new Jetty();
-        connector.start();
+        Bus bus = new Bus(new Firmware());
+        bus.attach("HTTP_IN_OUT", new Jetty());
+        bus.start();
 
         String json =
                 "{'type': 'business.uom.add'," +

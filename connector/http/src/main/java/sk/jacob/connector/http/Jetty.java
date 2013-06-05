@@ -4,9 +4,12 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import sk.jacob.engine.Bus;
+import sk.jacob.engine.Connector;
 
 public class Jetty implements Connector {
     private Server server;
+    private Bus bus;
 
     public Jetty() {
         this.server = init();
@@ -44,6 +47,11 @@ public class Jetty implements Connector {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void setBus(Bus bus) {
+        this.bus = bus;
     }
 }
 
