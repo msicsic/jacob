@@ -19,6 +19,11 @@
             <version>9.0.3.v20130506</version>
         </dependency>
         <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-rewrite</artifactId>
+            <version>9.0.3.v20130506</version>
+        </dependency>
+        <dependency>
             <groupId>sk.jacob</groupId>
             <artifactId>engine</artifactId>
             <version>1.0-SNAPSHOT</version>

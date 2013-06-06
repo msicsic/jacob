@@ -1,0 +1,53 @@
+<div>
+    <div class="viewInnerBackground">
+        <form data-dojo-attach-point="form" data-dojo-type="dijit/form/Form">
+
+            <div class="formRow">
+                <span class="label">
+                    <label for="${id}_id">Id:</label>
+                </span>
+                <span class="input">
+                    <input id="${id}_id"
+                           data-dojo-attach-point="idInput"
+                           data-dojo-type="dijit/form/TextBox"
+                           name="id" type="text" disabled="true" />
+                </span>
+            </div>
+
+            <div class="formRow">
+                <span class="label">
+                    <label for="${id}_name">Name:</label>
+                </span>
+                <span class="input">
+                    <input id="${id}_name"
+                           data-dojo-attach-point="nameInput"
+                           data-dojo-type="dijit/form/ValidationTextBox"
+                           name="name" type="text" required="true" />
+                </span>
+            </div>
+
+            <div class="formRow">
+                <span class="label">
+                    <label for="${id}_description">Description:</label>
+                </span>
+                <span class="input">
+                    <input id="${id}_description"
+                           data-dojo-attach-point="descriptionInput"
+                           data-dojo-type="dijit/form/ValidationTextBox"
+                           name="description" type="text" required="true" />
+                </span>
+            </div>
+
+            <div class="formRow spaceAfter">
+                <span class="input">
+                    <button data-dojo-type="dijit/form/Button"
+                            data-dojo-attach-point="backButton">Back</button>
+                    <button data-dojo-type="dijit/form/Button"
+                            data-dojo-attach-point="searchButton"
+                            data-dojo-attach-event="onClick: updateItem">Update</button>
+                </span>
+            </div>
+
+        </form>
+    </div>
+</div>

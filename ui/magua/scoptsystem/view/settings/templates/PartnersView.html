@@ -1,0 +1,152 @@
+<div>
+    <div class="viewInnerBackground">
+        <div class="twoColumnsSep fillWidth fillHeight">
+            <div class="column1">
+                <div data-dojo-type="dijit/layout/LayoutContainer" 
+                     class="fillHeight">
+                    <div data-dojo-type="scopt/OverflowTitlePane"
+                         data-dojo-attach-point="filterOptionsPane"
+                         data-dojo-props="title: '${messages.filterOptions}', open: false, region: 'top'"
+                         class="smallMarginBottom">
+                        <form data-dojo-type="dijit/form/Form"
+                              data-dojo-attach-point="searchPartnerForm">
+                            <div class="formRow">
+                                <span class="label mediumWidth">
+                                    <label for="${id}_searchPartnerNameInput">${messages.name}</label>
+                                </span>
+                                <span class="input">
+                                    <input data-dojo-type="dijit/form/TextBox"
+                                           data-dojo-attach-point="searchPartnerNameInput"
+                                           data-dojo-props="trim: true"
+                                           id="${id}_searchPartnerNameInput" type="text" value="*" class="bigWidth"/>
+                                </span>
+                            </div>
+                            <div class="formRow">
+                                <span class="label mediumWidth">
+                                    <label for="${id}_searchPartnerIsCustomerInput">${messages.isCustomer}</label>
+                                </span>
+                                <span class="input">
+                                    <input data-dojo-type="dijit/form/CheckBox"
+                                           data-dojo-attach-point="searchPartnerIsCustomerInput"
+                                           id="${id}_searchPartnerIsCustomerInput" type="checkbox"/>
+                                </span>
+                            </div>
+                            <div class="formRow">
+                                <span class="label mediumWidth">
+                                    <label for="${id}_searchPartnerIsSupplierInput">${messages.isSupplier}</label>
+                                </span>
+                                <span class="input">
+                                    <input data-dojo-type="dijit/form/CheckBox"
+                                           data-dojo-attach-point="searchPartnerIsSupplierInput"
+                                           id="${id}_searchPartnerIsSupplierInput" type="checkbox"/>
+                                </span>
+                            </div>
+                            <div class="formRow">
+                                <span class="input">
+                                    <button data-dojo-type="dijit/form/Button"
+                                            data-dojo-attach-point="searchButton"
+                                            data-dojo-attach-event="onClick: _searchPartner">${messages.buttonSearch}</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <div data-dojo-type="dojox/grid/DataGrid"
+                         data-dojo-attach-point="partnersGrid"  
+                         data-dojo-props="selectionMode: 'single', region: 'center'">
+                    </div>
+                    <button data-dojo-type="dijit/form/Button"
+                            data-dojo-props="region: 'bottom'"
+                            data-dojo-attach-event="onClick: _showCreatePartner"
+                            class="smallMarginTop">${messages.buttonCreate}</button>
+                </div>
+            </div>
+            <div class="column2">
+                <div data-dojo-type="dijit/layout/LayoutContainer" 
+                     data-dojo-attach-point="partnerDetailContainer"
+                     class="fillHeight">
+                    <form data-dojo-type="dijit/form/Form"
+                          data-dojo-attach-point="updatePartnerForm"
+                          data-dojo-props="region: 'top'">
+                        <div class="formRow">
+                            <span class="label mediumWidth">
+                                <label for="${id}_updatePartnerNameInput">${messages.name}</label>
+                            </span>
+                            <span class="input">
+                                <input data-dojo-type="dijit/form/ValidationTextBox"
+                                       data-dojo-attach-point="updatePartnerNameInput"
+                                       data-dojo-props="trim: true"
+                                       id="${id}_updatePartnerNameInput" type="text" required="true" class="bigWidth"/>
+                            </span>
+                        </div>
+                        <div class="formRow">
+                            <span class="label mediumWidth">
+                                <label for="${id}_updatePartnerIsCustomerInput">${messages.isCustomer}</label>
+                            </span>
+                            <span class="input">
+                                <input data-dojo-type="dijit/form/CheckBox"
+                                       data-dojo-attach-point="updatePartnerIsCustomerInput" 
+                                       id="${id}_updatePartnerIsCustomerInput" type="checkbox"/>
+                            </span>
+                        </div>
+                        <div class="formRow">
+                            <span class="label mediumWidth">
+                                <label for="${id}_updatePartnerIsSupplierInput">${messages.isSupplier}</label>
+                            </span>
+                            <span class="input">
+                                <input data-dojo-type="dijit/form/CheckBox"
+                                       data-dojo-attach-point="updatePartnerIsSupplierInput"
+                                       id="${id}_updatePartnerIsSupplierInput" type="checkbox"/>
+                            </span>
+                        </div>
+                        <div class="formRow">
+                            <span class="input">
+                                <button data-dojo-type="dijit/form/Button"
+                                        data-dojo-attach-point="createPartnerButton"
+                                        data-dojo-attach-event="onClick: _createPartner">${messages.buttonCreate}</button>
+                                <button data-dojo-type="dijit/form/Button"
+                                        data-dojo-attach-point="updatePartnerButton"
+                                        data-dojo-attach-event="onClick: _updatePartner">${messages.buttonUpdate}</button>
+                                <button data-dojo-type="dijit/form/Button"
+                                        data-dojo-attach-event="onClick: _cancelPartner">${messages.buttonCancel}</button>
+                            </span>
+                        </div>                    
+                    </form>
+                    <!-- TODO why dijit/layout/TabContainer grab more width than 50% -->
+                    <div data-dojo-type="dijit/layout/AccordionContainer"
+                         data-dojo-attach-point="detailsTabContainer"
+                         data-dojo-props="region: 'center'"
+                         class="marginTop">
+                        <div data-dojo-type="dijit/layout/ContentPane" title="${messages.identificator}">
+                            <div class="underConstruction" title="Under construction"></div>
+                        </div>
+                        <div data-dojo-type="dijit/layout/LayoutContainer" 
+                             title="${messages.contacts}"
+                             class="fillWidth fillHeight smallPadding">
+                            <div data-dojo-type="dojox/grid/DataGrid"
+                                 data-dojo-attach-point="mediaContactsGrid" 
+                                 data-dojo-props="selectionMode: 'single', region: 'center'"></div>                            
+                            <button data-dojo-type="dijit/form/Button"
+                                    data-dojo-props="region: 'bottom'"
+                                    data-dojo-attach-event="onClick: _createContact"
+                                    class="smallMarginTop">${messages.buttonCreate}</button>
+                        </div>
+                        <div data-dojo-type="dijit/layout/LayoutContainer"
+                             title="${messages.addresses}"
+                             class="fillWidth fillHeight smallPadding">
+                            <div data-dojo-type="dojox/grid/DataGrid"
+                                 data-dojo-attach-point="addressesGrid"
+                                 data-dojo-props="selectionMode: 'single', region: 'center'"></div>
+                            <button data-dojo-type="dijit/form/Button"
+                                    data-dojo-props="region: 'bottom'"
+                                    data-dojo-attach-event="onClick: _createAddress"
+                                    class="smallMarginTop">${messages.buttonCreate}</button>
+                        </div>
+                        <div data-dojo-type="dijit/layout/ContentPane" title="${messages.bankInfo}">
+                            <div class="underConstruction" title="Under construction"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

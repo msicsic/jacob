@@ -1,0 +1,45 @@
+<div>
+    <div class="dijitDialogPaneContentArea">
+        <form data-dojo-attach-point="form" data-dojo-type="dijit/form/Form">
+            <div class="formRow">
+                <span class="label mediumWidth">
+                    <label for="${id}_tenantName">${messages.name}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_tenantName" type="text" required="true"
+                           data-dojo-attach-point="tenantNameInput"
+                           data-dojo-type="dijit/form/ValidationTextBox" />
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label mediumWidth verticalAlignTop">
+                    <label for="${id}_tenantColor">${messages.color}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_tenantColor" type="color" required="true"
+                           data-dojo-attach-point="tenantColorInput"
+                           data-dojo-props="value: '#808080'"
+                           data-dojo-type="dijit/ColorPalette"/>
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label mediumWidth">
+                    <label for="${id}_tenantDemo">${messages.demo}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_tenantDemo" type="checkbox"
+                           data-dojo-attach-point="tenantDemoInput"
+                           data-dojo-type="dijit/form/CheckBox"/>
+                </span>
+            </div>
+        </form>
+    </div>
+    <div class="dijitDialogPaneActionBar">
+        <button data-dojo-type="dijit/form/Button"
+                data-dojo-attach-point="createButton"
+                data-dojo-attach-event="onClick: _create">${messages.buttonCreate}</button>
+        <button data-dojo-type="dijit/form/Button"
+                data-dojo-attach-point="cancelButton"
+                data-dojo-attach-event="onClick: _hide">${messages.buttonCancel}</button>
+    </div>
+</div>

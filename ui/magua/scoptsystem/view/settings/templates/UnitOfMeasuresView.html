@@ -1,0 +1,23 @@
+<div>
+    <div class="viewInnerBackground">
+        <div data-dojo-type="dijit/layout/LayoutContainer"
+             class="fillWidth fillHeight">
+            <form data-dojo-type="dijit/form/Form"
+                  data-dojo-attach-point="createForm" 
+                  data-dojo-props="region: 'top'"
+                  class="smallMarginBottom">
+                <label for="${id}_unitOfMeasureNameInput">${messages.createUnitOfMeasure}</label>
+                <input data-dojo-type="dijit/form/ValidationTextBox" 
+                       data-dojo-attach-point="unitOfMeasureNameInput"                       
+                       data-dojo-props="trim: true"
+                       id="${id}_unitOfMeasureNameInput" type="text" required="true"/>
+                <button data-dojo-type="dijit/form/Button" 
+                        data-dojo-attach-point="createButton"                        
+                        data-dojo-attach-event="onClick: _create">${messages.buttonCreate}</button>
+            </form>
+            <div data-dojo-type="dojox/grid/DataGrid"
+                 data-dojo-attach-point="unitOfMeasuresGrid"
+                 data-dojo-props="selectionMode: 'single', region: 'center'"></div>
+        </div>
+    </div>    
+</div>

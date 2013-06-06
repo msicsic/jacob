@@ -1,0 +1,53 @@
+<div data-dojo-type="dijit/TooltipDialog">
+    <form data-dojo-attach-point="form"
+          data-dojo-type="dijit/form/Form"          
+          data-dojo-attach-event="onSubmit: _login">
+        <div class="dijitDialogPaneContentArea">
+            <div class="formRow">
+                <span class="label smallWidth">
+                    <label for="${id}_userName">${messages.userName}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_userName" type="text" required="required"
+                           value="${userName}"
+                           data-dojo-attach-point="userNameInput"
+                           data-dojo-type="dijit/form/ValidationTextBox" />
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label smallWidth">
+                    <label for="${id}_userPassword">${messages.userPassword}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_userPassword" type="password" required="required" 
+                           data-dojo-attach-point="userPasswordInput"
+                           data-dojo-type="dijit/form/ValidationTextBox" />
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label smallWidth">
+                    <label for="${id}_language">${messages.language}</label> 
+                </span>
+                <span class="input">
+                    <select id="${id}_language" value="${currentLanguage}"
+                            data-dojo-attach-point="languageInput"
+                            data-dojo-attach-event="onChange: _changeLanguage"
+                            data-dojo-type="dijit/form/Select">
+                        <option value="en-EN">EN</option>
+                        <option value="sk-SK">SK</option>
+                    </select>
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label fillWidth">
+                    <p class="errorMessage" role="alert" data-dojo-attach-point="errorNode"></p>
+                </span>
+            </div>
+        </div>
+        <div class="dijitDialogPaneActionBar">
+            <button type="submit"
+                    data-dojo-type="dijit/form/Button"
+                    data-dojo-attach-point="loginButton">${messages.buttonLogin}</button>
+        </div>
+    </form>
+</div>

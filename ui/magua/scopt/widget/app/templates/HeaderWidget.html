@@ -1,0 +1,28 @@
+<div class="header">
+    <h2 data-dojo-attach-point="titleNode"
+        class="headerTitle"></h2>
+    <div class="headerRight">
+        <span data-dojo-attach-point="loggedInNode"
+              class="headerLoggedIn"></span>
+        <button data-dojo-type="dijit/form/Button"
+                data-dojo-attach-point="logoutButton"
+                data-dojo-attach-event="onClick: _logout">${messages.buttonLogout}</button>  
+        <div data-dojo-type="dijit/form/DropDownButton"
+             data-dojo-attach-point="loginDropDownButton"
+             data-dojo-props="label: '${messages.buttonLogin}'">
+            <div data-dojo-type="scopt/dialog/login/LoginTooltipDialog"
+                 data-dojo-attach-event="onShow: _onShowLoginTooltipDialog, onClose: _onCloseLoginTooltipDialog">
+            </div>
+        </div>  
+        <div class="tenantDropDownButton"
+             data-dojo-type="dijit/form/DropDownButton"
+             data-dojo-attach-point="tenantDropDownButton"
+             data-dojo-props="label: '${messages.buttonSelectTenant}'">
+            <div data-dojo-type="scopt/dialog/tenant/TenantSelectionTooltipDialog"
+                 data-dojo-attach-event="onShow: _onShowTenantTooltipDialog, onClose: _onCloseTenantTooltipDialog">
+            </div>
+        </div>
+    </div>
+    <div data-dojo-attach-point="tenantColorNode"
+         class="headerTenantColor"></div>
+</div>
