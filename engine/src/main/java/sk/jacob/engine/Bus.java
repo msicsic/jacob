@@ -24,13 +24,15 @@ public class Bus {
         for (Map.Entry<String, Connector> port : ports.entrySet()) {
             sout("Starting PORT: " + port.getKey());
             Connector connector = port.getValue();
-            connector.setBus(this);
+            connector.init(port.getKey(), this);
             connector.start();
         }
         sout("Bus started.");
     }
 
-    public DataPacket send(DataPacket dataPacket) {
+    public DataPacket send(String portId, DataPacket dataPacket) {
+        sout(portId + " --->>> " + dataPacket.message.rawRequest);
+        sout(portId + " <<<--- " + dataPacket.message.rawResponse);
         return dataPacket;
     }
 }

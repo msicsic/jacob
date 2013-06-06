@@ -3,5 +3,5 @@ package sk.jacob.engine;
 public interface Connector {
     void start();
     void stop();
-    void setBus(Bus bus);
+    void init(String portId, Bus bus);
 }

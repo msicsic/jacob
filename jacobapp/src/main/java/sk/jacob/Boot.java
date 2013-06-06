@@ -10,7 +10,7 @@ public class Boot {
     public static void main(String[] args) {
         Engine engine = new Engine(Module.getHandlers());
         Bus bus = new Bus(new Firmware());
-        bus.attach("HTTP_IN_OUT", new Jetty());
+        bus.attach("HTTP_IN_OUT", new Jetty("core", "ui", "magua", 5558));
         bus.start();
 
         String json =

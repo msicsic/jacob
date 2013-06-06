@@ -26,9 +26,7 @@ public class Engine {
         Method handler = this.handlerMap.get(handlerKey);
         Class hc = handler.getDeclaringClass();
         try {
-            DataPacket dp = new DataPacket();
-            dp.message.rawRequest = json;
-            //dp.message.request = request;
+            DataPacket dp = new DataPacket(json);
             Object h = hc.newInstance();
             DataPacket dpr = (DataPacket)handler.invoke(h, new Object[]{dp});
             rawResponse = dpr.message.rawResponse;
