@@ -12,9 +12,8 @@ var dojoConfig = {
         {name: "dojo", location: "dojo"},
         {name: "dijit", location: "dijit"},
         {name: "dojox", location: "dojox"},
-        {name: "scopt", location: "scopt", main: "app"},
-        {name: "scoptsystem", location: "scoptsystem"},
-        {name: "scoptinventory", location: "scoptinventory"}
+        {name: "jacob", location: "jacob", main: "app"},
+        {name: "jacobsystem", location: "jacobsystem"}
     ]
 };
 
@@ -22,31 +21,12 @@ var contentViews = [
     {
         id: "greetingView",
         hidden: true,
-        view: "scopt/view/main/GreetingView"
+        view: "jacob/view/main/GreetingView"
     }, {
         id: "dashboardView",
         code: "00",
-        view: "scopt/view/main/DashboardView"
+        view: "jacob/view/main/DashboardView"
     },
-//    {
-//        id: "inventory",
-//        views: [
-//            {
-//                id: "searchItemView",
-//                code: "0100",
-//                view: "scoptinventory/view/item/SearchItemView"
-//            }, {
-//                id: "createItemView",
-//                code: "0110",
-//                view: "scoptinventory/view/item/CreateItemView"
-//            }, {
-//                id: "updateItemView",
-//                hidden: true,
-//                code: "0111",
-//                view: "scoptinventory/view/item/UpdateItemView"
-//            }
-//        ]
-//    },
     {
         id: "system",
         views: [
@@ -56,22 +36,22 @@ var contentViews = [
                     {
                         id: "unitOfMeasuresView",
                         code: "01",
-                        view: "scoptsystem/view/settings/UnitOfMeasuresView"
+                        view: "jacobsystem/view/settings/UnitOfMeasuresView"
                     },
                     {
                         id: "addressTypesView",
                         code: "02",
-                        view: "scoptsystem/view/settings/AddressTypesView"
+                        view: "jacobsystem/view/settings/AddressTypesView"
                     },
                     {
                         id: "mediaTypesView",
                         code: "03",
-                        view: "scoptsystem/view/settings/MediaTypesView"
+                        view: "jacobsystem/view/settings/MediaTypesView"
                     },
                     {
                         id: "partnersView",
                         code: "04",
-                        view: "scoptsystem/view/settings/PartnersView"
+                        view: "jacobsystem/view/settings/PartnersView"
                     }
                 ]
             },
@@ -81,7 +61,7 @@ var contentViews = [
                     {
                         id: "registryView",
                         code: "9999",
-                        view: "scoptsystem/view/registry/RegistryView"
+                        view: "jacobsystem/view/registry/RegistryView"
                     }
                 ]
             }
