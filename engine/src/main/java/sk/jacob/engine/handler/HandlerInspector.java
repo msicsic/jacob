@@ -18,7 +18,7 @@ public class HandlerInspector {
         return methodsFound;
     }
 
-    public static Map<String, Method> mapHandlers(Class[] handlers) {
+    public static Map<String, Method> mapHandlers(List<Class> handlers) {
         Map<String, Method> mappedHandlers = new HashMap<String, Method>();
         for(Class<?> handler : handlers) {
             for(Object[] methodFound : inspect(handler)) {

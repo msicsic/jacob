@@ -8,10 +8,10 @@ import java.util.Map;
 import static sk.jacob.util.Log.sout;
 
 public class Bus {
-    private final Firmware firmware;
+    private final Module firmware;
     private final Map<String, Connector> ports = new HashMap<String, Connector>();
 
-    public Bus(Firmware firmware) {
+    public Bus(Module firmware) {
         this.firmware = firmware;
     }
 

@@ -20,9 +20,9 @@ public class Uom {
     }
 
     @Message(type="business.uom.add",
-            version="0.1",
-            reqd=Req1.class,
-            resd=Res1.class)
+             version="0.1",
+             reqd=Req1.class,
+             resd=Res1.class)
     public DataPacket method1(DataPacket dataPacket) {
         System.out.println("===========================================");
         System.out.println("method1");
@@ -32,9 +32,9 @@ public class Uom {
     }
 
     @Message(type="business.uom.add",
-            version="0.2",
-            reqd=Req1.class,
-            resd=Res1.class)
+             version="0.2",
+             reqd=Req1.class,
+             resd=Res1.class)
     public DataPacket method2(DataPacket dataPacket) {
         System.out.println("===========================================");
         System.out.println("method2");
