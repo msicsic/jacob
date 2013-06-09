@@ -1,0 +1,112 @@
+<div>
+    <div class="dijitDialogPaneContentArea">
+        <form data-dojo-attach-point="form" data-dojo-type="dijit/form/Form">
+            <div class="formRow">
+                <span class="label mediumWidth">
+                    <label for="${id}_addressTypeInput">${messages.type}</label> 
+                </span>
+                <span class="input">
+                    <select id="${id}_addressTypeInput" name="addressType.id"
+                            data-dojo-attach-point="addressTypeInput"
+                            data-dojo-type="dijit/form/Select"
+                            data-dojo-props="labelAttr: 'name'">
+                    </select>
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label mediumWidth">
+                    <label for="${id}_addressNoteInput">${messages.note}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_addressNoteInput" type="text" name="note"
+                           data-dojo-type="dijit/form/TextBox"
+                           data-dojo-props="trim: true"/>
+                </span>
+            </div>
+
+            <div class="formRow marginTop">
+                <span class="label mediumWidth">
+                    <label for="${id}_addressLine1Input">${messages.addressLine1}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_addressLine1Input" type="text"  name="address.addressLine1"
+                           data-dojo-type="dijit/form/TextBox"
+                           data-dojo-props="trim: true"/>
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label mediumWidth">
+                    <label for="${id}_addressLine2Input">${messages.addressLine2}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_addressLine2Input" type="text" name="address.addressLine2"
+                           data-dojo-type="dijit/form/TextBox"
+                           data-dojo-props="trim: true"/>
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label mediumWidth">
+                    <label for="${id}_addressLine3Input">${messages.addressLine3}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_addressLine3Input" type="text" name="address.addressLine3"
+                           data-dojo-type="dijit/form/TextBox"
+                           data-dojo-props="trim: true"/>
+                </span> 
+           </div>
+            <div class="formRow">
+                <span class="label mediumWidth">
+                    <label for="${id}_addressZip">${messages.zip}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_addressZip" type="text" name="address.zip"
+                           data-dojo-type="dijit/form/TextBox"
+                           data-dojo-props="trim: true"/>
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label mediumWidth">
+                    <label for="${id}_addressCity">${messages.city}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_addressCity" type="text" name="address.city"
+                           data-dojo-type="dijit/form/TextBox"
+                           data-dojo-props="trim: true"/>
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label mediumWidth">
+                    <label for="${id}_addressState">${messages.state}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_addressState" type="text" name="address.state"
+                           data-dojo-type="dijit/form/TextBox"
+                           data-dojo-props="trim: true"/>
+                </span>
+            </div>
+            <div class="formRow">
+                <span class="label mediumWidth">
+                    <label for="${id}_addressCountry">${messages.country}</label> 
+                </span>
+                <span class="input">
+                    <input id="${id}_addressCountry" type="text" name="address.country"
+                           data-dojo-type="dijit/form/TextBox"
+                           data-dojo-props="trim: true"/>
+                </span>
+            </div>
+        </form>
+    </div>
+    <div class="dijitDialogPaneActionBar">
+        <button data-dojo-type="dijit/form/Button"
+                data-dojo-attach-point="createButton"
+                data-dojo-attach-event="onClick: _create">${messages.buttonCreate}</button>
+        <button data-dojo-type="dijit/form/Button"
+                data-dojo-attach-point="updateButton"
+                data-dojo-attach-event="onClick: _update">${messages.buttonUpdate}</button>
+        <button data-dojo-type="dijit/form/Button"
+                data-dojo-attach-point="deleteButton"
+                data-dojo-attach-event="onClick: _delete">${messages.buttonDelete}</button>
+        <button data-dojo-type="dijit/form/Button"
+                data-dojo-attach-event="onClick: _hide">${messages.buttonCancel}</button>
+    </div>
+</div>
