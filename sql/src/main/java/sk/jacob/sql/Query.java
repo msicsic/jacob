@@ -1,5 +1,6 @@
 package sk.jacob.sql;
 
+import sk.jacob.sql.dialect.CompiledStatementList;
 import sk.jacob.sql.dialect.DialectVisitor;
 
 import java.util.Arrays;
@@ -12,7 +13,7 @@ public class Query implements Statement {
         this.columnNames = Arrays.asList(columnNames);
     }
 
-    public String sql(DialectVisitor visitor){
+    public CompiledStatementList sql(DialectVisitor visitor){
         return visitor.visit(this);
     }
 

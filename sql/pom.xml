@@ -11,5 +11,17 @@
 
     <artifactId>sql</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.3.172</version>
+        </dependency>
+        <dependency>
+            <groupId>sk.jacob</groupId>
+            <artifactId>util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

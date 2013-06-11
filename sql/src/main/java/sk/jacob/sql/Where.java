@@ -1,5 +1,6 @@
 package sk.jacob.sql;
 
+import sk.jacob.sql.dialect.CompiledStatementList;
 import sk.jacob.sql.dialect.DialectVisitor;
 
 public class Where implements Statement {
@@ -10,7 +11,7 @@ public class Where implements Statement {
     }
 
     @Override
-    public String sql(DialectVisitor visitor) {
+    public CompiledStatementList sql(DialectVisitor visitor) {
         return from.sql(visitor);
     }
 }

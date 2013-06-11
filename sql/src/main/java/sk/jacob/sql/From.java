@@ -1,5 +1,6 @@
 package sk.jacob.sql;
 
+import sk.jacob.sql.dialect.CompiledStatementList;
 import sk.jacob.sql.dialect.DialectVisitor;
 
 import java.util.Arrays;
@@ -19,10 +20,10 @@ public class From implements Statement {
     }
 
     @Override
-    public String sql(DialectVisitor visitor) {
-        StringBuffer b = new StringBuffer(query.sql(visitor));
+    public CompiledStatementList sql(DialectVisitor visitor) {
+        StringBuffer b = new StringBuffer(query.sql(visitor).toString());
         b.append(" ");
         b.append(visitor.visit(this));
-        return b.toString();
+        return new CompiledStatementList(b.toString());
     }
 }
