@@ -50,7 +50,6 @@ public class GenericDialectVisitor implements DialectVisitor {
         StringBuffer sb = new StringBuffer("(");
         List<String> coSql = new ArrayList<String>(and.conditionalOperations.size());
         for (ConditionalOperation co : and.conditionalOperations) {
-            co.paramCounter = and.paramCounter;
             coSql.add(co.sql(this));
         }
         String andStatement = (String)Functional.reduce(StringReducer.instance(" AND "), coSql, null );

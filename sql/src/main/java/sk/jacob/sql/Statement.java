@@ -46,14 +46,36 @@ public abstract class Statement {
     }
 
     public ParamCounter paramCounter;
+    private Statement rootStatement;
+
+    protected Statement() {
+        this.setRoot(null);
+    }
+
+    protected Statement(Statement rootStatement) {
+        this.setRoot(rootStatement);
+    }
+
+    public void setRootStatement(Statement rootStatement) {
+        this.setRoot(rootStatement);
+    }
+
+    private void setRoot(Statement rootStatement) {
+        this.rootStatement = (rootStatement == null) ? this : rootStatement;
+        this.paramCounter = (rootStatement == null) ? new Statement.ParamCounter() : rootStatement.paramCounter;
+    }
+
+    public Statement getRootStatement() {
+        return this.rootStatement;
+    }
 
     public CompiledStatement compile() {
         return compile(new GenericDialectVisitor());
     }
 
     public CompiledStatement compile(DialectVisitor visitor) {
-        Statement toBeCompiled = (this.rootStatement() == null) ? this : this.rootStatement();
-        return new CompiledStatement(toBeCompiled.sql(visitor), toBeCompiled.paramCounter.parameters());
+        return new CompiledStatement(this.rootStatement.sql(visitor),
+                                     this.rootStatement.paramCounter.parameters());
     }
 
     public CompiledStatement compile(DbEngine dbEngine) {
@@ -61,5 +83,4 @@ public abstract class Statement {
     }
 
     public abstract String sql(DialectVisitor visitor);
-    public abstract Statement rootStatement();
 }

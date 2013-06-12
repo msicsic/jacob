@@ -16,9 +16,4 @@ public class Column extends DbObject {
     public String sql(DialectVisitor dialect) {
         return null; //dialect.visit(this);
     }
-
-    @Override
-    public Statement rootStatement() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

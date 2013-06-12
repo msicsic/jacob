@@ -17,9 +17,4 @@ public class Table extends DbObject {
     public String sql(DialectVisitor visitor) {
         return null; //visitor.visit(this);
     }
-
-    @Override
-    public Statement rootStatement() {
-        return null;
-    }
 }
