@@ -47,6 +47,9 @@
                                 </goals>
                                 <configuration>
                                     <mainClass>sk.jacob.Boot</mainClass>
+                                    <arguments>
+                                        <argument>jacob.cfg</argument>
+                                    </arguments>
                                 </configuration>
                             </execution>
                         </executions>

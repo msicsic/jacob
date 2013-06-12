@@ -17,6 +17,6 @@ public class CompiledStatementList extends ArrayList<String>{
     }
 
     public String toString() {
-        return (String)Functional.reduce(StringReducer.instance("\n"), this, null);
+        return (String)Functional.reduce(StringReducer.instance(";\n"), this, null);
     }
 }

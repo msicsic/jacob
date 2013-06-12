@@ -10,34 +10,48 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import sk.jacob.engine.Bus;
 import sk.jacob.engine.Connector;
 
+import java.util.Properties;
+
 public class Jetty implements Connector {
-    private final String coreRoot;
-    private final String guiRoot;
+    private final String httpPortContextPath;
+    private final int httpPortPort;
+
+    private final String guiRootPath;
     private final String guiName;
-    private final int serverPort;
 
-    private Server server;
+    private Server connectorInstance;
     private Bus bus;
-    private String portId;
+    private String busPortId;
 
-    public Jetty(String coreRoot, String guiRoot, String guiName, int serverPort) {
-        this.coreRoot = coreRoot;
-        this.guiRoot = guiRoot;
+    private static final String GUI_CONTEXT_PATH = "/ui";
+
+    public Jetty(Properties config) {
+        this(config.getProperty("HTTP_port_context_path"),
+             Integer.valueOf(config.getProperty("HTTP_port_port")),
+             config.getProperty("GUI_root_path"),
+             config.getProperty("GUI_name"));
+    }
+
+    public Jetty(String httpPortContextPath, int httpPortPort, String guiRootPath, String guiName) {
+        this.httpPortContextPath = httpPortContextPath;
+        this.guiRootPath = guiRootPath;
         this.guiName = guiName;
-        this.serverPort = serverPort;
+        this.httpPortPort = httpPortPort;
     }
 
     @Override
-    public void init(String portId, Bus bus) {
-        this.portId = portId;
+    public void init(String busPortId, Bus bus) {
+        this.busPortId = busPortId;
         this.bus = bus;
     }
 
     @Override
     public void start() {
-        this.server = init();
+        if (this.connectorInstance != null)
+            return;
+        this.connectorInstance = getInstance();
         try {
-            this.server.start();
+            this.connectorInstance.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -46,47 +60,49 @@ public class Jetty implements Connector {
     @Override
     public void stop() {
         try {
-            this.server.join();
-        } catch (InterruptedException e) {
+            this.connectorInstance.stop();
+            this.connectorInstance.join();
+            this.connectorInstance = null;
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Server init() {
-        Server server = new Server(this.serverPort);
+    private Server getInstance() {
+        Server server = new Server(this.httpPortPort);
 
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] {
-                configureGuiContextHandler(this.guiRoot, this.guiName),
-                configureCoreContextHandler(this.coreRoot, this.portId, this.bus),
+                configureGuiContextHandler(),
+                configureCoreContextHandler(),
                 configureRootHandler()
         });
-        server.setHandler(handlers);
 
+        server.setHandler(handlers);
         return server;
     }
 
-    private Handler configureGuiContextHandler(String guiRoot, String guiName) {
+    private Handler configureGuiContextHandler() {
         ContextHandler context = new ContextHandler();
-        context.setContextPath("/" + guiRoot);
+        context.setContextPath(GUI_CONTEXT_PATH);
         context.setClassLoader(Thread.currentThread().getContextClassLoader());
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(false);
         resourceHandler.setWelcomeFiles(new String[]{"index.html"});
-        resourceHandler.setResourceBase(guiRoot + "/" + guiName);
+        resourceHandler.setResourceBase(this.guiRootPath + "/" + this.guiName);
 
         context.setHandler(resourceHandler);
         return context;
     }
 
-    private Handler configureCoreContextHandler(String contextRoot, String portId, Bus bus) {
+    private Handler configureCoreContextHandler() {
         ContextHandler context = new ContextHandler();
-        context.setContextPath("/" + contextRoot);
+        context.setContextPath(this.httpPortContextPath);
         context.setClassLoader(Thread.currentThread().getContextClassLoader());
         context.setAllowNullPathInfo(true);
 
-        CoreHandler coreHandler = new CoreHandler(portId, bus);
+        CoreHandler coreHandler = new CoreHandler(this.busPortId, this.bus);
         context.setHandler(coreHandler);
         return context;
     }

@@ -1,4 +1,4 @@
 package sk.jacob.sql;
 
-public interface DbObject extends Statement {
+public abstract class DbObject extends Statement {
 }

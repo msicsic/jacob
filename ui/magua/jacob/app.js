@@ -111,10 +111,10 @@ define([
         setViewTitle: function(title) {
             if (title) {
                 topic.publish("/app/titleChanged", title);
-                document.title = "SCOP - " + title;
+                document.title = "JACOB - " + title;
             } else {
                 topic.publish("/app/titleChanged", "JACOB");
-                document.title = "SCOP";
+                document.title = "JACOB";
             }
         }
     };

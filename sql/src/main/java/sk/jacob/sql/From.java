@@ -6,24 +6,39 @@ import sk.jacob.sql.dialect.DialectVisitor;
 import java.util.Arrays;
 import java.util.List;
 
-public class From implements Statement {
-    private Query query;
+public class From extends Statement {
     public List<String> tableNames;
+    public Where where;
+    public Statement rootStatement;
 
-    public From(Query query) {
-        this.query = query;
+    public From(Statement rootStatement, String ... tableNames) {
+        this.rootStatement = (rootStatement == null) ? this : rootStatement;
+        this.tableNames = Arrays.asList(tableNames);
     }
 
-    public Where from(String ... tableNames) {
-        this.tableNames = Arrays.asList(tableNames);
-        return new Where(this);
+    public Where where(ConditionalOperation conditionalOperation) {
+        return where( new Where(this.rootStatement, conditionalOperation) );
+    }
+
+    public Where where(Where where) {
+        this.where = where;
+        return this.where;
     }
 
     @Override
-    public CompiledStatementList sql(DialectVisitor visitor) {
-        StringBuffer b = new StringBuffer(query.sql(visitor).toString());
-        b.append(" ");
-        b.append(visitor.visit(this));
-        return new CompiledStatementList(b.toString());
+    public String sql(DialectVisitor visitor) {
+        String from = visitor.visit(this);
+        StringBuffer sb = new StringBuffer(from);
+        if(from != null) {
+            sb.append("\n");
+            String whereSql = this.where.sql(visitor);
+            sb.append(whereSql);
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public Statement rootStatement() {
+        return this.rootStatement;
     }
 }

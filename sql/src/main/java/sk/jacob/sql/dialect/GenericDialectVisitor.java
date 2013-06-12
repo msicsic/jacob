@@ -1,30 +1,29 @@
 package sk.jacob.sql.dialect;
 
-import sk.jacob.sql.Column;
-import sk.jacob.sql.From;
-import sk.jacob.sql.Query;
-import sk.jacob.sql.Table;
+import sk.jacob.sql.*;
 import sk.jacob.util.func.Functional;
 import sk.jacob.util.func.StringReducer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GenericDialectVisitor implements DialectVisitor {
     private Map<Class, String> tm = typeMap();
 
     @Override
-    public CompiledStatementList visit(Query query) {
-        StringBuffer b = new StringBuffer("SELECT ");
-        b.append((String) Functional.reduce(StringReducer.instance(", "), query.columnNames, null));
-        return new CompiledStatementList(b);
+    public String visit(Select select) {
+        StringBuffer sb = new StringBuffer("SELECT ");
+        sb.append((String) Functional.reduce(StringReducer.instance(", "), select.columnNames, null));
+        return sb.toString();
     }
 
     @Override
-    public CompiledStatementList visit(From from) {
-        StringBuffer b = new StringBuffer("FROM ");
-        b.append((String) Functional.reduce(StringReducer.instance(", "), from.tableNames, null));
-        return new CompiledStatementList(b);
+    public String visit(From from) {
+        StringBuffer sb = new StringBuffer("FROM ");
+        sb.append((String) Functional.reduce(StringReducer.instance(", "), from.tableNames, null));
+        return sb.toString();
     }
 
     @Override
@@ -44,6 +43,36 @@ public class GenericDialectVisitor implements DialectVisitor {
         sql += " ";
         sql += tm.get(column.type);
         return new CompiledStatementList(sql);
+    }
+
+    @Override
+    public String visit(Op.And and) {
+        StringBuffer sb = new StringBuffer("(");
+        List<String> coSql = new ArrayList<String>(and.conditionalOperations.size());
+        for (ConditionalOperation co : and.conditionalOperations) {
+            co.paramCounter = and.paramCounter;
+            coSql.add(co.sql(this));
+        }
+        String andStatement = (String)Functional.reduce(StringReducer.instance(" AND "), coSql, null );
+        sb.append(andStatement);
+        sb.append(")");
+        return sb.toString();
+    }
+
+    @Override
+    public String visit(Op.Eq eq) {
+        StringBuffer sb = new StringBuffer(eq.columnName);
+        sb.append(" = ");
+        sb.append(eq.paramCounter.addParam(eq.columnName, eq.value));
+        return sb.toString();
+    }
+
+    @Override
+    public String visit(Op.Le le) {
+        StringBuffer sb = new StringBuffer(le.columnName);
+        sb.append(" < ");
+        sb.append(le.paramCounter.addParam(le.columnName, le.value));
+        return sb.toString();
     }
 
     private Map<Class, String> typeMap() {

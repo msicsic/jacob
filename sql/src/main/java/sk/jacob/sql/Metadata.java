@@ -30,7 +30,7 @@ public class Metadata{
     private CompiledStatementList ddlStatements(DialectVisitor dialect) {
         CompiledStatementList sql = null;
         for(DbObject object : tables) {
-            sql = object.sql(dialect);
+            //sql = object.sql(dialect);
         }
         return sql;
     }

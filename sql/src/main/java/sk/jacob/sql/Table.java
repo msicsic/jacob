@@ -3,7 +3,7 @@ package sk.jacob.sql;
 import sk.jacob.sql.dialect.CompiledStatementList;
 import sk.jacob.sql.dialect.DialectVisitor;
 
-public class Table implements  DbObject {
+public class Table extends DbObject {
     public final String name;
     public final Column[] columns;
 
@@ -14,7 +14,12 @@ public class Table implements  DbObject {
     }
 
     @Override
-    public CompiledStatementList sql(DialectVisitor visitor) {
-        return visitor.visit(this);
+    public String sql(DialectVisitor visitor) {
+        return null; //visitor.visit(this);
+    }
+
+    @Override
+    public Statement rootStatement() {
+        return null;
     }
 }
