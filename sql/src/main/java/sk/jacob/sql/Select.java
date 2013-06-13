@@ -15,7 +15,7 @@ public class Select extends Statement {
     }
 
     public From from(String ... tableNames) {
-        return from( new From(this.getRootStatement(), tableNames) );
+        return from( new From(this, tableNames) );
     }
 
     public From from(From from) {

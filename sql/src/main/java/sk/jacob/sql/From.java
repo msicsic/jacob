@@ -9,13 +9,13 @@ public class From extends Statement {
     public List<String> tableNames;
     public Where where;
 
-    public From(Statement rootStatement, String ... tableNames) {
-        super(rootStatement);
+    public From(Statement parentStatement, String ... tableNames) {
+        super(parentStatement);
         this.tableNames = Arrays.asList(tableNames);
     }
 
     public Where where(ConditionalOperation conditionalOperation) {
-        return where( new Where(this.getRootStatement(), conditionalOperation) );
+        return where( new Where(this, conditionalOperation) );
     }
 
     public Where where(Where where) {

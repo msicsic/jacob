@@ -45,28 +45,24 @@ public abstract class Statement {
         }
     }
 
-    public ParamCounter paramCounter;
-    private Statement rootStatement;
+    public final ParamCounter paramCounter = new ParamCounter();
+    private Statement parent;
 
     protected Statement() {
-        this.setRoot(null);
+        this(null);
     }
 
-    protected Statement(Statement rootStatement) {
-        this.setRoot(rootStatement);
+    protected Statement(Statement parentStatement) {
+        this.parent = parentStatement;
     }
 
-    public void setRootStatement(Statement rootStatement) {
-        this.setRoot(rootStatement);
-    }
-
-    private void setRoot(Statement rootStatement) {
-        this.rootStatement = (rootStatement == null) ? this : rootStatement;
-        this.paramCounter = (rootStatement == null) ? new Statement.ParamCounter() : rootStatement.paramCounter;
+    public void setParentStatement(Statement parentStatement) {
+        this.parent = parentStatement;
     }
 
     public Statement getRootStatement() {
-        return this.rootStatement;
+        return (this.parent == null) ? this
+                                     : this.parent.getRootStatement();
     }
 
     public CompiledStatement compile() {
@@ -74,8 +70,8 @@ public abstract class Statement {
     }
 
     public CompiledStatement compile(DialectVisitor visitor) {
-        return new CompiledStatement(this.rootStatement.sql(visitor),
-                                     this.rootStatement.paramCounter.parameters());
+        return new CompiledStatement(this.getRootStatement().sql(visitor),
+                                     this.getRootStatement().paramCounter.parameters());
     }
 
     public CompiledStatement compile(DbEngine dbEngine) {

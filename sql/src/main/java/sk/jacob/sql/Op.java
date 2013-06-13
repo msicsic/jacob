@@ -19,10 +19,10 @@ public class Op {
         }
 
         @Override
-        public void setRootStatement(Statement rootStatement) {
-            super.setRootStatement(rootStatement);
+        public void setParentStatement(Statement parentStatement) {
+            super.setParentStatement(parentStatement);
             for (ConditionalOperation co : this.conditionalOperations) {
-                co.setRootStatement(rootStatement);
+                co.setParentStatement(this);
             }
         }
     }

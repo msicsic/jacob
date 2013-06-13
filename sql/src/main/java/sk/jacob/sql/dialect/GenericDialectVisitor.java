@@ -62,7 +62,7 @@ public class GenericDialectVisitor implements DialectVisitor {
     public String visit(Op.Eq eq) {
         StringBuffer sb = new StringBuffer(eq.columnName);
         sb.append(" = ");
-        sb.append(eq.paramCounter.addParam(eq.columnName, eq.value));
+        sb.append(getRootParamCounter(eq).addParam(eq.columnName, eq.value));
         return sb.toString();
     }
 
@@ -70,8 +70,12 @@ public class GenericDialectVisitor implements DialectVisitor {
     public String visit(Op.Le le) {
         StringBuffer sb = new StringBuffer(le.columnName);
         sb.append(" < ");
-        sb.append(le.paramCounter.addParam(le.columnName, le.value));
+        sb.append(getRootParamCounter(le).addParam(le.columnName, le.value));
         return sb.toString();
+    }
+
+    private Statement.ParamCounter getRootParamCounter(Statement statement) {
+        return statement.getRootStatement().paramCounter;
     }
 
     private Map<Class, String> typeMap() {

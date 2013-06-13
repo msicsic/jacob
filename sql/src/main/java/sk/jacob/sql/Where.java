@@ -5,10 +5,10 @@ import sk.jacob.sql.dialect.DialectVisitor;
 public class Where extends Statement {
     public ConditionalOperation conditionalOperation;
 
-    public Where(Statement rootStatement, ConditionalOperation conditionalOperation) {
-        super(rootStatement);
+    public Where(Statement parentStatement, ConditionalOperation conditionalOperation) {
+        super(parentStatement);
         this.conditionalOperation = conditionalOperation;
-        this.conditionalOperation.setRootStatement(rootStatement);
+        this.conditionalOperation.setParentStatement(this);
     }
 
     @Override
