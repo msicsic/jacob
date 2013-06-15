@@ -16,7 +16,7 @@ public class Metadata{
 
     public void createAll(DbEngine engine) {
         Connection connection = engine.getConnection();
-        //String sql = ddlStatements(engine.getDialect()).toString();
+        //string sql = ddlStatements(engine.getDialect()).toString();
         try {
             java.sql.Statement statement = connection.createStatement();
             //statement.execute(sql);

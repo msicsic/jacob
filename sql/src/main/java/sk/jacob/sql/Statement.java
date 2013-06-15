@@ -45,7 +45,7 @@ public abstract class Statement {
         }
     }
 
-    public final ParamCounter paramCounter = new ParamCounter();
+    private final ParamCounter paramCounter = new ParamCounter();
     private Statement parent;
 
     protected Statement() {
@@ -63,6 +63,10 @@ public abstract class Statement {
     public Statement getRootStatement() {
         return (this.parent == null) ? this
                                      : this.parent.getRootStatement();
+    }
+
+    public ParamCounter getParamCounter() {
+        return getRootStatement().paramCounter;
     }
 
     public CompiledStatement compile() {
