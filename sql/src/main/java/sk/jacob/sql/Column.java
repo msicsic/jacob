@@ -1,6 +1,6 @@
 package sk.jacob.sql;
 
-import sk.jacob.sql.dialect.CompiledStatementList;
+import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
 
 public class Column extends DbObject {
@@ -24,12 +24,11 @@ public class Column extends DbObject {
         }
     }
 
-    public final String name;
     public final TYPE.Type type;
-    public Options options;
+    public final Options options;
 
     Column(String name, TYPE.Type type, Options options) {
-        this.name = name;
+        super(name);
         this.type = type;
         this.options = options;
     }
@@ -39,7 +38,7 @@ public class Column extends DbObject {
     }
 
     @Override
-    public String sql(DialectVisitor dialect) {
-        return null; //dialect.visit(this);
+    public DDLStatement sql(DialectVisitor dialect) {
+        return dialect.visit(this);
     }
 }

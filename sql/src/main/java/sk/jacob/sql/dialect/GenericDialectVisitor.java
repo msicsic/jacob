@@ -5,44 +5,21 @@ import sk.jacob.util.func.Functional;
 import sk.jacob.util.func.StringReducer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GenericDialectVisitor implements DialectVisitor {
-    private Map<Class, String> tm = typeMap();
-
     @Override
     public String visit(Select select) {
         StringBuffer sb = new StringBuffer("SELECT ");
-        sb.append((String) Functional.reduce(StringReducer.instance(", "), select.columnNames, null));
+        sb.append((String) Functional.reduce(StringReducer.instance(", "), select.columnNames));
         return sb.toString();
     }
 
     @Override
     public String visit(From from) {
         StringBuffer sb = new StringBuffer("FROM ");
-        sb.append((String) Functional.reduce(StringReducer.instance(", "), from.tableNames, null));
+        sb.append((String) Functional.reduce(StringReducer.instance(", "), from.tableNames));
         return sb.toString();
-    }
-
-    @Override
-    public CompiledStatementList visit(Table table) {
-        String sql = "CREATE TABLE " + table.name + " (\n";
-        for(Column column : table.columns ) {
-            sql += column.sql(this).toString() + ", ";
-        }
-        sql = sql.substring(0, sql.length()-2);
-        sql += ");";
-        return new CompiledStatementList(sql);
-    }
-
-    @Override
-    public CompiledStatementList visit(Column column) {
-        String sql = column.name;
-        sql += " ";
-        sql += tm.get(column.type);
-        return new CompiledStatementList(sql);
     }
 
     @Override
@@ -52,7 +29,7 @@ public class GenericDialectVisitor implements DialectVisitor {
         for (ConditionalOperation co : and.conditionalOperations) {
             coSql.add(co.sql(this));
         }
-        String andStatement = (String)Functional.reduce(StringReducer.instance(" AND "), coSql, null );
+        String andStatement = (String)Functional.reduce(StringReducer.instance(" AND "), coSql);
         sb.append(andStatement);
         sb.append(")");
         return sb.toString();
@@ -74,10 +51,38 @@ public class GenericDialectVisitor implements DialectVisitor {
         return sb.toString();
     }
 
-    private Map<Class, String> typeMap() {
-        Map<Class, String> tm = new HashMap<Class, String>();
-        tm.put(Integer.class, "INT");
-        tm.put(String.class, "VARCHAR");
-        return tm;
+    @Override
+    public DDLStatement visit(Table table) {
+        StringBuffer sb = new StringBuffer("CREATE TABLE ");
+        sb.append(table.name);
+        sb.append(" (\n");
+        List<String> columnInlineStatements = new ArrayList<String>();
+        List<String> outlineStatements = new ArrayList<String>();
+        for(Column column : table.columns ) {
+            DDLStatement csl = column.sql(this);
+            columnInlineStatements.add(csl.inline);
+            outlineStatements.addAll(csl.outline);
+        }
+        sb.append(Functional.reduce(StringReducer.instance(", \n"), columnInlineStatements));
+        sb.append(");");
+        return new DDLStatement(sb.toString(), outlineStatements);
+    }
+
+    @Override
+    public DDLStatement visit(Column column) {
+        StringBuffer sb = new StringBuffer(column.name);
+        sb.append(" ");
+        if(column.type instanceof TYPE.StringType) {
+            sb.append(this.visit((TYPE.StringType)column.type));
+        }
+        return new DDLStatement(sb.toString(), null);
+    }
+
+    @Override
+    public String visit(TYPE.StringType stringType) {
+        StringBuffer sb = new StringBuffer("VARCHAR(");
+        sb.append(stringType.length);
+        sb.append(")");
+        return sb.toString();
     }
 }

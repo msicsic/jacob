@@ -1,37 +1,63 @@
 package sk.jacob.sql;
 
-import sk.jacob.sql.dialect.CompiledStatementList;
+import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.GenericDialectVisitor;
 
+import java.io.Closeable;
+import java.sql.*;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
-import java.sql.*;
-
 public class Metadata{
-    public List<DbObject> tables = new ArrayList<DbObject>();
+    private final List<String> createOrder = new ArrayList<String>();
+    private final Map<String, DbObject> dbObjects = new HashMap<String, DbObject>();
+
     public void add(DbObject dbObject) {
-        tables.add(dbObject);
+        createOrder.add(dbObject.name);
+        dbObjects.put(dbObject.name, dbObject);
     }
 
     public void createAll(DbEngine engine) {
+        List<DDLStatement> ddlStatements = ddlStatements(engine);
         Connection connection = engine.getConnection();
-        //string sql = ddlStatements(engine.getDialect()).toString();
         try {
-            java.sql.Statement statement = connection.createStatement();
-            //statement.execute(sql);
-        } catch (SQLException e) {
+            Statement statement = connection.createStatement();
+            for (DDLStatement ddl : ddlStatements) {
+                statement.execute(ddl.inline);
+            }
+        } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            //engine.closeConnection(connection);
+            close(connection);
         }
     }
 
-    private CompiledStatementList ddlStatements(DialectVisitor dialect) {
-        CompiledStatementList sql = null;
-        for(DbObject object : tables) {
-            //sql = object.sql(dialect);
+    private void close(Connection connection) {
+        try {
+            connection.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return sql;
+    }
+
+    private List<DDLStatement> ddlStatements(DbEngine engine) {
+        List<DDLStatement> ddlstatemens = new ArrayList<DDLStatement>();
+        for(String objectName : createOrder) {
+            DbObject dbObject = dbObjects.get(objectName);
+            if(isTable(dbObject)) {
+                DialectVisitor dialect = engine.getDialect();
+                DDLStatement ddlStatement = dialect.visit((Table) dbObject);
+                ddlstatemens.add(ddlStatement);
+            }
+        }
+        return ddlstatemens;
+    }
+
+    private Boolean isTable(DbObject dbObject){
+        return dbObject instanceof Table;
     }
 }
