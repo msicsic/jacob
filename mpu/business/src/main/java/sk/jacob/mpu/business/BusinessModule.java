@@ -1,13 +1,14 @@
 package sk.jacob.mpu.business;
 
 import sk.jacob.engine.Engine;
+import sk.jacob.engine.Module;
 import sk.jacob.engine.types.DataPacket;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BusinessModule implements sk.jacob.engine.Module {
+public class BusinessModule implements Module {
     private static List<Class> handlers = new ArrayList<Class>();
     private static Engine engine;
 
