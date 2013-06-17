@@ -14,6 +14,7 @@ public class BusinessModule implements Module {
 
     static {
         handlers.addAll(Arrays.asList(sk.jacob.mpu.business.settings.Init.handlers));
+        handlers.addAll(Arrays.asList(sk.jacob.mpu.business.devel.Init.handlers));
         engine = new Engine(handlers);
     }
 

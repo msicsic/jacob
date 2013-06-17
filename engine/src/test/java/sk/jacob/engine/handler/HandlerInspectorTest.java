@@ -9,41 +9,35 @@ import sk.jacob.engine.types.DataPacket;
 import sk.jacob.engine.types.RequestType;
 import sk.jacob.engine.types.ResponseType;
 
-public class HandlerSerializerTest {
-
+public class HandlerInspectorTest {
     class TestMpu {
-
         public class User {
-
             String login;
 
             String name;
 
             String email;
-
         }
 
-        public class Req extends RequestType {
-
+        public abstract class ReqSuper extends RequestType {
             @Required
             Long start;
 
             @Required
             Integer count;
+        }
 
+        public class Req extends ReqSuper {
             String[] groups;
 
             @Length(max = 255)
             String login;
-
         }
 
         public class Res extends ResponseType {
-
             Integer totalCount;
 
             List<User> users;
-
         }
 
         @Message(type = "test",
@@ -54,6 +48,7 @@ public class HandlerSerializerTest {
             return dataPacket;
         }
     }
+
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Test
@@ -63,6 +58,6 @@ public class HandlerSerializerTest {
         Class mpuClass = testMpu.getClass();
         Method handlerMethod = mpuClass.getMethod("method", DataPacket.class);
 
-        System.out.println(gson.toJson(HandlerSerializer.serialize(handlerMethod)));
+        System.out.println(gson.toJson(HandlerInspector.serializeMethod(handlerMethod)));
     }
 }
