@@ -1,5 +1,5 @@
 package sk.jacob.mpu.business.devel;
 
 public class Init {
-    public static Class[] handlers = {MpuList.class};
+    public static final Class[] HANDLERS = {MpuList.class};
 }

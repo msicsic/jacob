@@ -10,16 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JacobFirmware implements Module {
-    private final List<Class<? extends Module>> modules;
+    private static final List<Module> MODULES = initModules();
 
-    public JacobFirmware () {
-        this.modules = new ArrayList<Class<? extends Module>>();
-        this.modules.add(SecurityModule.class);
-        this.modules.add(ContextModule.class);
-        this.modules.add(BusinessModule.class);
+    private static final List<Module> initModules() {
+        return new ArrayList<Module>() {{
+            add(new SecurityModule());
+            add(new ContextModule());
+            add(new BusinessModule());
+        }};
     }
 
-    public DataPacket handle(DataPacket datapacket) {
-        return datapacket;
+    public DataPacket handle(DataPacket dataPacket) {
+        for(Module module : MODULES) {
+            dataPacket = module.handle(dataPacket);
+        }
+        return dataPacket;
     }
 }

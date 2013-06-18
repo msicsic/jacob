@@ -32,6 +32,7 @@ public class Bus {
 
     public DataPacket send(String portId, DataPacket dataPacket) {
         sout(portId + " --->>> " + dataPacket.message.rawRequest);
+        dataPacket = firmware.handle(dataPacket);
         sout(portId + " <<<--- " + dataPacket.message.rawResponse);
         return dataPacket;
     }

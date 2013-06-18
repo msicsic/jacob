@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface Token {
     String type();
-    String version();
     Class<? extends TokenType> token();
     Class<? extends ResponseType> resd();
 }

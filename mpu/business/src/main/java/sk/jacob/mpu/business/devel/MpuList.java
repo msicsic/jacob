@@ -15,7 +15,7 @@ public class MpuList {
     public DataPacket mpuList(DataPacket dataPacket) {
         DevelUtil.mpuListAppendModule(dataPacket, "bussines", DevelUtil.ROOT_NODE);
 
-        for (Class<?> handler : Init.handlers) {
+        for (Class<?> handler : Init.HANDLERS) {
             DevelUtil.mpuListAppendMpu(dataPacket, handler, "bussines");
         }
 

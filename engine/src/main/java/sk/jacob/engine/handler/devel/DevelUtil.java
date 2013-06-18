@@ -13,9 +13,9 @@ public class DevelUtil {
     public static void mpuListAppendMpu(DataPacket dataPacket, Class<?> mpuClass, String moduleId) {
         MpuListResponseType response = initResponse(dataPacket);
 
-        for (Object[] pair : HandlerInspector.inspect(mpuClass)) {
-            response.getResd().add(createMpuNode((Method) pair[1], moduleId));
-        }
+//        for (Object[] pair : HandlerInspector.inspect(mpuClass)) {
+//            response.getResd().add(createMpuNode((Method) pair[1], moduleId));
+//        }
     }
 
     private static Map<String, Object> createMpuNode(Method mpuMethod, String moduleId) {

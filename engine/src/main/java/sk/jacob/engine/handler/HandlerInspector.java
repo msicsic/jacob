@@ -1,10 +1,11 @@
 package sk.jacob.engine.handler;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
+import com.google.gson.*;
+import sk.jacob.engine.Module;
+import sk.jacob.engine.types.DataPacket;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +13,87 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class HandlerInspector {
+public abstract class HandlerInspector<T extends Annotation> implements Module {
+    private final Class<T> supportedAnnotation;
+    private final Map<String, Object> handlerInstances = new HashMap<String, Object>();
+    protected Map<String, Method> handlerMap = new HashMap<String, Method>();
+    protected final Gson typeResolver;
+
+
+    protected HandlerInspector(Class<T> supportedAnnotation, List<Class> messageHandlers) {
+        this.supportedAnnotation = supportedAnnotation;
+        this.handlerMap = map(messageHandlers);
+        typeResolver = new GsonBuilder()
+                .registerTypeAdapter(
+                        String.class,
+                        typeResolver())
+                .create();
+    }
+
+    private JsonDeserializer<String> typeResolver() {
+        return new JsonDeserializer<String>(){
+            @Override
+            public String deserialize(JsonElement jsonElement,
+                                      Type type,
+                                      JsonDeserializationContext jsonDeserializationContext)
+                    throws JsonParseException {
+                return getMessageType(jsonElement);
+            }
+        };
+    }
+
+    public abstract String getHandlerKey(T annotation);
+    public abstract String getMessageType(JsonElement jsonRequest);
+
+
+    public Map<String, Method> map(List<Class> handlers) {
+        Map<String, Method> mappedHandlers = new HashMap<String, Method>();
+        for (Class<?> handler : handlers) {
+            mappedHandlers.putAll(inspect(handler));
+        }
+        return mappedHandlers;
+    }
+
+    private Map<String, Method> inspect(Class<?> handler) {
+        Map<String, Method> mappedHandlers = new HashMap<String, Method>();
+        for (Method method : handler.getDeclaredMethods()) {
+            T annotation = method.getAnnotation(supportedAnnotation);
+            mappedHandlers.put(getHandlerKey(annotation), method);
+        }
+        return mappedHandlers;
+    }
+
+
+    protected DataPacket invokeMethod(String handlerKey, DataPacket dataPacket) {
+        try {
+            Method handler = this.handlerMap.get(handlerKey);
+            Object handlerInstance = handlerInstance(handlerKey);
+            dataPacket = (DataPacket)handler.invoke(handlerInstance, new Object[]{dataPacket});
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return dataPacket;
+    }
+
+    protected Object handlerInstance(String handlerKey) {
+        if (!this.handlerInstances.containsKey(handlerKey)) {
+            Method method = this.handlerMap.get(handlerKey);
+            Class clazz = method.getDeclaringClass();
+            handlerInstances.put(handlerKey, newInstance(clazz));
+        }
+        return  handlerInstances.get(handlerKey);
+    }
+
+    private Object newInstance(Class clazz) {
+        Object instance = null;
+        try {
+            instance = clazz.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return instance;
+    }
+
     private static final Set<Class> BOXED_TYPES = initBoxedTypes();
 
     private static Set<Class> initBoxedTypes() {
@@ -27,28 +108,6 @@ public class HandlerInspector {
         set.add(Boolean.class);
         set.add(String.class);
         return set;
-    }
-
-    public static List<Object[]> inspect(Class<?> clazz) {
-        List<Object[]> methodsFound = new ArrayList<Object[]>();
-        for (Method m : clazz.getDeclaredMethods()) {
-            if (!m.isAnnotationPresent(Message.class)) {
-                continue;
-            }
-            Message as = m.getAnnotation(Message.class);
-            methodsFound.add(new Object[]{as.type() + "." + as.version(), m});
-        }
-        return methodsFound;
-    }
-
-    public static Map<String, Method> mapHandlers(List<Class> handlers) {
-        Map<String, Method> mappedHandlers = new HashMap<String, Method>();
-        for (Class<?> handler : handlers) {
-            for (Object[] methodFound : inspect(handler)) {
-                mappedHandlers.put((String) methodFound[0], (Method) methodFound[1]);
-            }
-        }
-        return mappedHandlers;
     }
 
     public static Map<String, Object> serializeMethod(Method method) {

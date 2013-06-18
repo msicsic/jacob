@@ -21,7 +21,6 @@ public class AuthenticateLoginPassword {
     }
 
     @Token(type="security.authenticate.login.password",
-           version="1.0",
            token=AuthLogPassReq.class,
            resd=AuthLogPassRes.class)
     public DataPacket handle(DataPacket dataPacket) {
