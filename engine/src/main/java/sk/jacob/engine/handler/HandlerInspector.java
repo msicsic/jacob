@@ -63,13 +63,14 @@ public class HandlerInspector {
         return handlerMap;
     }
 
+    //TODO pada pri java.util.Date
     private static Map<String, Object> serializeClass(Class resReqClass) {
         Map<String, Object> resMap = new HashMap<String, Object>();
 
         for (Field field : getAllFields(resReqClass)) {
             Class fieldClass = field.getType();
 
-            if (fieldClass.getModifiers() == 0 || (field.getModifiers() & Modifier.STATIC) != 0) {
+            if (field.isEnumConstant() || field.isSynthetic() || (field.getModifiers() & Modifier.STATIC) != 0) {
                 continue;
             }
 
