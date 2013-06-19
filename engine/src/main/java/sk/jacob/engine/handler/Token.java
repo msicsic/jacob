@@ -1,5 +1,6 @@
 package sk.jacob.engine.handler;
 
+import sk.jacob.engine.types.ResponseDataType;
 import sk.jacob.engine.types.ResponseType;
 import sk.jacob.engine.types.TokenType;
 
@@ -13,5 +14,5 @@ import java.lang.annotation.Target;
 public @interface Token {
     String type();
     Class<? extends TokenType> token();
-    Class<? extends ResponseType> resd();
+    Class<? extends ResponseDataType> resd();
 }

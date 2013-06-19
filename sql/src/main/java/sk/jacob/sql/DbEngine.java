@@ -10,18 +10,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DbEngine {
+    public static enum DB_CONFIG {
+        H2(new H2DialectVisitor(), "org.h2.Driver"),
+        ORACLE(new OracleDialectVisitor(), "com.oracle.jdbc"),
+        POSTGRESQL( new PostgreDialectVisitor(), "org.postgresql");
+
+        public final DialectVisitor dialectVisitor;
+        public final String driverClassName;
+
+        DB_CONFIG(DialectVisitor dialectVisitor, String driverClassName) {
+            this.dialectVisitor = dialectVisitor;
+            this.driverClassName = driverClassName;
+        }
+    }
+
     private final String driverClass;
     private final String url;
     private final String username;
     private final String password;
-
-    private static final Map<String, DialectVisitor> dialects = new HashMap<String, DialectVisitor>();
-
-    static {
-        dialects.put("h2", new H2DialectVisitor());
-        dialects.put("oracle", new OracleDialectVisitor());
-        dialects.put("postgresql", new PostgreDialectVisitor());
-    }
 
     public DbEngine(String driverClass, String url, String username, String password) {
         this.driverClass = driverClass;
@@ -29,12 +35,15 @@ public class DbEngine {
         this.username = username;
         this.password = password;
 
-
         try {
             Class.forName(this.driverClass);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public DbEngine(String url, String username, String password) {
+        this(getDriverClassName(url), url, username, password);
     }
 
     public Connection getConnection() {
@@ -48,7 +57,17 @@ public class DbEngine {
     }
 
     public DialectVisitor getDialect() {
-        return dialects.get(getDbVendorName(this.url));
+        return getDialect(this.url);
+    }
+
+    public DialectVisitor getDialect(String url) {
+        DB_CONFIG dbConfig = DB_CONFIG.valueOf(getDbVendorName(url).toUpperCase());
+        return dbConfig.dialectVisitor;
+    }
+
+    private static String getDriverClassName(String url) {
+        DB_CONFIG dbConfig = DB_CONFIG.valueOf(getDbVendorName(url).toUpperCase());
+        return dbConfig.driverClassName;
     }
 
     private static String getDbVendorName(String url) {

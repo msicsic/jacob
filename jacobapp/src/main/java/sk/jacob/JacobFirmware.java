@@ -8,20 +8,25 @@ import sk.jacob.mpu.security.SecurityModule;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class JacobFirmware implements Module {
-    private static final List<Module> MODULES = initModules();
+    private final List<Module> modules;
 
-    private static final List<Module> initModules() {
+    public JacobFirmware(Properties config) {
+        modules = initModules(config);
+    }
+
+    private final List<Module> initModules(final Properties config) {
         return new ArrayList<Module>() {{
-            add(new SecurityModule());
+            add(new SecurityModule(config));
             add(new ContextModule());
             add(new BusinessModule());
         }};
     }
 
     public DataPacket handle(DataPacket dataPacket) {
-        for(Module module : MODULES) {
+        for(Module module : modules) {
             dataPacket = module.handle(dataPacket);
         }
         return dataPacket;

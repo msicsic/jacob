@@ -11,21 +11,9 @@ public class Boot {
     public static void main(String[] args) {
         Properties config = loadConfig(args[0]);
 
-        Bus bus = new Bus(new JacobFirmware());
+        Bus bus = new Bus(new JacobFirmware(config));
         bus.attach("HTTP_IN_OUT", new Jetty(config));
         bus.start();
-
-        String json =
-                "{'type': 'business.uom.add'," +
-                " 'version': '0.1'," +
-                " 'i': 1," +
-                " 's': 'hello'}";
-
-        String json2 =
-                "{'type': 'business.uom.add'," +
-                " 'version': '0.2'," +
-                " 'i': 2," +
-                " 's': 'world'}";
     }
 
     private static Properties loadConfig(String path) {

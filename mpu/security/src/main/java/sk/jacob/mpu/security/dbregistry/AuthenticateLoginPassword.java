@@ -1,29 +1,34 @@
 package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.engine.handler.Token;
-import sk.jacob.engine.types.DataPacket;
-import sk.jacob.engine.types.ResponseType;
-import sk.jacob.engine.types.TokenType;
+import sk.jacob.engine.types.*;
 
 public class AuthenticateLoginPassword {
-    public static class AuthLogPassReq extends TokenType {
+    public static class AuthLogPassToken extends TokenType {
         public String login;
         public String password;
     }
 
-    public static class AuthLogPassRes extends ResponseType {
+    public static class AuthLogPassRes extends ResponseDataType {
         public String token;
+        public Principal principal = new Principal();
 
-        public static class principal{
+        public static class Principal{
             public String login;
             public String username;
         }
     }
 
     @Token(type="security.authenticate.login.password",
-           token=AuthLogPassReq.class,
+           token=AuthLogPassToken.class,
            resd=AuthLogPassRes.class)
-    public DataPacket handle(DataPacket dataPacket) {
+    public static DataPacket handle(DataPacket dataPacket) {
+        AuthLogPassToken token = (AuthLogPassToken)dataPacket.security.token;
+        AuthLogPassRes resd = new AuthLogPassRes();
+        resd.token = "TOKEN 12345";
+        resd.principal.login = "ADMIN";
+        resd.principal.username = "ADMINISTRATOR";
+        dataPacket.message.createResponse(resd);
         return dataPacket;
     }
 }

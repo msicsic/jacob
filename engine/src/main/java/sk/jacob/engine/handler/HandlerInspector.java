@@ -1,7 +1,5 @@
 package sk.jacob.engine.handler;
 
-import com.google.gson.*;
-import sk.jacob.engine.Module;
 import sk.jacob.engine.types.DataPacket;
 
 import java.lang.annotation.Annotation;
@@ -13,40 +11,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class HandlerInspector<T extends Annotation> implements Module {
+public abstract class HandlerInspector<T extends Annotation> {
     private final Class<T> supportedAnnotation;
-    private final Map<String, Object> handlerInstances = new HashMap<String, Object>();
     protected Map<String, Method> handlerMap = new HashMap<String, Method>();
-    protected final Gson typeResolver;
-
 
     protected HandlerInspector(Class<T> supportedAnnotation, List<Class> messageHandlers) {
         this.supportedAnnotation = supportedAnnotation;
         this.handlerMap = map(messageHandlers);
-        typeResolver = new GsonBuilder()
-                .registerTypeAdapter(
-                        String.class,
-                        typeResolver())
-                .create();
     }
 
-    private JsonDeserializer<String> typeResolver() {
-        return new JsonDeserializer<String>(){
-            @Override
-            public String deserialize(JsonElement jsonElement,
-                                      Type type,
-                                      JsonDeserializationContext jsonDeserializationContext)
-                    throws JsonParseException {
-                return getMessageType(jsonElement);
-            }
-        };
-    }
-
-    public abstract String getHandlerKey(T annotation);
-    public abstract String getMessageType(JsonElement jsonRequest);
-
-
-    public Map<String, Method> map(List<Class> handlers) {
+    private Map<String, Method> map(List<Class> handlers) {
         Map<String, Method> mappedHandlers = new HashMap<String, Method>();
         for (Class<?> handler : handlers) {
             mappedHandlers.putAll(inspect(handler));
@@ -57,43 +31,40 @@ public abstract class HandlerInspector<T extends Annotation> implements Module {
     private Map<String, Method> inspect(Class<?> handler) {
         Map<String, Method> mappedHandlers = new HashMap<String, Method>();
         for (Method method : handler.getDeclaredMethods()) {
+            if (!method.isAnnotationPresent(supportedAnnotation)) {
+                continue;
+            }
             T annotation = method.getAnnotation(supportedAnnotation);
             mappedHandlers.put(getHandlerKey(annotation), method);
         }
         return mappedHandlers;
     }
 
+    public final DataPacket process(DataPacket dataPacket) {
+        String handlerKey = this.getMessageType(dataPacket);
+        dataPacket = invokeMethod(handlerKey, dataPacket);
+        return serializeResponse(dataPacket);
+    }
 
-    protected DataPacket invokeMethod(String handlerKey, DataPacket dataPacket) {
+    private DataPacket invokeMethod(String handlerKey, DataPacket dataPacket) {
         try {
             Method handler = this.handlerMap.get(handlerKey);
-            Object handlerInstance = handlerInstance(handlerKey);
-            dataPacket = (DataPacket)handler.invoke(handlerInstance, new Object[]{dataPacket});
+            updateRequestData(dataPacket, handler.getAnnotation(supportedAnnotation));
+            dataPacket = (DataPacket)handler.invoke(null, dataPacket);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return dataPacket;
     }
 
-    protected Object handlerInstance(String handlerKey) {
-        if (!this.handlerInstances.containsKey(handlerKey)) {
-            Method method = this.handlerMap.get(handlerKey);
-            Class clazz = method.getDeclaringClass();
-            handlerInstances.put(handlerKey, newInstance(clazz));
-        }
-        return  handlerInstances.get(handlerKey);
-    }
+    protected abstract String getHandlerKey(T annotation);
+    protected abstract String getMessageType(DataPacket dataPacket);
+    protected abstract void updateRequestData(DataPacket dataPacket, Annotation annotation);
+    protected abstract DataPacket serializeResponse(DataPacket dataPacket);
 
-    private Object newInstance(Class clazz) {
-        Object instance = null;
-        try {
-            instance = clazz.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return instance;
-    }
 
+// TODO: Bude treba vyfaktorovat.
+//////////////////////////////////////////////////////////////////////////////////
     private static final Set<Class> BOXED_TYPES = initBoxedTypes();
 
     private static Set<Class> initBoxedTypes() {
