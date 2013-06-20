@@ -5,15 +5,19 @@ public class CRUD {
         return new Select(columnNames);
     }
 
-    public static Statement insert() {
-        return null;
+    public static Insert insert(String tableName) {
+        return new Insert(tableName);
     }
 
-    public static Statement update() {
-        return null;
+    public static Update update(String tableName) {
+        return new Update(tableName);
     }
 
-    public static Statement delete() {
-        return null;
+    public static Delete delete(String tableName) {
+        return new Delete(tableName);
+    }
+
+    public static ColumnValue cv(String columnName, Object value) {
+        return new ColumnValue(columnName, value);
     }
 }

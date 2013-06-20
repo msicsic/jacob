@@ -85,4 +85,26 @@ public class GenericDialectVisitor implements DialectVisitor {
         sb.append(")");
         return sb.toString();
     }
+
+    @Override
+    public String visit(Insert insert) {
+        StringBuffer sb = new StringBuffer("INSERT INTO ");
+        sb.append(insert.tableName);
+        sb.append(" (");
+        for(ColumnValue cv : insert.columnValues) {
+            sb.append(cv.columnName);
+            sb.append(", ");
+        }
+        int lastComma = sb.lastIndexOf(",");
+        sb.replace(lastComma, lastComma + 2, ")\nVALUES (");
+
+        for(ColumnValue cv : insert.columnValues) {
+            sb.append(insert.getParamCounter().addParam(cv.columnName, cv.value));
+            sb.append(", ");
+        }
+        lastComma = sb.lastIndexOf(",");
+        sb.replace(lastComma, lastComma + 1, ")");
+
+        return sb.toString();
+    }
 }

@@ -15,6 +15,8 @@ public class Main {
         Statement.CompiledStatement compiledStatement = statement.compile();
         System.out.println(compiledStatement.compiledStatement());
         System.out.println(compiledStatement.parameters());
+        System.out.println(compiledStatement.positionalParameters());
+        System.out.println(compiledStatement.normalizedStatement());
 
         Metadata metadata = new Metadata();
         table("users", metadata,
@@ -24,7 +26,16 @@ public class Main {
                 column("token", string().length(255), options().nullable(true).unique(true)),
                 column("admin", string().length(1), options().nullable(true)));
 
-        DbEngine dbEngine = new DbEngine("org.h2.Driver", "jdbc:h2:/data/test", "sa", "sa");
-        metadata.createAll(dbEngine);
+//        DbEngine dbEngine = new DbEngine("org.h2.Driver", "jdbc:h2:/data/test", "sa", "sa");
+//        metadata.createAll(dbEngine);
+
+
+        statement = insert("users").values(cv("login", "ADMIN"), cv("username", "Administrator"));
+        compiledStatement = statement.compile();
+        System.out.println("\n" + compiledStatement.compiledStatement());
+        System.out.println(compiledStatement.parameters());
+        System.out.println(compiledStatement.positionalParameters());
+        System.out.println(compiledStatement.normalizedStatement());
+
     }
 }

@@ -12,4 +12,6 @@ public interface DialectVisitor {
     String visit(Op.Le le);
 
     String visit(TYPE.StringType stringType);
+
+    String visit(Insert insert);
 }
