@@ -47,12 +47,14 @@ public abstract class HandlerInspector<T extends Annotation> {
     }
 
     private DataPacket invokeMethod(String handlerKey, DataPacket dataPacket) {
-        try {
-            Method handler = this.handlerMap.get(handlerKey);
-            updateRequestData(dataPacket, handler.getAnnotation(supportedAnnotation));
-            dataPacket = (DataPacket)handler.invoke(null, dataPacket);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (this.handlerMap.containsKey(handlerKey)) {
+            try {
+                Method handler = this.handlerMap.get(handlerKey);
+                updateRequestData(dataPacket, handler.getAnnotation(supportedAnnotation));
+                dataPacket = (DataPacket) handler.invoke(null, dataPacket);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         return dataPacket;
     }
@@ -61,7 +63,6 @@ public abstract class HandlerInspector<T extends Annotation> {
     protected abstract String getMessageType(DataPacket dataPacket);
     protected abstract void updateRequestData(DataPacket dataPacket, Annotation annotation);
     protected abstract DataPacket serializeResponse(DataPacket dataPacket);
-
 
 // TODO: Bude treba vyfaktorovat.
 //////////////////////////////////////////////////////////////////////////////////

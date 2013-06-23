@@ -9,7 +9,7 @@ public class AuthenticateLoginPassword {
         public String password;
     }
 
-    public static class AuthLogPassRes extends ResponseDataType {
+    public static class AuthLogPassRes implements ResponseDataType {
         public String token;
         public Principal principal = new Principal();
 
