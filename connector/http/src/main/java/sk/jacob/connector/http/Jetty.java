@@ -26,10 +26,10 @@ public class Jetty implements Connector {
     private static final String GUI_CONTEXT_PATH = "/ui";
 
     public Jetty(Properties config) {
-        this(config.getProperty("HTTP_port_context_path"),
-             Integer.valueOf(config.getProperty("HTTP_port_port")),
-             config.getProperty("GUI_root_path"),
-             config.getProperty("GUI_name"));
+        this(config.getProperty("http_port.context_path"),
+             Integer.valueOf(config.getProperty("http_port.port")),
+             config.getProperty("gui.root_path"),
+             config.getProperty("gui.name"));
     }
 
     public Jetty(String httpPortContextPath, int httpPortPort, String guiRootPath, String guiName) {
@@ -110,7 +110,7 @@ public class Jetty implements Connector {
     private Handler configureRootHandler() {
         RedirectPatternRule redirect = new RedirectPatternRule();
         redirect.setPattern("/");
-        redirect.setLocation("/ui");
+        redirect.setLocation(GUI_CONTEXT_PATH);
 
         RewriteHandler rewrite = new RewriteHandler();
         rewrite.addRule(redirect);
