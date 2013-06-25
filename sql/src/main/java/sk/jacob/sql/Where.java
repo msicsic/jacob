@@ -13,9 +13,6 @@ public class Where extends Statement {
 
     @Override
     public String sql(DialectVisitor visitor) {
-        StringBuffer sb = new StringBuffer("WHERE ");
-        String coSql = conditionalOperation.sql(visitor);
-        sb.append(coSql);
-        return sb.toString();
+        return visitor.visit(this);
     }
 }

@@ -6,46 +6,12 @@ import sk.jacob.sql.dialect.OracleDialectVisitor;
 import sk.jacob.sql.dialect.PostgreDialectVisitor;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static sk.jacob.sql.Statement.CompiledStatement;
 
 public class DbEngine {
-    public void execute(Statement statement) {
-        CompiledStatement cs = statement.compile(this);
-        Connection c = this.getConnection();
-        try {
-            c.setAutoCommit(Boolean.FALSE);
-        } catch (SQLException e) {
-            // FIXME:
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        try {
-            PreparedStatement s = c.prepareStatement(cs.normalizedStatement());
-            bindParameters(s, cs.parameterList());
-            s.executeUpdate();
-            c.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                c.close();
-            } catch (SQLException e) {
-                // FIXME:
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-        }
-    }
-
-    private static PreparedStatement bindParameters(PreparedStatement preparedStatement,
-                                                    List<Object> parameters) throws SQLException {
-        int paramSize = parameters.size();
-        for (int i = 1; i <= paramSize; i++) {
-            preparedStatement.setObject(i, parameters.get(i - 1));
-        }
-        return preparedStatement;
-    }
-
     public static enum DB_CONFIG {
         H2(new H2DialectVisitor(), "org.h2.Driver"),
         ORACLE(new OracleDialectVisitor(), "com.oracle.jdbc"),
@@ -86,17 +52,53 @@ public class DbEngine {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(this.url, this.username, this.password);
+            connection.setAutoCommit(Boolean.FALSE);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return connection;
     }
 
+    public List<Long> execute(Statement statement) {
+        List<Long> generatedIds = null;
+        CompiledStatement cs = statement.compile(this);
+        Connection connection = this.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(cs.normalizedStatement());
+            bindParameters(preparedStatement, cs.parameterList());
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            this.close(connection);
+        }
+        return generatedIds;
+    }
+
+    private static PreparedStatement bindParameters(PreparedStatement preparedStatement,
+                                                    List<Object> parameters) throws SQLException {
+        int paramSize = parameters.size();
+        for (int i = 1; i <= paramSize; i++) {
+            preparedStatement.setObject(i, parameters.get(i - 1));
+        }
+        return preparedStatement;
+    }
+
+    public static void close(AutoCloseable closeable) {
+        try {
+            closeable.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public DialectVisitor getDialect() {
         return getDialect(this.url);
     }
 
-    public DialectVisitor getDialect(String url) {
+    private static DialectVisitor getDialect(String url) {
         DB_CONFIG dbConfig = DB_CONFIG.valueOf(getDbVendorName(url).toUpperCase());
         return dbConfig.dialectVisitor;
     }

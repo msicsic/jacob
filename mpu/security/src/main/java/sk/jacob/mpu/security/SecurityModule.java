@@ -49,15 +49,18 @@ public class SecurityModule implements Module {
     }
 
     private void initializeAdmin(String adminLogin, String adminMd5Pwd) {
-        Statement s = delete("users").where(Op.eq("admin", Boolean.TRUE));
-        this.dbEngine.execute(s);
+        Statement deleteStatement =
+                delete("users")
+                        .where(Op.eq("admin", Boolean.TRUE));
+        this.dbEngine.execute(deleteStatement);
 
-
-        s = insert("users").values(cv("login", adminLogin),
-                                   cv("username", "Administrator"),
-                                   cv("admin", Boolean.TRUE),
-                                   cv("md5pwd", adminMd5Pwd));
-        this.dbEngine.execute(s);
+        Statement insertStatement =
+                insert("users")
+                        .values(cv("login", adminLogin),
+                                cv("username", "Administrator"),
+                                cv("admin", Boolean.TRUE),
+                                cv("md5pwd", adminMd5Pwd));
+        this.dbEngine.execute(insertStatement);
     }
 }
 

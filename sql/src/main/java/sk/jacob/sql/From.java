@@ -25,13 +25,6 @@ public class From extends Statement {
 
     @Override
     public String sql(DialectVisitor visitor) {
-        String from = visitor.visit(this);
-        StringBuffer sb = new StringBuffer(from);
-        if(this.where != null) {
-            sb.append("\n");
-            String whereSql = this.where.sql(visitor);
-            sb.append(whereSql);
-        }
-        return sb.toString();
+        return visitor.visit(this);
     }
 }

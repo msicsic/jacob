@@ -10,12 +10,10 @@ public interface DialectVisitor {
     String visit(Op.And and);
     String visit(Op.Eq eq);
     String visit(Op.Le le);
-
     String visit(TYPE.StringType stringType);
-
     String visit(Insert insert);
-
     String visit(TYPE.BooleanType booleanType);
-
     String visit(Delete delete);
+    String visit(Where where);
+    String visit(Column.Options options);
 }

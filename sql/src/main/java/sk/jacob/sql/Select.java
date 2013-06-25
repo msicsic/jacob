@@ -24,14 +24,6 @@ public class Select extends Statement {
     }
 
     public String sql(DialectVisitor visitor){
-        String select = visitor.visit(this);
-        StringBuffer sb = new StringBuffer(select);
-        sb.append("\n");
-        if(this.from != null) {
-            String fromSql = this.from.sql(visitor);
-            sb.append(fromSql);
-        }
-        sb.append(";");
-        return sb.toString();
+        return visitor.visit(this);
     }
 }

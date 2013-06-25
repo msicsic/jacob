@@ -4,23 +4,28 @@ import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
 
 public class Column extends DbObject {
-    public static class Options {
-        public Boolean primaryKey;
-        public Options primaryKey(Boolean primaryKey) {
-            this.primaryKey = primaryKey;
+    public static class Options extends Statement {
+        public Boolean primaryKey = Boolean.FALSE;
+        public Options primaryKey() {
+            this.primaryKey = Boolean.TRUE;
             return this;
         }
 
-        public Boolean nullable;
-        public Options nullable(Boolean nullable) {
-            this.nullable = nullable;
+        public Boolean nullable = Boolean.FALSE;
+        public Options nullable() {
+            this.nullable = Boolean.TRUE;
             return this;
         }
 
-        public Boolean unique;
-        public Options unique(boolean unique) {
-            this.unique = unique;
+        public Boolean unique = Boolean.FALSE;
+        public Options unique() {
+            this.unique = Boolean.TRUE;
             return this;
+        }
+
+        @Override
+        public String sql(DialectVisitor dialect) {
+            return dialect.visit(this);
         }
     }
 
