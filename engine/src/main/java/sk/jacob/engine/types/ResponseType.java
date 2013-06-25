@@ -1,7 +1,6 @@
 package sk.jacob.engine.types;
 
-public class ResponseType<H extends ResponseHeaderType, D extends ResponseDataType> {
-    public H resh;
-
-    public D resd;
+public class ResponseType {
+    public ResponseHeaderType resh;
+    public ResponseDataType resd;
 }

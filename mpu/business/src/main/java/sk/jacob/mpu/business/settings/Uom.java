@@ -1,12 +1,10 @@
 package sk.jacob.mpu.business.settings;
 
 import sk.jacob.engine.handler.Message;
-import sk.jacob.engine.types.DataPacket;
-import sk.jacob.engine.types.RequestType;
-import sk.jacob.engine.types.ResponseType;
+import sk.jacob.engine.types.*;
 
 public class Uom {
-    public class Req1 extends RequestType {
+    public class Req1 extends RequestDataType {
         private int i;
         private String s;
 
@@ -16,7 +14,7 @@ public class Uom {
         }
     }
 
-    public class Res1 extends ResponseType {
+    public class Res1 extends ResponseDataType {
     }
 
     @Message(type="business.uom.add",

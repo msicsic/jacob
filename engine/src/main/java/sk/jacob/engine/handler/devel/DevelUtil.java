@@ -7,11 +7,12 @@ import java.util.Map;
 import sk.jacob.engine.handler.HandlerInspector;
 import sk.jacob.engine.types.DataPacket;
 
+// FIXME
 public class DevelUtil {
-    public static String ROOT_NODE = "jacob";
+    public static final String ROOT_NODE = "jacob";
 
     public static void mpuListAppendMpu(DataPacket dataPacket, Class<?> mpuClass, String moduleId) {
-        MpuListResponseType response = initResponse(dataPacket);
+//        MpuRegistryTypes response = initResponse(dataPacket);
 
 //        for (Object[] pair : HandlerInspector.inspect(mpuClass)) {
 //            response.getResd().add(createMpuNode((Method) pair[1], moduleId));
@@ -26,23 +27,24 @@ public class DevelUtil {
     }
 
     public static void mpuListAppendModule(DataPacket dataPacket, String moduleId, String parentId) {
-        MpuListResponseType response = initResponse(dataPacket);
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("id", moduleId);
-        map.put("parent", parentId);
-        map.put("type", "module");
-        response.getResd().add(map);
+//        MpuRegistryTypes response = initResponse(dataPacket);
+//
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put("id", moduleId);
+//        map.put("parent", parentId);
+//        map.put("type", "module");
+//        response.getResd().add(map);
     }
 
-    private static MpuListResponseType initResponse(DataPacket dataPacket) {
-        MpuListResponseType response = (MpuListResponseType) dataPacket.message.response;
-        if (response == null) {
-            dataPacket.message.response = response = new MpuListResponseType();
-            response.setResd(new LinkedList());
-            response.getResd().add(createRootNode());
-        }
-        return response;
+    private static MpuRegistryTypes initResponse(DataPacket dataPacket) {
+//        MpuRegistryTypes response = (MpuRegistryTypes) dataPacket.message.response;
+//        if (response == null) {
+//            dataPacket.message.response = response = new MpuRegistryTypes();
+//            response.setResd(new LinkedList());
+//            response.getResd().add(createRootNode());
+//        }
+//        return response;
+        return null;
     }
 
     private static Object createRootNode() {

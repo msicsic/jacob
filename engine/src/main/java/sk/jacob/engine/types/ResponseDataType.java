@@ -1,4 +1,3 @@
 package sk.jacob.engine.types;
 
-public interface ResponseDataType {
-}
+public abstract class ResponseDataType {}

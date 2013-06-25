@@ -1,4 +1,4 @@
 package sk.jacob.engine.types;
 
-public class TokenType {
+public abstract class TokenType {
 }
