@@ -50,7 +50,7 @@ public abstract class HandlerInspector<T extends Annotation> {
         if (this.handlerMap.containsKey(handlerKey)) {
             try {
                 Method handler = this.handlerMap.get(handlerKey);
-                updateRequestData(dataPacket, handler.getAnnotation(supportedAnnotation));
+                deserializeRawRequest(dataPacket, handler.getAnnotation(supportedAnnotation));
                 dataPacket = (DataPacket) handler.invoke(null, dataPacket);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -59,9 +59,26 @@ public abstract class HandlerInspector<T extends Annotation> {
         return dataPacket;
     }
 
+    /**
+     * Gets Handler key from given annotation.
+     * Method is called at startup when framework builds up handler map.
+     */
     protected abstract String getHandlerKey(T annotation);
+
+    /**
+     * Gets actual type of message.
+     * Message type is then used by framework to lookup handler method.
+     */
     protected abstract String getMessageType(DataPacket dataPacket);
-    protected abstract void updateRequestData(DataPacket dataPacket, Annotation annotation);
+
+    /**
+     * Deserializes JSON raw request to corespondent Java object type.
+     */
+    protected abstract void deserializeRawRequest(DataPacket dataPacket, Annotation annotation);
+
+    /**
+     * Serializes raw response to raw response.
+     */
     protected abstract DataPacket serializeResponse(DataPacket dataPacket);
 
 // TODO: Bude treba vyfaktorovat.

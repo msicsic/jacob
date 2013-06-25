@@ -6,10 +6,46 @@ import sk.jacob.sql.dialect.OracleDialectVisitor;
 import sk.jacob.sql.dialect.PostgreDialectVisitor;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+
+import static sk.jacob.sql.Statement.CompiledStatement;
 
 public class DbEngine {
+    public void execute(Statement statement) {
+        CompiledStatement cs = statement.compile(this);
+        Connection c = this.getConnection();
+        try {
+            c.setAutoCommit(Boolean.FALSE);
+        } catch (SQLException e) {
+            // FIXME:
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        try {
+            PreparedStatement s = c.prepareStatement(cs.normalizedStatement());
+            bindParameters(s, cs.parameterList());
+            s.executeUpdate();
+            c.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                c.close();
+            } catch (SQLException e) {
+                // FIXME:
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+    }
+
+    private static PreparedStatement bindParameters(PreparedStatement preparedStatement,
+                                                    List<Object> parameters) throws SQLException {
+        int paramSize = parameters.size();
+        for (int i = 1; i <= paramSize; i++) {
+            preparedStatement.setObject(i, parameters.get(i - 1));
+        }
+        return preparedStatement;
+    }
+
     public static enum DB_CONFIG {
         H2(new H2DialectVisitor(), "org.h2.Driver"),
         ORACLE(new OracleDialectVisitor(), "com.oracle.jdbc"),

@@ -4,16 +4,18 @@ import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerInspector;
 import sk.jacob.engine.handler.Token;
 import sk.jacob.engine.types.DataPacket;
-import sk.jacob.mpu.security.dbregistry.AuthenticateLoginPassword;
 import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.mpu.security.dbregistry.Model;
-import sk.jacob.sql.DbEngine;
-import sk.jacob.sql.Metadata;
+import sk.jacob.sql.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+
+import static sk.jacob.sql.CRUD.cv;
+import static sk.jacob.sql.CRUD.delete;
+import static sk.jacob.sql.CRUD.insert;
 
 public class SecurityModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<Class>();
@@ -32,7 +34,8 @@ public class SecurityModule implements Module {
                         config.getProperty("security.url"),
                         config.getProperty("security.username"),
                         config.getProperty("security.password"));
-        this.initDatabase();
+        this.initDatabase(config.getProperty("admin.login"),
+                          config.getProperty("admin.md5pwd"));
     }
 
     @Override
@@ -40,8 +43,21 @@ public class SecurityModule implements Module {
         return this.handlerInspector.process(dataPacket);
     }
 
-    private void initDatabase() {
+    private void initDatabase(String adminLogin, String adminMd5Pwd) {
         MODEL.createAll(dbEngine);
+        initializeAdmin(adminLogin, adminMd5Pwd);
+    }
+
+    private void initializeAdmin(String adminLogin, String adminMd5Pwd) {
+        Statement s = delete("users").where(Op.eq("admin", Boolean.TRUE));
+        this.dbEngine.execute(s);
+
+
+        s = insert("users").values(cv("login", adminLogin),
+                                   cv("username", "Administrator"),
+                                   cv("admin", Boolean.TRUE),
+                                   cv("md5pwd", adminMd5Pwd));
+        this.dbEngine.execute(s);
     }
 }
 

@@ -21,6 +21,6 @@ public class Delete extends Statement {
 
     @Override
     public String sql(DialectVisitor visitor) {
-        return null;
+        return visitor.visit(this);
     }
 }

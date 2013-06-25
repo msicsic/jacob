@@ -28,7 +28,7 @@ public class SecurityHandlerInspector extends HandlerInspector<Token> {
     }
 
     @Override
-    protected void updateRequestData(DataPacket dataPacket, Annotation annotation) {
+    protected void deserializeRawRequest(DataPacket dataPacket, Annotation annotation) {
         JsonObject securityElement = getSecurityElement(dataPacket);
         Token token = (Token)annotation;
         dataPacket.security.token = new Gson().fromJson(securityElement, token.token());

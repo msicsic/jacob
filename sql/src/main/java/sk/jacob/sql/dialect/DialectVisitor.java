@@ -14,4 +14,8 @@ public interface DialectVisitor {
     String visit(TYPE.StringType stringType);
 
     String visit(Insert insert);
+
+    String visit(TYPE.BooleanType booleanType);
+
+    String visit(Delete delete);
 }

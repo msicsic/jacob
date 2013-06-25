@@ -18,7 +18,16 @@ public class TYPE {
             return this;
         }
     }
-    public static StringType string() {
+    public static StringType String() {
         return new StringType();
+    }
+
+    public static class BooleanType extends Type {
+        public BooleanType() {
+            super(Boolean.class);
+        }
+    }
+    public static BooleanType Boolean() {
+        return new BooleanType();
     }
 }

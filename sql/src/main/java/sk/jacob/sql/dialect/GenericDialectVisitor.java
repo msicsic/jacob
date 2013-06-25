@@ -53,7 +53,7 @@ public class GenericDialectVisitor implements DialectVisitor {
 
     @Override
     public DDLStatement visit(Table table) {
-        StringBuffer sb = new StringBuffer("CREATE TABLE ");
+        StringBuffer sb = new StringBuffer("CREATE TABLE IF NOT EXISTS ");
         sb.append(table.name);
         sb.append(" (\n");
         List<String> columnInlineStatements = new ArrayList<String>();
@@ -74,6 +74,8 @@ public class GenericDialectVisitor implements DialectVisitor {
         sb.append(" ");
         if(column.type instanceof TYPE.StringType) {
             sb.append(this.visit((TYPE.StringType)column.type));
+        } else if(column.type instanceof TYPE.BooleanType) {
+            sb.append(this.visit((TYPE.BooleanType)column.type));
         }
         return new DDLStatement(sb.toString(), null);
     }
@@ -83,6 +85,20 @@ public class GenericDialectVisitor implements DialectVisitor {
         StringBuffer sb = new StringBuffer("VARCHAR(");
         sb.append(stringType.length);
         sb.append(")");
+        return sb.toString();
+    }
+
+    @Override
+    public String visit(TYPE.BooleanType booleanType) {
+        return "BOOLEAN";
+    }
+
+    @Override
+    public String visit(Delete delete) {
+        StringBuffer sb = new StringBuffer("DELETE FROM ");
+        sb.append(delete.tableName);
+        sb.append(" ");
+        sb.append(delete.where.sql(this));
         return sb.toString();
     }
 

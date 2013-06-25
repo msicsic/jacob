@@ -27,11 +27,7 @@ public class Metadata{
         try {
             Statement statement = connection.createStatement();
             for (DDLStatement ddl : ddlStatements) {
-                try {
                 statement.execute(ddl.inline);
-                } catch (Exception e) {
-                    // pass
-                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

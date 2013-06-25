@@ -52,12 +52,20 @@ public abstract class Statement {
             return this.parameters;
         }
 
-        public List<String> positionalParameters() {
+        private List<String> positionalParameters() {
             return new ArrayList<String>(){{
                 Matcher match = PARAM_MATCHER.matcher(compiledStatement);
                 while(match.find())
                     add(":"+match.group(1)+":");
             }};
+        }
+
+        public List<Object> parameterList() {
+            List parameterList = new ArrayList();
+            for(String parameterName : positionalParameters()) {
+                parameterList.add(this.parameters.get(parameterName));
+            }
+            return parameterList;
         }
 
         public String normalizedStatement() {
@@ -99,7 +107,7 @@ public abstract class Statement {
     }
 
     public CompiledStatement compile(DbEngine dbEngine) {
-        throw new UnsupportedOperationException();
+        return compile(dbEngine.getDialect());
     }
 
     public abstract String sql(DialectVisitor visitor);

@@ -34,7 +34,7 @@ public class ContextHandleInspector extends HandlerInspector<Message> {
     }
 
     @Override
-    protected void updateRequestData(DataPacket dataPacket, Annotation annotation) {
+    protected void deserializeRawRequest(DataPacket dataPacket, Annotation annotation) {
         try {
             Message message = (Message) annotation;
 //            dataPacket.message.request = new Gson().fromJson(dataPacket.message.jsonRequest, message.reqd());
