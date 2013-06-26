@@ -6,16 +6,18 @@ import sk.jacob.engine.handler.Token;
 import sk.jacob.engine.types.DataPacket;
 import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.mpu.security.dbregistry.Model;
-import sk.jacob.sql.*;
+import sk.jacob.sql.DbEngine;
+import sk.jacob.sql.ExecutionContext;
+import sk.jacob.sql.Metadata;
+import sk.jacob.sql.Op;
+import sk.jacob.sql.dialect.Statement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import static sk.jacob.sql.CRUD.cv;
-import static sk.jacob.sql.CRUD.delete;
-import static sk.jacob.sql.CRUD.insert;
+import static sk.jacob.sql.CRUD.*;
 
 public class SecurityModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<Class>();
@@ -52,7 +54,8 @@ public class SecurityModule implements Module {
         Statement deleteStatement =
                 delete("users")
                         .where(Op.eq("admin", Boolean.TRUE));
-        this.dbEngine.execute(deleteStatement);
+        ExecutionContext ectx = this.dbEngine.getExecutionContext();
+        ectx.execute(deleteStatement);
 
         Statement insertStatement =
                 insert("users")
@@ -60,7 +63,7 @@ public class SecurityModule implements Module {
                                 cv("username", "Administrator"),
                                 cv("admin", Boolean.TRUE),
                                 cv("md5pwd", adminMd5Pwd));
-        this.dbEngine.execute(insertStatement);
+        ectx.execute(insertStatement);
     }
 }
 

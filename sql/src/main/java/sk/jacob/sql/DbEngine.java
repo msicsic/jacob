@@ -6,10 +6,10 @@ import sk.jacob.sql.dialect.OracleDialectVisitor;
 import sk.jacob.sql.dialect.PostgreDialectVisitor;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
-import static sk.jacob.sql.Statement.CompiledStatement;
+import static sk.jacob.sql.CRUD.cv;
+import static sk.jacob.sql.dialect.Statement.CompiledStatement;
 
 public class DbEngine {
     public static enum DB_CONFIG {
@@ -26,19 +26,17 @@ public class DbEngine {
         }
     }
 
-    private final String driverClass;
     private final String url;
     private final String username;
     private final String password;
 
     public DbEngine(String driverClass, String url, String username, String password) {
-        this.driverClass = driverClass;
         this.url = url;
         this.username = username;
         this.password = password;
 
         try {
-            Class.forName(this.driverClass);
+            Class.forName(driverClass);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -46,6 +44,11 @@ public class DbEngine {
 
     public DbEngine(String url, String username, String password) {
         this(getDriverClassName(url), url, username, password);
+    }
+
+
+    public ExecutionContext getExecutionContext() {
+        return new ExecutionContext(this);
     }
 
     public Connection getConnection() {
@@ -59,26 +62,9 @@ public class DbEngine {
         return connection;
     }
 
-    public List<Long> execute(Statement statement) {
-        List<Long> generatedIds = null;
-        CompiledStatement cs = statement.compile(this);
-        Connection connection = this.getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(cs.normalizedStatement());
-            bindParameters(preparedStatement, cs.parameterList());
-            preparedStatement.executeUpdate();
 
-            connection.commit();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            this.close(connection);
-        }
-        return generatedIds;
-    }
-
-    private static PreparedStatement bindParameters(PreparedStatement preparedStatement,
-                                                    List<Object> parameters) throws SQLException {
+    static PreparedStatement bindParameters(PreparedStatement preparedStatement,
+                                            List<Object> parameters) throws SQLException {
         int paramSize = parameters.size();
         for (int i = 1; i <= paramSize; i++) {
             preparedStatement.setObject(i, parameters.get(i - 1));

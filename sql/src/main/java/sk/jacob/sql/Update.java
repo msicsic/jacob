@@ -1,10 +1,11 @@
 package sk.jacob.sql;
 
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.Statement;
 
 public class Update extends Statement {
     public final String tableName;
-    public Where where;
+    private Where where;
 
     public Update(String tableName) {
         this.tableName = tableName;
@@ -16,6 +17,10 @@ public class Update extends Statement {
 
     public Where where(Where where) {
         this.where = where;
+        return this.where;
+    }
+
+    public Where getWhereClause() {
         return this.where;
     }
 

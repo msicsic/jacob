@@ -1,9 +1,10 @@
 package sk.jacob.sql;
 
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.Statement;
 
 public class Where extends Statement {
-    public ConditionalOperation conditionalOperation;
+    public final ConditionalOperation conditionalOperation;
 
     public Where(Statement parentStatement, ConditionalOperation conditionalOperation) {
         super(parentStatement);

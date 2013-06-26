@@ -9,6 +9,10 @@ public class CRUD {
         return new Insert(tableName);
     }
 
+    public static Insert insert(Table table) {
+        return new Insert(table);
+    }
+
     public static Update update(String tableName) {
         return new Update(tableName);
     }

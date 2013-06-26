@@ -13,8 +13,9 @@ public class GenericDialectVisitor implements DialectVisitor {
         StringBuffer sb = new StringBuffer("SELECT ");
         sb.append((String) Functional.reduce(StringReducer.instance(", "), select.columnNames));
         sb.append("\n");
-        if(select.from != null) {
-            String fromSql = select.from.sql(this);
+        From fromClause = select.getFromClause();
+        if(fromClause != null) {
+            String fromSql = fromClause.sql(this);
             sb.append(fromSql);
         }
         sb.append(";");
@@ -26,14 +27,14 @@ public class GenericDialectVisitor implements DialectVisitor {
         StringBuffer sb = new StringBuffer("INSERT INTO ");
         sb.append(insert.tableName);
         sb.append(" (");
-        for(ColumnValue cv : insert.columnValues) {
+        for(ColumnValue cv : insert.getColumnValues()) {
             sb.append(cv.columnName);
             sb.append(", ");
         }
         int lastComma = sb.lastIndexOf(",");
         sb.replace(lastComma, lastComma + 2, ")\nVALUES (");
 
-        for(ColumnValue cv : insert.columnValues) {
+        for(ColumnValue cv : insert.getColumnValues()) {
             sb.append(insert.getParamCounter().addParam(cv.columnName, cv.value));
             sb.append(", ");
         }
@@ -48,7 +49,7 @@ public class GenericDialectVisitor implements DialectVisitor {
         StringBuffer sb = new StringBuffer("DELETE FROM ");
         sb.append(delete.tableName);
         sb.append(" ");
-        sb.append(delete.where.sql(this));
+        sb.append(delete.getWhereClause().sql(this));
         return sb.toString();
     }
 
@@ -56,9 +57,10 @@ public class GenericDialectVisitor implements DialectVisitor {
     public String visit(From from) {
         StringBuffer sb = new StringBuffer("FROM ");
         sb.append((String) Functional.reduce(StringReducer.instance(", "), from.tableNames));
-        if(from.where != null) {
+        Where whereClause = from.getWhereClause();
+        if(whereClause != null) {
             sb.append("\n");
-            String whereSql = from.where.sql(this);
+            String whereSql = whereClause.sql(this);
             sb.append(whereSql);
         }
         return sb.toString();
@@ -74,7 +76,7 @@ public class GenericDialectVisitor implements DialectVisitor {
 
     @Override
     public String visit(Column.Options options) {
-        return options.primaryKey == Boolean.TRUE ? " PRIMARY KEY " : "";
+        return options.isPrimaryKey() == Boolean.TRUE ? " PRIMARY KEY " : "";
     }
 
     @Override
@@ -102,6 +104,8 @@ public class GenericDialectVisitor implements DialectVisitor {
             sb.append(this.visit((TYPE.StringType)column.type));
         } else if(column.type instanceof TYPE.BooleanType) {
             sb.append(this.visit((TYPE.BooleanType)column.type));
+        } else if(column.type instanceof TYPE.LongType) {
+            sb.append(this.visit((TYPE.LongType)column.type));
         }
         sb.append(" ");
         sb.append(visit(column.options));
@@ -119,6 +123,27 @@ public class GenericDialectVisitor implements DialectVisitor {
     @Override
     public String visit(TYPE.BooleanType booleanType) {
         return "BOOLEAN";
+    }
+
+    @Override
+    public String visit(TYPE.LongType longType) {
+        return "NUMBER";
+    }
+
+    @Override
+    public DDLStatement visit(Sequence sequence) {
+        StringBuffer sb = new StringBuffer("CREATE SEQUENCE IF NOT EXISTS ");
+        sb.append(sequence.name);
+        sb.append(";");
+        return new DDLStatement(sb.toString());
+    }
+
+    @Override
+    public String sequenceNextVal(Sequence sequence) {
+        StringBuffer sb = new StringBuffer("SELECT ");
+        sb.append(sequence.name);
+        sb.append(".NEXTVAL AS ID FROM DUAL;");
+        return sb.toString();
     }
 
     @Override
@@ -149,5 +174,4 @@ public class GenericDialectVisitor implements DialectVisitor {
         sb.append(le.getParamCounter().addParam(le.columnName, le.value));
         return sb.toString();
     }
-
 }

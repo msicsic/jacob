@@ -1,13 +1,14 @@
 package sk.jacob.sql;
 
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.Statement;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class From extends Statement {
-    public List<String> tableNames;
-    public Where where;
+    public final List<String> tableNames;
+    private Where where;
 
     public From(Statement parentStatement, String ... tableNames) {
         super(parentStatement);
@@ -20,6 +21,10 @@ public class From extends Statement {
 
     public Where where(Where where) {
         this.where = where;
+        return this.where;
+    }
+
+    public Where getWhereClause() {
         return this.where;
     }
 

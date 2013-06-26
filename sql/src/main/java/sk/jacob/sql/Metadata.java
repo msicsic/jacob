@@ -2,15 +2,13 @@ package sk.jacob.sql;
 
 import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.GenericDialectVisitor;
 
-import java.io.Closeable;
-import java.sql.*;
+import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 public class Metadata{
     private final List<String> createOrder = new ArrayList<String>();
@@ -32,32 +30,22 @@ public class Metadata{
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            close(connection);
-        }
-    }
-
-    private void close(Connection connection) {
-        try {
-            connection.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            DbEngine.close(connection);
         }
     }
 
     private List<DDLStatement> ddlStatements(DbEngine engine) {
-        List<DDLStatement> ddlstatemens = new ArrayList<DDLStatement>();
+        List<DDLStatement> ddlStatements = new ArrayList<DDLStatement>();
+        DialectVisitor dialect = engine.getDialect();
         for(String objectName : createOrder) {
             DbObject dbObject = dbObjects.get(objectName);
-            if(isTable(dbObject)) {
-                DialectVisitor dialect = engine.getDialect();
-                DDLStatement ddlStatement = dialect.visit((Table) dbObject);
-                ddlstatemens.add(ddlStatement);
+
+            if(dbObject instanceof Table) {
+                ddlStatements.add(dialect.visit((Table) dbObject));
+            } else if (dbObject instanceof Sequence) {
+                ddlStatements.add(dialect.visit((Sequence) dbObject));
             }
         }
-        return ddlstatemens;
-    }
-
-    private Boolean isTable(DbObject dbObject){
-        return dbObject instanceof Table;
+        return ddlStatements;
     }
 }

@@ -1,6 +1,7 @@
 package sk.jacob.sql;
 
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.Statement;
 
 import java.util.Arrays;
 import java.util.List;

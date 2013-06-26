@@ -1,13 +1,14 @@
 package sk.jacob.sql;
 
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.Statement;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class Select extends Statement {
     public final List<String> columnNames;
-    public From from;
+    private From from;
 
     public Select(String ... columnNames) {
         super();
@@ -23,7 +24,13 @@ public class Select extends Statement {
         return this.from;
     }
 
+    public From getFromClause() {
+        return this.from;
+    }
+
+    @Override
     public String sql(DialectVisitor visitor){
         return visitor.visit(this);
     }
 }
+

@@ -1,7 +1,9 @@
 package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.engine.handler.Token;
-import sk.jacob.engine.types.*;
+import sk.jacob.engine.types.DataPacket;
+import sk.jacob.engine.types.ResponseDataType;
+import sk.jacob.engine.types.TokenType;
 
 public class AuthenticateLoginPassword {
     private static class AuthLogPassToken extends TokenType {

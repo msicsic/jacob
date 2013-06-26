@@ -16,4 +16,7 @@ public interface DialectVisitor {
     String visit(Delete delete);
     String visit(Where where);
     String visit(Column.Options options);
+    String visit(TYPE.LongType longType);
+    DDLStatement visit(Sequence sequence);
+    String sequenceNextVal(Sequence sequence);
 }

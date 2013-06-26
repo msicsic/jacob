@@ -7,11 +7,11 @@ import sk.jacob.engine.types.*;
 import sk.jacob.engine.types.RequestDataType;
 
 public class FindByLogin {
-    public static class FindByLoginReqd extends RequestDataType {
+    private static class FindByLoginReqd extends RequestDataType {
         public String login;
     }
 
-    public static class FindByLoginResd extends ResponseDataType {
+    private static class FindByLoginResd extends ResponseDataType {
         public static class TenantResponse {
             public String tenantId;
             public String tenantName;
@@ -32,7 +32,7 @@ public class FindByLogin {
     }
 
     @Message(type = "context.tenant.findByLogin",
-             version = "0.1",
+             version = "1.0",
              reqd = FindByLoginReqd.class,
              resd = FindByLoginResd.class)
     public static DataPacket handle(DataPacket dataPacket) {

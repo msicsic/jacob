@@ -1,11 +1,10 @@
 package sk.jacob.mpu.security;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import sk.jacob.engine.handler.HandlerInspector;
 import sk.jacob.engine.handler.Token;
 import sk.jacob.engine.types.DataPacket;
-import sk.jacob.engine.types.TokenType;
-import sk.jacob.mpu.security.dbregistry.AuthenticateLoginPassword;
 
 import java.lang.annotation.Annotation;
 import java.util.List;

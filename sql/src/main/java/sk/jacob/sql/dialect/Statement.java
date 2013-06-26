@@ -1,7 +1,6 @@
-package sk.jacob.sql;
+package sk.jacob.sql.dialect;
 
-import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.GenericDialectVisitor;
+import sk.jacob.sql.DbEngine;
 
 import java.util.ArrayList;
 import java.util.HashMap;

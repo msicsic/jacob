@@ -30,4 +30,13 @@ public class TYPE {
     public static BooleanType Boolean() {
         return new BooleanType();
     }
+
+    public static class LongType extends Type {
+        public LongType() {
+            super(Long.class);
+        }
+    }
+    public static LongType Long() {
+        return new LongType();
+    }
 }

@@ -2,26 +2,47 @@ package sk.jacob.sql;
 
 import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.Statement;
 
 public class Column extends DbObject {
     public static class Options extends Statement {
-        public Boolean primaryKey = Boolean.FALSE;
+        private Boolean primaryKey = Boolean.FALSE;
+        private IdGenerator generator = null;
         public Options primaryKey() {
+            return primaryKey(null);
+        }
+        public Options primaryKey(IdGenerator generator) {
+            this.generator = generator;
             this.primaryKey = Boolean.TRUE;
             return this;
         }
+        public Boolean isPrimaryKey() {
+            return this.primaryKey;
+        }
+        public IdGenerator getGenerator() {
+            return this.generator;
+        }
 
-        public Boolean nullable = Boolean.FALSE;
+
+        private Boolean nullable = Boolean.FALSE;
         public Options nullable() {
             this.nullable = Boolean.TRUE;
             return this;
         }
+        public Boolean isNullable() {
+            return this.nullable;
+        }
 
-        public Boolean unique = Boolean.FALSE;
+
+        private Boolean unique = Boolean.FALSE;
         public Options unique() {
             this.unique = Boolean.TRUE;
             return this;
         }
+        public Boolean isUnique() {
+            return this.unique;
+        }
+
 
         @Override
         public String sql(DialectVisitor dialect) {
