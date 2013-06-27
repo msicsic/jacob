@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static sk.jacob.sql.dml.DML.*;
+import static sk.jacob.sql.dml.Op.eq;
 
 public class SecurityModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<Class>();
@@ -53,7 +54,7 @@ public class SecurityModule implements Module {
     private void initializeAdmin(String adminLogin, String adminMd5Pwd) {
         Statement deleteStatement =
                 delete("users")
-                        .where(Op.eq("admin", Boolean.TRUE));
+                        .where(eq("admin", Boolean.TRUE));
         Statement insertStatement =
                 insert("users")
                         .values(cv("login", adminLogin),
@@ -65,6 +66,7 @@ public class SecurityModule implements Module {
         ectx.execute(deleteStatement);
         ectx.execute(insertStatement);
         ectx.txCommit();
+        ectx.close();
     }
 }
 
