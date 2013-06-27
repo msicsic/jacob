@@ -1,6 +1,10 @@
-package sk.jacob.sql;
+package sk.jacob.sql.ddl;
+
+import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.Statement;
+
 public class TYPE {
-    public static abstract class Type{
+    public static abstract class Type extends Statement {
         public final Class columnType;
         public Type(Class columnType) {
             this.columnType = columnType;
@@ -17,6 +21,11 @@ public class TYPE {
             this.length = length;
             return this;
         }
+
+        @Override
+        public String sql(DialectVisitor visitor) {
+            return visitor.visit(this);
+        }
     }
     public static StringType String() {
         return new StringType();
@@ -26,6 +35,10 @@ public class TYPE {
         public BooleanType() {
             super(Boolean.class);
         }
+        @Override
+        public String sql(DialectVisitor visitor) {
+            return visitor.visit(this);
+        }
     }
     public static BooleanType Boolean() {
         return new BooleanType();
@@ -34,6 +47,10 @@ public class TYPE {
     public static class LongType extends Type {
         public LongType() {
             super(Long.class);
+        }
+        @Override
+        public String sql(DialectVisitor visitor) {
+            return visitor.visit(this);
         }
     }
     public static LongType Long() {

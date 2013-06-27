@@ -1,4 +1,4 @@
-package sk.jacob.sql;
+package sk.jacob.sql.ddl;
 
 public class ColumnValue {
     public final String columnName;

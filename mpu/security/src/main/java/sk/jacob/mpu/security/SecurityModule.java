@@ -6,10 +6,10 @@ import sk.jacob.engine.handler.Token;
 import sk.jacob.engine.types.DataPacket;
 import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.mpu.security.dbregistry.Model;
-import sk.jacob.sql.DbEngine;
-import sk.jacob.sql.ExecutionContext;
+import sk.jacob.sql.engine.DbEngine;
+import sk.jacob.sql.engine.ExecutionContext;
 import sk.jacob.sql.Metadata;
-import sk.jacob.sql.Op;
+import sk.jacob.sql.dml.Op;
 import sk.jacob.sql.dialect.Statement;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import static sk.jacob.sql.CRUD.*;
+import static sk.jacob.sql.dml.DML.*;
 
 public class SecurityModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<Class>();
@@ -54,16 +54,17 @@ public class SecurityModule implements Module {
         Statement deleteStatement =
                 delete("users")
                         .where(Op.eq("admin", Boolean.TRUE));
-        ExecutionContext ectx = this.dbEngine.getExecutionContext();
-        ectx.execute(deleteStatement);
-
         Statement insertStatement =
                 insert("users")
                         .values(cv("login", adminLogin),
                                 cv("username", "Administrator"),
                                 cv("admin", Boolean.TRUE),
                                 cv("md5pwd", adminMd5Pwd));
+        ExecutionContext ectx = this.dbEngine.getExecutionContext();
+        ectx.txBegin();
+        ectx.execute(deleteStatement);
         ectx.execute(insertStatement);
+        ectx.txCommit();
     }
 }
 

@@ -1,7 +1,9 @@
 package sk.jacob.sql;
 
+import sk.jacob.sql.ddl.DbObject;
 import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.engine.DbEngine;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -20,7 +22,7 @@ public class Metadata{
     }
 
     public void createAll(DbEngine engine) {
-        List<DDLStatement> ddlStatements = ddlStatements(engine);
+        List<DDLStatement> ddlStatements = compileDDLStatements(engine);
         Connection connection = engine.getConnection();
         try {
             Statement statement = connection.createStatement();
@@ -34,17 +36,12 @@ public class Metadata{
         }
     }
 
-    private List<DDLStatement> ddlStatements(DbEngine engine) {
+    private List<DDLStatement> compileDDLStatements(DbEngine engine) {
         List<DDLStatement> ddlStatements = new ArrayList<DDLStatement>();
         DialectVisitor dialect = engine.getDialect();
         for(String objectName : createOrder) {
             DbObject dbObject = dbObjects.get(objectName);
-
-            if(dbObject instanceof Table) {
-                ddlStatements.add(dialect.visit((Table) dbObject));
-            } else if (dbObject instanceof Sequence) {
-                ddlStatements.add(dialect.visit((Sequence) dbObject));
-            }
+            ddlStatements.add(dbObject.sql(dialect));
         }
         return ddlStatements;
     }

@@ -1,4 +1,7 @@
-package sk.jacob.sql;
+package sk.jacob.sql.ddl;
+
+import sk.jacob.sql.*;
+
 public class DDL {
     public static Table table(String name, Metadata metadata, Column... columns) {
         return new Table(name, metadata, columns);

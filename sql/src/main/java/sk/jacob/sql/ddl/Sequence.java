@@ -1,7 +1,11 @@
-package sk.jacob.sql;
+package sk.jacob.sql.ddl;
 
+import sk.jacob.sql.Metadata;
+import sk.jacob.sql.ddl.DbObject;
 import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.engine.DbEngine;
+import sk.jacob.sql.engine.ExecutionContext;
 
 public class Sequence extends DbObject {
     public Sequence(String sequenceName, Metadata metadata) {
@@ -17,6 +21,9 @@ public class Sequence extends DbObject {
     public Long nextVal(DbEngine dbEngine) {
         DialectVisitor visitor = dbEngine.getDialect();
         String nextValStatement = visitor.sequenceNextVal(this);
-        return dbEngine.getExecutionContext().execute(nextValStatement);
+        ExecutionContext ectx = dbEngine.getExecutionContext();
+        Long nextVal = ectx.execute(nextValStatement);
+        ectx.close();
+        return nextVal;
     }
 }

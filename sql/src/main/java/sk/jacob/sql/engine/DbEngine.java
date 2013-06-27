@@ -1,4 +1,4 @@
-package sk.jacob.sql;
+package sk.jacob.sql.engine;
 
 import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.dialect.H2DialectVisitor;
@@ -7,9 +7,6 @@ import sk.jacob.sql.dialect.PostgreDialectVisitor;
 
 import java.sql.*;
 import java.util.List;
-
-import static sk.jacob.sql.CRUD.cv;
-import static sk.jacob.sql.dialect.Statement.CompiledStatement;
 
 public class DbEngine {
     public static enum DB_CONFIG {

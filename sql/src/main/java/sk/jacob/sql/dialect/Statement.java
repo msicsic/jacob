@@ -1,6 +1,6 @@
 package sk.jacob.sql.dialect;
 
-import sk.jacob.sql.DbEngine;
+import sk.jacob.sql.engine.DbEngine;
 
 import java.util.ArrayList;
 import java.util.HashMap;

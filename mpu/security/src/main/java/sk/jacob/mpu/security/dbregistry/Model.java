@@ -1,13 +1,12 @@
 package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.sql.Metadata;
-import sk.jacob.sql.SequenceIdGenerator;
 
-import static sk.jacob.sql.Column.options;
-import static sk.jacob.sql.DDL.column;
-import static sk.jacob.sql.DDL.table;
-import static sk.jacob.sql.TYPE.Boolean;
-import static sk.jacob.sql.TYPE.String;
+import static sk.jacob.sql.ddl.Column.options;
+import static sk.jacob.sql.ddl.DDL.column;
+import static sk.jacob.sql.ddl.DDL.table;
+import static sk.jacob.sql.ddl.TYPE.Boolean;
+import static sk.jacob.sql.ddl.TYPE.String;
 
 public class Model {
     public static Metadata get() {

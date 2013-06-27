@@ -1,20 +1,17 @@
 package sk.jacob.sql;
 
+import sk.jacob.sql.ddl.Sequence;
+import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.dialect.Statement;
+import sk.jacob.sql.engine.DbEngine;
+import sk.jacob.sql.engine.ExecutionContext;
 
-import static sk.jacob.sql.CRUD.*;
-import static sk.jacob.sql.CRUD.insert;
-import static sk.jacob.sql.Column.options;
-import static sk.jacob.sql.DDL.column;
-import static sk.jacob.sql.DDL.sequence;
-import static sk.jacob.sql.DDL.table;
-import static sk.jacob.sql.Op.and;
-import static sk.jacob.sql.Op.eq;
-import static sk.jacob.sql.Op.le;
-import static sk.jacob.sql.SequenceIdGenerator.sequenceIdGenerator;
-import static sk.jacob.sql.TYPE.Boolean;
-import static sk.jacob.sql.TYPE.String;
-import static sk.jacob.sql.TYPE.Long;
+import static sk.jacob.sql.dml.DML.*;
+import static sk.jacob.sql.ddl.Column.options;
+import static sk.jacob.sql.ddl.DDL.*;
+import static sk.jacob.sql.dml.Op.*;
+import static sk.jacob.sql.generator.SequenceIdGenerator.sequenceIdGenerator;
+import static sk.jacob.sql.ddl.TYPE.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,7 +21,7 @@ public class Main {
                                         le("col4", "abc")));
         dumpStatement(statement);
 
-        statement = delete("users").where(Op.eq("ADMIN", Boolean.TRUE));
+        statement = delete("users").where(eq("ADMIN", Boolean.TRUE));
         dumpStatement(statement);
 
         statement = insert("users").values(cv("username", "Administrator"));

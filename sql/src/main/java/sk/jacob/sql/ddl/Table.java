@@ -1,9 +1,8 @@
-package sk.jacob.sql;
+package sk.jacob.sql.ddl;
 
+import sk.jacob.sql.Metadata;
 import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
-
-import java.util.List;
 
 public class Table extends DbObject {
     public final Column[] columns;

@@ -1,6 +1,7 @@
 package sk.jacob.sql.dialect;
 
-import sk.jacob.sql.*;
+import sk.jacob.sql.ddl.*;
+import sk.jacob.sql.dml.*;
 import sk.jacob.util.func.Functional;
 import sk.jacob.util.func.StringReducer;
 
@@ -100,13 +101,7 @@ public class GenericDialectVisitor implements DialectVisitor {
     public DDLStatement visit(Column column) {
         StringBuffer sb = new StringBuffer(column.name);
         sb.append(" ");
-        if(column.type instanceof TYPE.StringType) {
-            sb.append(this.visit((TYPE.StringType)column.type));
-        } else if(column.type instanceof TYPE.BooleanType) {
-            sb.append(this.visit((TYPE.BooleanType)column.type));
-        } else if(column.type instanceof TYPE.LongType) {
-            sb.append(this.visit((TYPE.LongType)column.type));
-        }
+        sb.append(column.type.sql(this));
         sb.append(" ");
         sb.append(visit(column.options));
         return new DDLStatement(sb.toString(), null);

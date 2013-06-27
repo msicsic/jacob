@@ -1,6 +1,9 @@
-package sk.jacob.sql;
+package sk.jacob.sql.dml;
 
-public class CRUD {
+import sk.jacob.sql.ddl.ColumnValue;
+import sk.jacob.sql.ddl.Table;
+
+public class DML {
     public static Select select(String ... columnNames) {
         return new Select(columnNames);
     }
