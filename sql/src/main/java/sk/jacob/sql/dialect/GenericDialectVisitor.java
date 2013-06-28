@@ -12,7 +12,8 @@ public class GenericDialectVisitor implements DialectVisitor {
     @Override
     public String visit(Select select) {
         StringBuffer sb = new StringBuffer("SELECT ");
-        sb.append((String) Functional.reduce(StringReducer.instance(", "), select.columnNames));
+        sb.append((String) Functional.reduce(StringReducer.instance(", "),
+                                             normalizePredicates(select.columnPredicates)));
         sb.append("\n");
         From fromClause = select.getFromClause();
         if(fromClause != null) {
@@ -21,6 +22,19 @@ public class GenericDialectVisitor implements DialectVisitor {
         }
         sb.append(";");
         return sb.toString();
+    }
+
+    private List<String> normalizePredicates(List columnPredicates) {
+        List<String> normalizedPredicates = new ArrayList<String>();
+        for(Object predicate : columnPredicates) {
+            if (predicate instanceof String) {
+                normalizedPredicates.add((String)predicate);
+            } else if(predicate instanceof ColumnPredicate) {
+                String statement = ((ColumnPredicate)predicate).sql(this);
+                normalizedPredicates.add(statement);
+            }
+        }
+        return normalizedPredicates;
     }
 
     @Override
@@ -81,14 +95,14 @@ public class GenericDialectVisitor implements DialectVisitor {
     }
 
     @Override
-    public DDLStatement visit(Table table) {
+    public DDLStatement create(Table table) {
         StringBuffer sb = new StringBuffer("CREATE TABLE IF NOT EXISTS ");
         sb.append(table.name);
         sb.append(" (\n");
         List<String> columnInlineStatements = new ArrayList<String>();
         List<String> outlineStatements = new ArrayList<String>();
         for(Column column : table.columns ) {
-            DDLStatement csl = column.sql(this);
+            DDLStatement csl = column.create(this);
             columnInlineStatements.add(csl.inline);
             outlineStatements.addAll(csl.outline);
         }
@@ -98,7 +112,7 @@ public class GenericDialectVisitor implements DialectVisitor {
     }
 
     @Override
-    public DDLStatement visit(Column column) {
+    public DDLStatement create(Column column) {
         StringBuffer sb = new StringBuffer(column.name);
         sb.append(" ");
         sb.append(column.type.sql(this));
@@ -126,7 +140,15 @@ public class GenericDialectVisitor implements DialectVisitor {
     }
 
     @Override
-    public DDLStatement visit(Sequence sequence) {
+    public String visit(Function.Count count) {
+        StringBuffer sb = new StringBuffer("COUNT(");
+        sb.append(count.columnName);
+        sb.append(")");
+        return sb.toString();
+    }
+
+    @Override
+    public DDLStatement create(Sequence sequence) {
         StringBuffer sb = new StringBuffer("CREATE SEQUENCE IF NOT EXISTS ");
         sb.append(sequence.name);
         sb.append(";");
@@ -134,7 +156,7 @@ public class GenericDialectVisitor implements DialectVisitor {
     }
 
     @Override
-    public String sequenceNextVal(Sequence sequence) {
+    public String nextVal(Sequence sequence) {
         StringBuffer sb = new StringBuffer("SELECT ");
         sb.append(sequence.name);
         sb.append(".NEXTVAL AS ID FROM DUAL;");

@@ -74,6 +74,7 @@ public abstract class Statement {
 
     private final ParamCounter paramCounter = new ParamCounter();
     private Statement parent;
+    private CompiledStatement compiledStatement;
 
     protected Statement() {
         this(null);
@@ -101,8 +102,12 @@ public abstract class Statement {
     }
 
     public CompiledStatement compile(DialectVisitor visitor) {
-        return new CompiledStatement(this.getRootStatement().sql(visitor),
-                                     this.getRootStatement().paramCounter.parameters());
+        if (this.getRootStatement().compiledStatement == null) {
+            this.getRootStatement().compiledStatement =
+                    new CompiledStatement(this.getRootStatement().sql(visitor),
+                                          this.getRootStatement().paramCounter.parameters());
+        }
+        return this.getRootStatement().compiledStatement;
     }
 
     public CompiledStatement compile(DbEngine dbEngine) {

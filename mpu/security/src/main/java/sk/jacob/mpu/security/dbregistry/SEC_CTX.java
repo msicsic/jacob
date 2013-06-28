@@ -8,4 +8,7 @@ public enum SEC_CTX {
     public Object get(DataPacket dataPacket) {
         return dataPacket.security.context.get(this.toString());
     }
+    public Object set(DataPacket dataPacket, Object value) {
+        return dataPacket.security.context.put(this.toString(), value);
+    }
 }

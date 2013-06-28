@@ -12,14 +12,10 @@ public class TYPE {
     }
 
     public static class StringType extends Type {
-        public StringType() {
+        public final Integer length;
+        public StringType(Integer length) {
             super(String.class);
-        }
-
-        public Integer length;
-        public StringType length(Integer length) {
             this.length = length;
-            return this;
         }
 
         @Override
@@ -27,8 +23,8 @@ public class TYPE {
             return visitor.visit(this);
         }
     }
-    public static StringType String() {
-        return new StringType();
+    public static StringType String(Integer length) {
+        return new StringType(length);
     }
 
     public static class BooleanType extends Type {

@@ -25,7 +25,7 @@ public class Table extends DbObject {
     }
 
     @Override
-    public DDLStatement sql(DialectVisitor visitor) {
-        return visitor.visit(this);
+    public DDLStatement create(DialectVisitor visitor) {
+        return visitor.create(this);
     }
 }

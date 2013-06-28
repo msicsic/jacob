@@ -17,32 +17,15 @@ public class Metadata{
     private final Map<String, DbObject> dbObjects = new HashMap<String, DbObject>();
 
     public void add(DbObject dbObject) {
+        // TODO: Implement order creation logic
         createOrder.add(dbObject.name);
         dbObjects.put(dbObject.name, dbObject);
     }
 
     public void createAll(DbEngine engine) {
-        List<DDLStatement> ddlStatements = compileDDLStatements(engine);
-        Connection connection = engine.getConnection();
-        try {
-            Statement statement = connection.createStatement();
-            for (DDLStatement ddl : ddlStatements) {
-                statement.execute(ddl.inline);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            DbEngine.close(connection);
-        }
-    }
-
-    private List<DDLStatement> compileDDLStatements(DbEngine engine) {
-        List<DDLStatement> ddlStatements = new ArrayList<DDLStatement>();
-        DialectVisitor dialect = engine.getDialect();
         for(String objectName : createOrder) {
             DbObject dbObject = dbObjects.get(objectName);
-            ddlStatements.add(dbObject.sql(dialect));
+            dbObject.create(engine);
         }
-        return ddlStatements;
     }
 }

@@ -9,8 +9,6 @@ import sk.jacob.sql.dml.*;
 public interface DialectVisitor {
     String visit(Select select);
     String visit(From from);
-    DDLStatement visit(Table table);
-    DDLStatement visit(Column column);
     String visit(Op.And and);
     String visit(Op.Eq eq);
     String visit(Op.Le le);
@@ -21,6 +19,9 @@ public interface DialectVisitor {
     String visit(Where where);
     String visit(Column.Options options);
     String visit(TYPE.LongType longType);
-    DDLStatement visit(Sequence sequence);
-    String sequenceNextVal(Sequence sequence);
+    String visit(Function.Count count);
+    DDLStatement create(Sequence sequence);
+    DDLStatement create(Table table);
+    DDLStatement create(Column column);
+    String nextVal(Sequence sequence);
 }

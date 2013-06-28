@@ -4,7 +4,20 @@ import sk.jacob.engine.handler.Token;
 import sk.jacob.engine.types.DataPacket;
 import sk.jacob.engine.types.ResponseDataType;
 import sk.jacob.engine.types.TokenType;
+import sk.jacob.mpu.security.TokenGenerator;
+import sk.jacob.sql.dialect.GenericDialectVisitor;
+import sk.jacob.sql.dialect.Statement;
 import sk.jacob.sql.engine.ExecutionContext;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static sk.jacob.sql.dml.DML.select;
+import static sk.jacob.sql.dml.Function.count;
+import static sk.jacob.sql.dml.Op.and;
+import static sk.jacob.sql.dml.Op.eq;
 
 public class AuthenticateLoginPassword {
     private static class AuthLogPassToken extends TokenType {
@@ -25,14 +38,52 @@ public class AuthenticateLoginPassword {
     @Token(type="security.authenticate.login.password",
            token=AuthLogPassToken.class,
            resd=AuthLogPassResd.class)
-    public static DataPacket handle(DataPacket dataPacket) {
+    public static DataPacket handle(DataPacket dataPacket) throws Exception {
         AuthLogPassToken token = (AuthLogPassToken)dataPacket.security.token;
-        AuthLogPassResd resd = new AuthLogPassResd();
+        Statement s =
+                select("login", "username")
+                        .from("users")
+                        .where(and(eq("login", token.login),
+                                   eq("md5pwd", md5String(token.password))));
         ExecutionContext ectx = (ExecutionContext)SEC_CTX.EXECUTION_CTX.get(dataPacket);
-        resd.token = "TOKEN 12345";
-        resd.principal.login = "ADMIN";
-        resd.principal.username = "ADMINISTRATOR";
+        ResultSet rs = (ResultSet)ectx.execute(s);
+        if(rs.next() == Boolean.FALSE) {
+            // return soft exception
+        }
+
+        AuthLogPassResd resd = new AuthLogPassResd();
+        resd.token = TokenGenerator.getToken();
+        resd.principal.login = rs.getString("login");
+        resd.principal.username = rs.getString("username");
         dataPacket.message.createResponse(resd);
         return dataPacket;
+    }
+
+    private static class InvalidateToken extends TokenType {
+        public String value;
+    }
+
+    @Token(type="security.flyby.token",
+            token=InvalidateToken.class)
+    public static DataPacket invalidateToken(DataPacket dataPacket) throws Exception {
+        return dataPacket;
+    }
+
+    private static String md5String(String inputString) {
+        String md5String;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(inputString.getBytes());
+            byte[] dig = md.digest();
+            StringBuffer sb = new StringBuffer();
+
+            for (int i=0; i < dig.length; i++) {
+                sb.append(Integer.toString( ( dig[i] & 0xff ) + 0x100, 16).substring( 1 ));
+            }
+            md5String = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        return md5String;
     }
 }

@@ -8,12 +8,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Select extends Statement {
-    public final List<String> columnNames;
+    public final List<Object> columnPredicates;
     private From from;
 
-    public Select(String ... columnNames) {
+    public Select(Object ... columnPredicates) {
         super();
-        this.columnNames = Arrays.asList(columnNames);
+        this.columnPredicates = Arrays.asList(columnPredicates);
     }
 
     public From from(String ... tableNames) {

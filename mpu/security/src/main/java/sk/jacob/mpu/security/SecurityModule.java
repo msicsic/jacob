@@ -6,6 +6,7 @@ import sk.jacob.engine.handler.Token;
 import sk.jacob.engine.types.DataPacket;
 import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.mpu.security.dbregistry.Model;
+import sk.jacob.mpu.security.dbregistry.SEC_CTX;
 import sk.jacob.sql.engine.DbEngine;
 import sk.jacob.sql.engine.ExecutionContext;
 import sk.jacob.sql.Metadata;
@@ -43,11 +44,21 @@ public class SecurityModule implements Module {
 
     @Override
     public DataPacket handle(DataPacket dataPacket) {
-        return this.handlerInspector.process(dataPacket);
+        SEC_CTX.EXECUTION_CTX.set(dataPacket, this.dbEngine.getExecutionContext());
+        try {
+            dataPacket = this.handlerInspector.process(dataPacket);
+        } catch (Exception e){
+            // TODO: Return soft exception.
+            throw new RuntimeException(e);
+        } finally {
+            ((ExecutionContext)SEC_CTX.EXECUTION_CTX.get(dataPacket)).close();
+            SEC_CTX.EXECUTION_CTX.set(dataPacket, null);
+        }
+        return dataPacket;
     }
 
     private void initDatabase(String adminLogin, String adminMd5Pwd) {
-        MODEL.createAll(dbEngine);
+        this.MODEL.createAll(this.dbEngine);
         initializeAdmin(adminLogin, adminMd5Pwd);
     }
 

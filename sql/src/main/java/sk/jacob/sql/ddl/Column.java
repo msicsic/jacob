@@ -65,7 +65,7 @@ public class Column extends DbObject {
     }
 
     @Override
-    public DDLStatement sql(DialectVisitor dialect) {
-        return dialect.visit(this);
+    public DDLStatement create(DialectVisitor dialect) {
+        return dialect.create(this);
     }
 }
