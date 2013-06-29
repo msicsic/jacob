@@ -1,13 +1,10 @@
 package sk.jacob.sql.engine;
 
-import sk.jacob.sql.dml.Delete;
-import sk.jacob.sql.dml.Select;
-import sk.jacob.sql.dml.Update;
+import sk.jacob.sql.dml.*;
 import sk.jacob.sql.generator.IdGenerator;
 import sk.jacob.sql.ddl.Column;
 import sk.jacob.sql.ddl.ColumnValue;
-import sk.jacob.sql.dialect.Statement;
-import sk.jacob.sql.dml.Insert;
+import sk.jacob.sql.dml.DMLStatement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,10 +27,8 @@ public class ExecutionContext {
         this.connection = dbEngine.getConnection();
     }
 
-    // FIXME
     public ResultSet execute(String stringStatement) {
         ResultSet resultSet;
-
         try {
             java.sql.Statement statement = this.connection.createStatement();
             sqlStatements.add(statement);
@@ -45,64 +40,44 @@ public class ExecutionContext {
         return resultSet;
     }
 
-    public Object execute(Statement statement) {
-        Statement rootStatement = statement.getRootStatement();
+    public Object execute(DMLStatement dmlStatement) {
+        DMLStatement rootDMLStatement = dmlStatement.getRootStatement();
         Object returnValue = null;
-        if(rootStatement instanceof Select) {
-            returnValue = execute((Select)rootStatement);
-        } else if(rootStatement instanceof Insert) {
-            returnValue = execute((Insert)rootStatement);
-        } else if(rootStatement instanceof Update) {
-            execute((Update)rootStatement);
-        } else if(rootStatement instanceof Delete) {
-            execute((Delete)rootStatement);
+        if(rootDMLStatement instanceof Select) {
+            returnValue = queryStatement((Select) rootDMLStatement);
+        } else if(rootDMLStatement instanceof Insert) {
+            returnValue = insertStatement((Insert) rootDMLStatement);
+        } else if(rootDMLStatement instanceof Update) {
+            updateDeleteStatement((Update) rootDMLStatement);
+        } else if(rootDMLStatement instanceof Delete) {
+            updateDeleteStatement((Delete) rootDMLStatement);
         }
         return returnValue;
     }
 
-    private ResultSet execute(Select statement) {
-        return queryStatement(statement);
-    }
-
-    private Object execute(Insert statement) {
-        return insertStatement(statement);
-    }
-
-    private void execute(Update statement) {
-        updateDeleteStatement(statement);
-    }
-
-    private void execute(Delete statement) {
-        updateDeleteStatement(statement);
-    }
-
-    private ResultSet queryStatement(Statement statement) {
+    private ResultSet queryStatement(DMLStatement dmlStatement) {
         ResultSet resultSet;
-
         try {
-            PreparedStatement ps = toPreparedStatement(statement);
+            PreparedStatement ps = toPreparedStatement(dmlStatement);
             sqlStatements.add(ps);
             resultSet = ps.executeQuery();
         } catch (SQLException e) {
             this.close();
             throw new RuntimeException(e);
         }
-
         return resultSet;
     }
 
-    private Object insertStatement(Statement statement) {
-        Object generatedId = this.checkIdColumn((Insert)statement);
-
+    private Object insertStatement(DMLStatement dmlStatement) {
+        Object generatedId = this.checkIdColumn((Insert) dmlStatement);
         try {
-            PreparedStatement ps = toPreparedStatement(statement);
+            PreparedStatement ps = toPreparedStatement(dmlStatement);
             sqlStatements.add(ps);
             ps.executeUpdate();
         } catch (SQLException e) {
             this.close();
             throw new RuntimeException(e);
         }
-
         return generatedId;
     }
 
@@ -127,9 +102,9 @@ public class ExecutionContext {
         return generatedId;
     }
 
-    private void updateDeleteStatement(Statement statement) {
+    private void updateDeleteStatement(DMLStatement dmlStatement) {
         try {
-            PreparedStatement ps = toPreparedStatement(statement);
+            PreparedStatement ps = toPreparedStatement(dmlStatement);
             sqlStatements.add(ps);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -138,8 +113,8 @@ public class ExecutionContext {
         }
     }
 
-    private PreparedStatement toPreparedStatement(Statement statement) throws SQLException {
-        Statement.CompiledStatement cs = statement.compile(dbEngine);
+    private PreparedStatement toPreparedStatement(DMLStatement dmlStatement) throws SQLException {
+        DMLStatement.CompiledStatement cs = dmlStatement.compile(dbEngine);
         PreparedStatement  preparedStatement = this.connection.prepareStatement(cs.normalizedStatement());
         DbEngine.bindParameters(preparedStatement, cs.parameterList());
         return preparedStatement;

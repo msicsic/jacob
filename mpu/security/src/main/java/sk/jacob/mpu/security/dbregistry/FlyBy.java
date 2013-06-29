@@ -3,7 +3,7 @@ package sk.jacob.mpu.security.dbregistry;
 import sk.jacob.engine.handler.Token;
 import sk.jacob.engine.types.DataPacket;
 import sk.jacob.engine.types.TokenType;
-import sk.jacob.sql.dialect.Statement;
+import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.sql.engine.ExecutionContext;
 
 import java.sql.ResultSet;
@@ -21,7 +21,7 @@ public class FlyBy {
            token=FlyByToken.class)
     public static DataPacket flyByToken(DataPacket dataPacket) throws Exception {
         FlyByToken token = (FlyByToken)dataPacket.security.token;
-        Statement s =
+        DMLStatement s =
                 select(count("*"))
                         .from("users")
                         .where(eq("token", token.value));

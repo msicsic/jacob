@@ -5,17 +5,14 @@ import sk.jacob.engine.types.DataPacket;
 import sk.jacob.engine.types.ResponseDataType;
 import sk.jacob.engine.types.TokenType;
 import sk.jacob.mpu.security.TokenGenerator;
-import sk.jacob.sql.dialect.GenericDialectVisitor;
-import sk.jacob.sql.dialect.Statement;
+import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.sql.engine.ExecutionContext;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import static sk.jacob.sql.dml.DML.select;
-import static sk.jacob.sql.dml.Function.count;
 import static sk.jacob.sql.dml.Op.and;
 import static sk.jacob.sql.dml.Op.eq;
 
@@ -40,7 +37,7 @@ public class AuthenticateLoginPassword {
            resd=AuthLogPassResd.class)
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         AuthLogPassToken token = (AuthLogPassToken)dataPacket.security.token;
-        Statement s =
+        DMLStatement s =
                 select("login", "username")
                         .from("users")
                         .where(and(eq("login", token.login),

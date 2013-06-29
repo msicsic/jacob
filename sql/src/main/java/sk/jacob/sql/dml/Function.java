@@ -3,7 +3,7 @@ package sk.jacob.sql.dml;
 import sk.jacob.sql.dialect.DialectVisitor;
 
 public class Function {
-    public static class Count implements ColumnPredicate {
+    public static class Count implements SqlExpression {
         public final String columnName;
         public Count(String columnName) {
             this.columnName = columnName;

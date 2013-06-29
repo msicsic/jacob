@@ -3,13 +3,12 @@ package sk.jacob.sql.dml;
 import sk.jacob.sql.ddl.ColumnValue;
 import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.Statement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Insert extends Statement {
+public class Insert extends DMLStatement {
     public final String tableName;
     public final Table table;
     private final List<ColumnValue> columnValues = new ArrayList<ColumnValue>();
@@ -24,12 +23,12 @@ public class Insert extends Statement {
         this.table = table;
     }
 
-    public Statement values(ColumnValue ... columnValues) {
+    public DMLStatement values(ColumnValue ... columnValues) {
         this.columnValues.addAll(Arrays.asList(columnValues));
         return this;
     }
 
-    public Statement addValue(ColumnValue columnValue) {
+    public DMLStatement addValue(ColumnValue columnValue) {
         this.columnValues.add(columnValue);
         return this;
     }

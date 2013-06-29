@@ -1,6 +1,5 @@
 package sk.jacob.sql.ddl;
 
-import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.engine.DbEngine;
 

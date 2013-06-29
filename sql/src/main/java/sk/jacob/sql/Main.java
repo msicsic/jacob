@@ -2,14 +2,9 @@ package sk.jacob.sql;
 
 import sk.jacob.sql.ddl.Sequence;
 import sk.jacob.sql.ddl.Table;
-import sk.jacob.sql.dialect.Statement;
+import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.sql.engine.DbEngine;
 import sk.jacob.sql.engine.ExecutionContext;
-
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.ddl.Column.options;
@@ -21,17 +16,17 @@ import static sk.jacob.sql.ddl.TYPE.*;
 
 public class Main {
     public static void main(String[] args) {
-        Statement statement = select(count("*"), "col1", "col2").
+        DMLStatement dmlStatement = select(count("*"), "col1", "col2").
                               from("table1", "table2").
                               where(and(eq("col2", 2),
                                       le("col4", "abc")));
-        dumpStatement(statement);
+        dumpStatement(dmlStatement);
 
-        statement = delete("users").where(eq("ADMIN", Boolean.TRUE));
-        dumpStatement(statement);
+        dmlStatement = delete("users").where(eq("ADMIN", Boolean.TRUE));
+        dumpStatement(dmlStatement);
 
-        statement = insert("users").values(cv("username", "Administrator"));
-        dumpStatement(statement);
+        dmlStatement = insert("users").values(cv("username", "Administrator"));
+        dumpStatement(dmlStatement);
 
         Metadata metadata = new Metadata();
         Sequence sequence = sequence("SEQ_A", metadata);
@@ -45,16 +40,16 @@ public class Main {
         DbEngine dbEngine = new DbEngine("org.h2.Driver", "jdbc:h2:data/test", "sa", "sa");
         metadata.createAll(dbEngine);
 
-        statement = insert(users).values(cv("username", "Administrator"));
+        dmlStatement = insert(users).values(cv("username", "Administrator"));
         ExecutionContext ectx = dbEngine.getExecutionContext();
         ectx.txBegin();
-        System.out.println(ectx.execute(statement));
+        System.out.println(ectx.execute(dmlStatement));
         ectx.txCommit();
         ectx.close();
     }
 
-    private static void dumpStatement(Statement statement) {
-        Statement.CompiledStatement compiledStatement = statement.compile();
+    private static void dumpStatement(DMLStatement dmlStatement) {
+        DMLStatement.CompiledStatement compiledStatement = dmlStatement.compile();
         System.out.println(compiledStatement.compiledStatement());
         System.out.println(compiledStatement.parameters());
         System.out.println(compiledStatement.normalizedStatement());

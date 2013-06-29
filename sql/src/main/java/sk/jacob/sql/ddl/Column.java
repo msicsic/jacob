@@ -1,12 +1,11 @@
 package sk.jacob.sql.ddl;
 
+import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.sql.generator.IdGenerator;
-import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.Statement;
 
 public class Column extends DbObject {
-    public static class Options extends Statement {
+    public static class Options extends DMLStatement {
         private Boolean primaryKey = Boolean.FALSE;
         private IdGenerator generator = null;
         public Options primaryKey() {

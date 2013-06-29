@@ -1,4 +1,4 @@
-package sk.jacob.sql.dialect;
+package sk.jacob.sql.ddl;
 
 import java.util.ArrayList;
 import java.util.List;

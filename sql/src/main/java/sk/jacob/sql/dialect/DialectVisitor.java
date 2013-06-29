@@ -1,9 +1,6 @@
 package sk.jacob.sql.dialect;
 
-import sk.jacob.sql.ddl.Column;
-import sk.jacob.sql.ddl.Sequence;
-import sk.jacob.sql.ddl.TYPE;
-import sk.jacob.sql.ddl.Table;
+import sk.jacob.sql.ddl.*;
 import sk.jacob.sql.dml.*;
 
 public interface DialectVisitor {

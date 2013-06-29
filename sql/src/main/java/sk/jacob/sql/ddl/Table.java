@@ -1,7 +1,6 @@
 package sk.jacob.sql.ddl;
 
 import sk.jacob.sql.Metadata;
-import sk.jacob.sql.dialect.DDLStatement;
 import sk.jacob.sql.dialect.DialectVisitor;
 
 public class Table extends DbObject {

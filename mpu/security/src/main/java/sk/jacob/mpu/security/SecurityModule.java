@@ -7,11 +7,10 @@ import sk.jacob.engine.types.DataPacket;
 import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.mpu.security.dbregistry.Model;
 import sk.jacob.mpu.security.dbregistry.SEC_CTX;
+import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.sql.engine.DbEngine;
 import sk.jacob.sql.engine.ExecutionContext;
 import sk.jacob.sql.Metadata;
-import sk.jacob.sql.dml.Op;
-import sk.jacob.sql.dialect.Statement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,10 +62,10 @@ public class SecurityModule implements Module {
     }
 
     private void initializeAdmin(String adminLogin, String adminMd5Pwd) {
-        Statement deleteStatement =
+        DMLStatement deleteDMLStatement =
                 delete("users")
                         .where(eq("admin", Boolean.TRUE));
-        Statement insertStatement =
+        DMLStatement insertDMLStatement =
                 insert("users")
                         .values(cv("login", adminLogin),
                                 cv("username", "Administrator"),
@@ -74,8 +73,8 @@ public class SecurityModule implements Module {
                                 cv("md5pwd", adminMd5Pwd));
         ExecutionContext ectx = this.dbEngine.getExecutionContext();
         ectx.txBegin();
-        ectx.execute(deleteStatement);
-        ectx.execute(insertStatement);
+        ectx.execute(deleteDMLStatement);
+        ectx.execute(insertDMLStatement);
         ectx.txCommit();
         ectx.close();
     }

@@ -1,17 +1,16 @@
 package sk.jacob.sql.dml;
 
 import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.Statement;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class From extends Statement {
+public class From extends DMLStatement {
     public final List<String> tableNames;
     private Where where;
 
-    public From(Statement parentStatement, String ... tableNames) {
-        super(parentStatement);
+    public From(DMLStatement parentDMLStatement, String ... tableNames) {
+        super(parentDMLStatement);
         this.tableNames = Arrays.asList(tableNames);
     }
 

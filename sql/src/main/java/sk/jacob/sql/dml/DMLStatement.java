@@ -1,5 +1,7 @@
-package sk.jacob.sql.dialect;
+package sk.jacob.sql.dml;
 
+import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.GenericDialectVisitor;
 import sk.jacob.sql.engine.DbEngine;
 
 import java.util.ArrayList;
@@ -9,7 +11,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Statement {
+public abstract class DMLStatement implements SqlExpression{
 
     public static class ParamCounter {
         private Integer counter = new Integer(1);
@@ -73,22 +75,22 @@ public abstract class Statement {
     }
 
     private final ParamCounter paramCounter = new ParamCounter();
-    private Statement parent;
+    private DMLStatement parent;
     private CompiledStatement compiledStatement;
 
-    protected Statement() {
+    protected DMLStatement() {
         this(null);
     }
 
-    protected Statement(Statement parentStatement) {
-        this.parent = parentStatement;
+    protected DMLStatement(DMLStatement parentDMLStatement) {
+        this.parent = parentDMLStatement;
     }
 
-    public void setParentStatement(Statement parentStatement) {
-        this.parent = parentStatement;
+    public void setParentStatement(DMLStatement parentDMLStatement) {
+        this.parent = parentDMLStatement;
     }
 
-    public Statement getRootStatement() {
+    public DMLStatement getRootStatement() {
         return (this.parent == null) ? this
                                      : this.parent.getRootStatement();
     }
@@ -113,6 +115,4 @@ public abstract class Statement {
     public CompiledStatement compile(DbEngine dbEngine) {
         return compile(dbEngine.getDialect());
     }
-
-    public abstract String sql(DialectVisitor visitor);
 }

@@ -13,7 +13,7 @@ public class GenericDialectVisitor implements DialectVisitor {
     public String visit(Select select) {
         StringBuffer sb = new StringBuffer("SELECT ");
         sb.append((String) Functional.reduce(StringReducer.instance(", "),
-                                             normalizePredicates(select.columnPredicates)));
+                                             normalizePredicates(select.columnExpressions)));
         sb.append("\n");
         From fromClause = select.getFromClause();
         if(fromClause != null) {
@@ -29,8 +29,8 @@ public class GenericDialectVisitor implements DialectVisitor {
         for(Object predicate : columnPredicates) {
             if (predicate instanceof String) {
                 normalizedPredicates.add((String)predicate);
-            } else if(predicate instanceof ColumnPredicate) {
-                String statement = ((ColumnPredicate)predicate).sql(this);
+            } else if(predicate instanceof SqlExpression) {
+                String statement = ((SqlExpression)predicate).sql(this);
                 normalizedPredicates.add(statement);
             }
         }

@@ -2,6 +2,6 @@ package sk.jacob.sql.dml;
 
 import sk.jacob.sql.dialect.DialectVisitor;
 
-public interface ColumnPredicate {
+public interface SqlExpression {
     String sql(DialectVisitor visitor);
 }

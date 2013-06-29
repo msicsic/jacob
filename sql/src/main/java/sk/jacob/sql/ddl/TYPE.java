@@ -1,10 +1,10 @@
 package sk.jacob.sql.ddl;
 
 import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.Statement;
+import sk.jacob.sql.dml.DMLStatement;
 
 public class TYPE {
-    public static abstract class Type extends Statement {
+    public static abstract class Type extends DMLStatement {
         public final Class columnType;
         public Type(Class columnType) {
             this.columnType = columnType;

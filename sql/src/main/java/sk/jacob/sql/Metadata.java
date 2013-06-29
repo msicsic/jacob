@@ -1,12 +1,8 @@
 package sk.jacob.sql;
 
 import sk.jacob.sql.ddl.DbObject;
-import sk.jacob.sql.dialect.DDLStatement;
-import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.engine.DbEngine;
 
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

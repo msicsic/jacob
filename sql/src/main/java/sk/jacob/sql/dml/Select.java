@@ -1,19 +1,17 @@
 package sk.jacob.sql.dml;
 
 import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.Statement;
-import sk.jacob.sql.dml.From;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Select extends Statement {
-    public final List<Object> columnPredicates;
+public class Select extends DMLStatement {
+    public final List<Object> columnExpressions;
     private From from;
 
-    public Select(Object ... columnPredicates) {
+    public Select(Object ... columnExpressions) {
         super();
-        this.columnPredicates = Arrays.asList(columnPredicates);
+        this.columnExpressions = Arrays.asList(columnExpressions);
     }
 
     public From from(String ... tableNames) {

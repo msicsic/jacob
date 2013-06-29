@@ -1,9 +1,8 @@
 package sk.jacob.sql.dml;
 
 import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.Statement;
 
-public class Update extends Statement {
+public class Update extends DMLStatement {
     public final String tableName;
     private Where where;
 

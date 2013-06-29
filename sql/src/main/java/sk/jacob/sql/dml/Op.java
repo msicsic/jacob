@@ -1,8 +1,6 @@
 package sk.jacob.sql.dml;
 
 import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.Statement;
-import sk.jacob.sql.dml.ConditionalOperation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,8 +19,8 @@ public class Op {
         }
 
         @Override
-        public void setParentStatement(Statement parentStatement) {
-            super.setParentStatement(parentStatement);
+        public void setParentStatement(DMLStatement parentDMLStatement) {
+            super.setParentStatement(parentDMLStatement);
             for (ConditionalOperation co : this.conditionalOperations) {
                 co.setParentStatement(this);
             }
