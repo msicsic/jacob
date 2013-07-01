@@ -43,7 +43,6 @@ public class FindByLogin {
         responseTenants.add(new FindByLoginResd.TenantResponse("2"));
         responseTenants.add(new FindByLoginResd.TenantResponse("3"));
 
-        dataPacket.message.createResponse(new FindByLoginResd(requestData.login, responseTenants));
-        return dataPacket;
+        return Return.OK(new FindByLoginResd(requestData.login, responseTenants), dataPacket);
     }
 }

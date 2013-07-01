@@ -29,7 +29,7 @@ public class FlyBy {
         ResultSet rs = (ResultSet)ectx.execute(s);
         rs.next();
         if(rs.getLong(1) != 1) {
-            // return soft exception
+            // return soft EXCEPTION
         }
         //dataPacket.security.username;
         return dataPacket;

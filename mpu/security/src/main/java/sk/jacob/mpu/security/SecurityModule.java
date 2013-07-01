@@ -47,7 +47,7 @@ public class SecurityModule implements Module {
         try {
             dataPacket = this.handlerInspector.process(dataPacket);
         } catch (Exception e){
-            // TODO: Return soft exception.
+            // TODO: Return soft EXCEPTION.
             throw new RuntimeException(e);
         } finally {
             ((ExecutionContext)SEC_CTX.EXECUTION_CTX.get(dataPacket)).close();

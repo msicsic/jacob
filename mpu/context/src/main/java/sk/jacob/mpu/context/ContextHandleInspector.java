@@ -34,7 +34,7 @@ public class ContextHandleInspector extends HandlerInspector<Message> {
     }
 
     @Override
-    protected void deserializeRawRequest(DataPacket dataPacket, Annotation annotation) {
+    protected void deserializeMessageElement(DataPacket dataPacket, Annotation annotation) {
         try {
             Message message = (Message) annotation;
 //            dataPacket.message.request = new Gson().fromJson(dataPacket.message.jsonRequest, message.reqd());
@@ -42,12 +42,5 @@ public class ContextHandleInspector extends HandlerInspector<Message> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    protected DataPacket serializeResponse(DataPacket dataPacket) {
-        Gson g = new Gson();
-        dataPacket.message.rawResponse = g.toJson(dataPacket.message.response);
-        return dataPacket;
     }
 }

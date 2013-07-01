@@ -42,15 +42,14 @@ public abstract class HandlerInspector<T extends Annotation> {
 
     public final DataPacket process(DataPacket dataPacket) {
         String handlerKey = this.getMessageType(dataPacket);
-        dataPacket = invokeMethod(handlerKey, dataPacket);
-        return serializeResponse(dataPacket);
+        return invokeMethod(handlerKey, dataPacket);
     }
 
     private DataPacket invokeMethod(String handlerKey, DataPacket dataPacket) {
         if (this.handlerMap.containsKey(handlerKey)) {
             try {
                 Method handler = this.handlerMap.get(handlerKey);
-                deserializeRawRequest(dataPacket, handler.getAnnotation(supportedAnnotation));
+                deserializeMessageElement(dataPacket, handler.getAnnotation(supportedAnnotation));
                 dataPacket = (DataPacket) handler.invoke(null, dataPacket);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -74,12 +73,7 @@ public abstract class HandlerInspector<T extends Annotation> {
     /**
      * Deserializes JSON raw request to corespondent Java object type.
      */
-    protected abstract void deserializeRawRequest(DataPacket dataPacket, Annotation annotation);
-
-    /**
-     * Serializes raw response to raw response.
-     */
-    protected abstract DataPacket serializeResponse(DataPacket dataPacket);
+    protected abstract void deserializeMessageElement(DataPacket dataPacket, Annotation annotation);
 
 // TODO: Bude treba vyfaktorovat.
 //////////////////////////////////////////////////////////////////////////////////

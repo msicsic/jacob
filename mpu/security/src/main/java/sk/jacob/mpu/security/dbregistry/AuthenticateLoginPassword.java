@@ -3,6 +3,7 @@ package sk.jacob.mpu.security.dbregistry;
 import sk.jacob.engine.handler.Token;
 import sk.jacob.engine.types.DataPacket;
 import sk.jacob.engine.types.ResponseDataType;
+import sk.jacob.engine.types.Return;
 import sk.jacob.engine.types.TokenType;
 import sk.jacob.mpu.security.TokenGenerator;
 import sk.jacob.sql.dml.DMLStatement;
@@ -38,22 +39,21 @@ public class AuthenticateLoginPassword {
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         AuthLogPassToken token = (AuthLogPassToken)dataPacket.security.token;
         DMLStatement s =
-                select("login", "username")
+                select("login", "username", "admin")
                         .from("users")
                         .where(and(eq("login", token.login),
-                                   eq("md5pwd", md5String(token.password))));
+                                eq("md5pwd", md5String(token.password))));
         ExecutionContext ectx = (ExecutionContext)SEC_CTX.EXECUTION_CTX.get(dataPacket);
         ResultSet rs = (ResultSet)ectx.execute(s);
         if(rs.next() == Boolean.FALSE) {
-            // return soft exception
+            return Return.EXCEPTION("security.invalid.login.password", dataPacket);
         }
 
         AuthLogPassResd resd = new AuthLogPassResd();
         resd.token = TokenGenerator.getToken();
-        resd.principal.login = rs.getString("login");
+        resd.principal.login = rs.getBoolean("admin") ? "ADMIN" : rs.getString("login");
         resd.principal.username = rs.getString("username");
-        dataPacket.message.createResponse(resd);
-        return dataPacket;
+        return Return.OK(resd, dataPacket);
     }
 
     private static class InvalidateToken extends TokenType {

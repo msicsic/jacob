@@ -19,9 +19,11 @@ public class JacobFirmware implements Module {
 
     private final List<Module> initModules(final Properties config) {
         return new ArrayList<Module>() {{
+            add(new DataPacketDeserializer());
             add(new SecurityModule(config));
             add(new ContextModule());
             add(new BusinessModule());
+            add(new DataPacketSerializer());
         }};
     }
 
