@@ -14,6 +14,7 @@ public class FindByLogin {
     private static class FindByLoginResd extends ResponseDataType {
         public static class TenantResponse {
             public String tenantId;
+
             public String tenantName;
 
             public TenantResponse(String id) {
@@ -23,6 +24,7 @@ public class FindByLogin {
         }
 
         public String login;
+
         public List<TenantResponse> tenants;
 
         public FindByLoginResd(String login, List<TenantResponse> tenants) {
@@ -32,9 +34,9 @@ public class FindByLogin {
     }
 
     @Message(type = "context.tenant.findByLogin",
-             version = "1.0",
-             reqd = FindByLoginReqd.class,
-             resd = FindByLoginResd.class)
+            version = "1.0",
+            reqd = FindByLoginReqd.class,
+            resd = FindByLoginResd.class)
     public static DataPacket handle(DataPacket dataPacket) {
         FindByLoginReqd requestData = (FindByLoginReqd) dataPacket.message.request.reqd;
 
@@ -43,6 +45,6 @@ public class FindByLogin {
         responseTenants.add(new FindByLoginResd.TenantResponse("2"));
         responseTenants.add(new FindByLoginResd.TenantResponse("3"));
 
-        return Return.OK(new FindByLoginResd(requestData.login, responseTenants), dataPacket);
+        return Return.OK(new FindByLoginResd("Aaaa", responseTenants), dataPacket);
     }
 }
