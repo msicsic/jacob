@@ -1,6 +1,6 @@
 package sk.jacob.engine.types;
 
-public enum STATUS {
+public enum DATAPACKET_STATUS {
     FIN,
     AFP;
 }

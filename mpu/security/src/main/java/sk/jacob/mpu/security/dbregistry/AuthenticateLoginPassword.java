@@ -13,7 +13,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 
+import static sk.jacob.sql.dml.DML.cv;
 import static sk.jacob.sql.dml.DML.select;
+import static sk.jacob.sql.dml.DML.update;
 import static sk.jacob.sql.dml.Op.and;
 import static sk.jacob.sql.dml.Op.eq;
 
@@ -38,11 +40,10 @@ public class AuthenticateLoginPassword {
            resd=AuthLogPassResd.class)
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         AuthLogPassToken token = (AuthLogPassToken)dataPacket.security.token;
-        DMLStatement s =
-                select("login", "username", "admin")
-                        .from("users")
-                        .where(and(eq("login", token.login),
-                                eq("md5pwd", md5String(token.password))));
+        DMLStatement s = select("login", "username", "admin")
+                         .from("users")
+                         .where(and(eq("login", token.login),
+                                    eq("md5pwd", md5String(token.password))));
         ExecutionContext ectx = (ExecutionContext)SEC_CTX.EXECUTION_CTX.get(dataPacket);
         ResultSet rs = (ResultSet)ectx.execute(s);
         if(rs.next() == Boolean.FALSE) {
@@ -60,10 +61,16 @@ public class AuthenticateLoginPassword {
         public String value;
     }
 
-    @Token(type="security.flyby.token",
-            token=InvalidateToken.class)
+    @Token(type="security.invalidate_token",
+           token=InvalidateToken.class)
     public static DataPacket invalidateToken(DataPacket dataPacket) throws Exception {
-        return dataPacket;
+        InvalidateToken token = (InvalidateToken)dataPacket.security.token;
+        DMLStatement s = update("users")
+                         .set(cv("token", null))
+                         .where(eq("token", token.value));
+        ExecutionContext ectx = (ExecutionContext)SEC_CTX.EXECUTION_CTX.get(dataPacket);
+        ectx.execute(s);
+        return Return.FINISH(dataPacket);
     }
 
     private static String md5String(String inputString) {

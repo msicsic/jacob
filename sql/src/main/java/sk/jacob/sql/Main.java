@@ -28,6 +28,9 @@ public class Main {
         dmlStatement = insert("users").values(cv("username", "Administrator"));
         dumpStatement(dmlStatement);
 
+        dmlStatement = update("users").set(cv("token", null)).where(eq("token", "TOKEN_STRING"));
+        dumpStatement(dmlStatement);
+
         Metadata metadata = new Metadata();
         Sequence sequence = sequence("SEQ_A", metadata);
         Table users = table("users", metadata,
@@ -42,14 +45,15 @@ public class Main {
 
         dmlStatement = insert(users).values(cv("username", "Administrator"));
         ExecutionContext ectx = dbEngine.getExecutionContext();
-        ectx.txBegin();
-        System.out.println(ectx.execute(dmlStatement));
-        ectx.txCommit();
-        ectx.close();
+//        ectx.txBegin();
+//        System.out.println(ectx.execute(dmlStatement));
+//        ectx.txCommit();
+//        ectx.close();
     }
 
     private static void dumpStatement(DMLStatement dmlStatement) {
         DMLStatement.CompiledStatement compiledStatement = dmlStatement.compile();
+        System.out.println(">>>");
         System.out.println(compiledStatement.compiledStatement());
         System.out.println(compiledStatement.parameters());
         System.out.println(compiledStatement.normalizedStatement());

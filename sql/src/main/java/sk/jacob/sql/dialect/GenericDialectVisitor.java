@@ -164,6 +164,30 @@ public class GenericDialectVisitor implements DialectVisitor {
     }
 
     @Override
+    public String visit(Set set) {
+        StringBuffer sb = new StringBuffer("SET ");
+        for(ColumnValue cv : set.getColumnValues()) {
+            sb.append(cv.columnName);
+            sb.append("=");
+            sb.append(set.getParamCounter().addParam(cv.columnName, cv.value));
+            sb.append(", ");
+        }
+        int lastComma = sb.lastIndexOf(",");
+        sb.replace(lastComma, lastComma + 2, "\n");
+        sb.append(set.getWhereClause().sql(this));
+        return sb.toString();
+    }
+
+    @Override
+    public String visit(Update update) {
+        StringBuffer sb = new StringBuffer("UPDATE ");
+        sb.append(update.tableName);
+        sb.append("\n");
+        sb.append(update.getSetStatement().sql(this));
+        return sb.toString();
+    }
+
+    @Override
     public String visit(Op.And and) {
         StringBuffer sb = new StringBuffer("(");
         List<String> coSql = new ArrayList<String>(and.conditionalOperations.size());

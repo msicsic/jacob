@@ -17,8 +17,10 @@ public interface DialectVisitor {
     String visit(Column.Options options);
     String visit(TYPE.LongType longType);
     String visit(Function.Count count);
+    String nextVal(Sequence sequence);
+    String visit(Set set);
+    String visit(Update update);
     DDLStatement create(Sequence sequence);
     DDLStatement create(Table table);
     DDLStatement create(Column column);
-    String nextVal(Sequence sequence);
 }

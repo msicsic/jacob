@@ -2,9 +2,9 @@ package sk.jacob.engine.types;
 
 public class Return {
     public static DataPacket EXCEPTION(String exceptionCode, DataPacket dataPacket) {
-        dataPacket.status = STATUS.FIN;
+        dataPacket = FINISH(dataPacket);
         MessageType message = initResponse(dataPacket);
-        message.response.resh.status = "INT";
+        message.response.resh.status = MESSAGE_STATUS.INT.name();
 
         ExceptionType exception = new ExceptionType();
         message.response.resd = exception;
@@ -14,9 +14,9 @@ public class Return {
     }
 
     public static DataPacket OK(ResponseDataType responseData, DataPacket dataPacket) {
-        dataPacket.status = STATUS.FIN;
+        dataPacket = FINISH(dataPacket);
         MessageType message = initResponse(dataPacket);
-        message.response.resh.status = "OK";
+        message.response.resh.status = MESSAGE_STATUS.OK.name();
         message.response.resh.messageId = "12345678";
 
         message.response.resd = responseData;
@@ -28,5 +28,10 @@ public class Return {
         message.response = new ResponseType();
         message.response.resh = new ResponseHeaderType();
         return message;
+    }
+
+    public static DataPacket FINISH(DataPacket dataPacket) {
+        dataPacket.dataPacketStatus = DATAPACKET_STATUS.FIN;
+        return dataPacket;
     }
 }

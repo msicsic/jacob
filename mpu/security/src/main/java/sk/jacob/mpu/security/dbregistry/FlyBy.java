@@ -2,6 +2,7 @@ package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.engine.handler.Token;
 import sk.jacob.engine.types.DataPacket;
+import sk.jacob.engine.types.Return;
 import sk.jacob.engine.types.TokenType;
 import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.sql.engine.ExecutionContext;
@@ -29,7 +30,7 @@ public class FlyBy {
         ResultSet rs = (ResultSet)ectx.execute(s);
         rs.next();
         if(rs.getLong(1) != 1) {
-            // return soft EXCEPTION
+            return Return.EXCEPTION("security.invalid.token", dataPacket);
         }
         //dataPacket.security.username;
         return dataPacket;
@@ -43,6 +44,6 @@ public class FlyBy {
     @Token(type="security.flyby.login.password",
            token=FlyByLoginPassword.class)
     public static DataPacket flyByLoginPassword(DataPacket dataPacket) throws Exception {
-        return dataPacket;
+        return Return.EXCEPTION("security.invalid.login.password", dataPacket);
     }
 }

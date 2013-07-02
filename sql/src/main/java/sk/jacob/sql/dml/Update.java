@@ -1,30 +1,31 @@
 package sk.jacob.sql.dml;
 
+import sk.jacob.sql.ddl.ColumnValue;
 import sk.jacob.sql.dialect.DialectVisitor;
 
 public class Update extends DMLStatement {
     public final String tableName;
-    private Where where;
+    private Set set;
 
     public Update(String tableName) {
         this.tableName = tableName;
     }
 
-    public Where where(ConditionalOperation conditionalOperation) {
-        return where( new Where(this, conditionalOperation) );
+    public Set set(ColumnValue... columnValues) {
+        return set(new Set(this, columnValues));
     }
 
-    public Where where(Where where) {
-        this.where = where;
-        return this.where;
+    public Set set(Set set) {
+        this.set = set;
+        return this.set;
     }
 
-    public Where getWhereClause() {
-        return this.where;
+    public Set getSetStatement() {
+        return this.set;
     }
 
     @Override
     public String sql(DialectVisitor visitor) {
-        return null;
+        return visitor.visit(this);
     }
 }
