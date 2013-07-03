@@ -1,10 +1,16 @@
 package sk.jacob.mpu.context.tenant;
 
+import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.engine.types.*;
 import sk.jacob.engine.types.RequestDataType;
+import sk.jacob.mpu.context.Context;
+import static sk.jacob.sql.dml.DML.select;
+import sk.jacob.sql.dml.DMLStatement;
+import static sk.jacob.sql.dml.Op.eq;
+import sk.jacob.sql.engine.ExecutionContext;
 
 public class FindByLogin {
     private static class FindByLoginReqd extends RequestDataType {
@@ -18,7 +24,7 @@ public class FindByLogin {
 
             public TenantResponse(String id) {
                 this.tenantId = id;
-                this.tenantName = "Name of " + id;
+                this.tenantName = id;
             }
         }
 
@@ -35,14 +41,22 @@ public class FindByLogin {
             version = "1.0",
             reqd = FindByLoginReqd.class,
             resd = FindByLoginResd.class)
-    public static DataPacket handle(DataPacket dataPacket) {
+    public static DataPacket handle(DataPacket dataPacket) throws Exception {
         FindByLoginReqd requestData = (FindByLoginReqd) dataPacket.message.request.reqd;
 
-        List<FindByLoginResd.TenantResponse> responseTenants = new LinkedList<FindByLoginResd.TenantResponse>();
-        responseTenants.add(new FindByLoginResd.TenantResponse("1"));
-        responseTenants.add(new FindByLoginResd.TenantResponse("2"));
-        responseTenants.add(new FindByLoginResd.TenantResponse("3"));
+        //kym nie je implementovany JOIN tak aspon takto...
+        DMLStatement s = select("login", "tenant_fk")
+                .from("users_tenants")
+                .where(eq("login", requestData.login));
 
-        return Return.OK(new FindByLoginResd("Aaaa", responseTenants), dataPacket);
+        ExecutionContext ectx = (ExecutionContext) Context.EXECUTION_CTX.get(dataPacket);
+        ResultSet rs = (ResultSet) ectx.execute(s);
+
+        List<FindByLoginResd.TenantResponse> responseTenants = new LinkedList<>();
+        while (rs.next()) {
+            responseTenants.add(new FindByLoginResd.TenantResponse(rs.getString("tenant_fk")));
+        }
+
+        return Return.OK(new FindByLoginResd(requestData.login, responseTenants), dataPacket);
     }
 }

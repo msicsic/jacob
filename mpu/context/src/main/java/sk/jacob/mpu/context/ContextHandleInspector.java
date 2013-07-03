@@ -7,7 +7,6 @@ import java.util.List;
 import sk.jacob.engine.handler.HandlerInspector;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.engine.types.DataPacket;
-import sk.jacob.engine.types.RequestDataType;
 import sk.jacob.engine.types.RequestType;
 
 // FIXME:
@@ -23,16 +22,9 @@ public class ContextHandleInspector extends HandlerInspector<Message> {
 
     @Override
     protected String getMessageType(DataPacket dataPacket) {
-        String type = null;
-
         JsonObject jsonRequest = dataPacket.message.jsonRequest;
         JsonObject reqh = jsonRequest.get("reqh").getAsJsonObject();
-
-        if (reqh.has("type")) {
-            type = reqh.get("type").getAsString();
-        }
-
-        return type;
+        return reqh.get("type").getAsString();
     }
 
     @Override
@@ -41,7 +33,6 @@ public class ContextHandleInspector extends HandlerInspector<Message> {
             Message message = (Message) annotation;
             dataPacket.message.request = new RequestType();
             dataPacket.message.request.reqd = new Gson().fromJson(dataPacket.message.jsonRequest, message.reqd());
-            //            dataPacket.message.response = message.resd().newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

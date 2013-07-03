@@ -21,7 +21,7 @@ public class JacobFirmware implements Module {
         return new ArrayList<Module>() {{
             add(new DataPacketDeserializer());
             add(new SecurityModule(config));
-            add(new ContextModule());
+            add(new ContextModule(config));
             add(new BusinessModule());
             add(new DataPacketSerializer());
         }};
