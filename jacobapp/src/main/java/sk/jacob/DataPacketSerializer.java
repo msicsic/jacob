@@ -2,7 +2,7 @@ package sk.jacob;
 
 import com.google.gson.Gson;
 import sk.jacob.engine.Module;
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DataPacket;
 
 public class DataPacketSerializer implements Module {
     private Gson gson = new Gson();

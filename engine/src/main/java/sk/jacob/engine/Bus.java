@@ -1,6 +1,6 @@
 package sk.jacob.engine;
 
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DataPacket;
 
 import java.util.HashMap;
 import java.util.Map;

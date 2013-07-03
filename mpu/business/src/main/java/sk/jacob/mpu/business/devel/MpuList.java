@@ -3,7 +3,7 @@ package sk.jacob.mpu.business.devel;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.engine.handler.devel.DevelUtil;
 import sk.jacob.engine.handler.devel.MpuRegistryTypes;
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DataPacket;
 import sk.jacob.mpu.business.settings.Init;
 
 public class MpuList {

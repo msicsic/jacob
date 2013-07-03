@@ -1,7 +1,7 @@
 package sk.jacob;
 
 import sk.jacob.engine.Module;
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DataPacket;
 import sk.jacob.mpu.business.BusinessModule;
 import sk.jacob.mpu.context.ContextModule;
 import sk.jacob.mpu.security.SecurityModule;

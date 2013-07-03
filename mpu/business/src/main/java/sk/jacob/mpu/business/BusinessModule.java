@@ -1,7 +1,7 @@
 package sk.jacob.mpu.business;
 
 import sk.jacob.engine.Module;
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DataPacket;
 
 import java.util.ArrayList;
 import java.util.Arrays;

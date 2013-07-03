@@ -3,7 +3,7 @@ package sk.jacob.connector.http;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import sk.jacob.engine.Bus;
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DataPacket;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

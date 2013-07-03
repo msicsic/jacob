@@ -2,14 +2,16 @@ package sk.jacob.mpu.security;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import sk.jacob.common.SECURITY;
 import sk.jacob.engine.handler.HandlerInspector;
 import sk.jacob.engine.handler.Token;
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DataPacket;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 
 public class SecurityHandlerInspector extends HandlerInspector<Token> {
+    private static final Gson GSON = new Gson();
 
     public SecurityHandlerInspector(List<Class> messageHandlers) {
         super(Token.class, messageHandlers);
@@ -30,7 +32,7 @@ public class SecurityHandlerInspector extends HandlerInspector<Token> {
     protected void deserializeMessageElement(DataPacket dataPacket, Annotation annotation) {
         JsonObject securityElement = getSecurityElement(dataPacket);
         Token token = (Token)annotation;
-        dataPacket.security.token = new Gson().fromJson(securityElement, token.token());
+        SECURITY.setToken(dataPacket, GSON.fromJson(securityElement, token.token()));
     }
 
     private static JsonObject getSecurityElement(DataPacket dataPacket) {
