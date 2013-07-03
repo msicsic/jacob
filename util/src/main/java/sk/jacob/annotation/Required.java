@@ -1,4 +1,4 @@
-package sk.jacob.engine.handler;
+package sk.jacob.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

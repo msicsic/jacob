@@ -32,6 +32,10 @@ public abstract class DMLStatement implements SqlExpression{
         public Map<String, Object> parameters() {
             return bindParams;
         }
+
+        public void reset() {
+            bindParams.clear();
+        }
     }
 
     public static class CompiledStatement {
@@ -104,12 +108,11 @@ public abstract class DMLStatement implements SqlExpression{
     }
 
     public CompiledStatement compile(DialectVisitor visitor) {
-        if (this.getRootStatement().compiledStatement == null) {
-            this.getRootStatement().compiledStatement =
-                    new CompiledStatement(this.getRootStatement().sql(visitor),
-                                          this.getRootStatement().paramCounter.parameters());
-        }
-        return this.getRootStatement().compiledStatement;
+        DMLStatement rootStatement = this.getRootStatement();
+        rootStatement.paramCounter.reset();
+        rootStatement.compiledStatement = new CompiledStatement(this.getRootStatement().sql(visitor),
+                                                                this.getRootStatement().paramCounter.parameters());
+        return rootStatement.compiledStatement;
     }
 
     public CompiledStatement compile(DbEngine dbEngine) {

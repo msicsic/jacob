@@ -3,8 +3,10 @@ package sk.jacob.mpu.context.tenant;
 import java.util.LinkedList;
 import java.util.List;
 import sk.jacob.engine.handler.Message;
-import sk.jacob.engine.types.*;
-import sk.jacob.engine.types.RequestDataType;
+import sk.jacob.types.DataPacket;
+import sk.jacob.types.RequestDataType;
+import sk.jacob.types.ResponseDataType;
+import sk.jacob.types.Return;
 
 public class FindByLogin {
     private static class FindByLoginReqd extends RequestDataType {
@@ -43,6 +45,6 @@ public class FindByLogin {
         responseTenants.add(new FindByLoginResd.TenantResponse("2"));
         responseTenants.add(new FindByLoginResd.TenantResponse("3"));
 
-        return Return.OK(new FindByLoginResd("Aaaa", responseTenants), dataPacket);
+        return Return.RESPONSE(new FindByLoginResd("Aaaa", responseTenants), dataPacket);
     }
 }

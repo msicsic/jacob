@@ -54,7 +54,7 @@ define([
             return deferred;
         },
         logout: function() {
-            header.security.type = "security.invalidateToken";
+            header.security.type = "security.invalidate.token";
 
             this.call(undefined, {
                 noErrorLog: true,

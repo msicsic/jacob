@@ -1,4 +1,4 @@
-package sk.jacob.engine.types;
+package sk.jacob.types;
 
 public class ResponseHeaderType {
     public String messageId;

@@ -1,9 +1,7 @@
 package sk.jacob.engine.handler;
 
-import sk.jacob.engine.types.RequestDataType;
-import sk.jacob.engine.types.RequestType;
-import sk.jacob.engine.types.ResponseDataType;
-import sk.jacob.engine.types.ResponseType;
+import sk.jacob.types.RequestDataType;
+import sk.jacob.types.ResponseDataType;
 
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Retention;

@@ -1,16 +1,15 @@
 package sk.jacob.mpu.security.dbregistry;
 
+import sk.jacob.common.SECURITY;
 import sk.jacob.engine.handler.Token;
-import sk.jacob.engine.types.DataPacket;
-import sk.jacob.engine.types.ResponseDataType;
-import sk.jacob.engine.types.Return;
-import sk.jacob.engine.types.TokenType;
+import sk.jacob.types.DataPacket;
+import sk.jacob.types.ResponseDataType;
+import sk.jacob.types.Return;
+import sk.jacob.types.TokenType;
 import sk.jacob.mpu.security.TokenGenerator;
 import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.sql.engine.ExecutionContext;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 
 import static sk.jacob.sql.dml.DML.cv;
@@ -18,6 +17,7 @@ import static sk.jacob.sql.dml.DML.select;
 import static sk.jacob.sql.dml.DML.update;
 import static sk.jacob.sql.dml.Op.and;
 import static sk.jacob.sql.dml.Op.eq;
+import static sk.jacob.util.Crypto.md5String;
 
 public class AuthenticateLoginPassword {
     private static class AuthLogPassToken extends TokenType {
@@ -38,56 +38,39 @@ public class AuthenticateLoginPassword {
     @Token(type="security.authenticate.login.password",
            token=AuthLogPassToken.class,
            resd=AuthLogPassResd.class)
-    public static DataPacket handle(DataPacket dataPacket) throws Exception {
-        AuthLogPassToken token = (AuthLogPassToken)dataPacket.security.token;
+    public static DataPacket authenticateLoginPassword(DataPacket dataPacket) throws Exception {
+        AuthLogPassToken token = (AuthLogPassToken) SECURITY.getToken(dataPacket);
         DMLStatement s = select("login", "username", "admin")
                          .from("users")
                          .where(and(eq("login", token.login),
-                                    eq("md5pwd", md5String(token.password))));
-        ExecutionContext ectx = (ExecutionContext)SEC_CTX.EXECUTION_CTX.get(dataPacket);
+                                 eq("md5pwd", md5String(token.password))));
+        ExecutionContext ectx = (ExecutionContext) SECURITY.EXECUTION_CTX.get(dataPacket);
         ResultSet rs = (ResultSet)ectx.execute(s);
         if(rs.next() == Boolean.FALSE) {
             return Return.EXCEPTION("security.invalid.login.password", dataPacket);
         }
-
+        String generatedToken = TokenGenerator.getToken();
+        ectx.execute(update("users").set(cv("token", generatedToken)).where(eq("login", token.login)));
         AuthLogPassResd resd = new AuthLogPassResd();
-        resd.token = TokenGenerator.getToken();
+        resd.token = generatedToken;
         resd.principal.login = rs.getBoolean("admin") ? "ADMIN" : rs.getString("login");
         resd.principal.username = rs.getString("username");
-        return Return.OK(resd, dataPacket);
+        return Return.RESPONSE(resd, dataPacket);
     }
 
     private static class InvalidateToken extends TokenType {
         public String value;
     }
 
-    @Token(type="security.invalidate_token",
+    @Token(type="security.invalidate.token",
            token=InvalidateToken.class)
     public static DataPacket invalidateToken(DataPacket dataPacket) throws Exception {
-        InvalidateToken token = (InvalidateToken)dataPacket.security.token;
+        InvalidateToken token = (InvalidateToken) SECURITY.getToken(dataPacket);
         DMLStatement s = update("users")
                          .set(cv("token", null))
                          .where(eq("token", token.value));
-        ExecutionContext ectx = (ExecutionContext)SEC_CTX.EXECUTION_CTX.get(dataPacket);
+        ExecutionContext ectx = (ExecutionContext) SECURITY.EXECUTION_CTX.get(dataPacket);
         ectx.execute(s);
-        return Return.FINISH(dataPacket);
-    }
-
-    private static String md5String(String inputString) {
-        String md5String;
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(inputString.getBytes());
-            byte[] dig = md.digest();
-            StringBuffer sb = new StringBuffer();
-
-            for (int i=0; i < dig.length; i++) {
-                sb.append(Integer.toString( ( dig[i] & 0xff ) + 0x100, 16).substring( 1 ));
-            }
-            md5String = sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        return md5String;
+        return Return.EMPTY_RESPONSE(dataPacket);
     }
 }

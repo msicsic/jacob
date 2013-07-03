@@ -1,4 +1,4 @@
-package sk.jacob.engine.types;
+package sk.jacob.types;
 
 
 import com.google.gson.JsonObject;

@@ -3,7 +3,7 @@ package sk.jacob.mpu.business.devel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.Test;
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DataPacket;
 import sk.jacob.mpu.business.BusinessModule;
 
 public class MpuListTest {

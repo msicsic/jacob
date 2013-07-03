@@ -59,6 +59,12 @@ public class Column extends DbObject {
         this.options = options;
     }
 
+    Column(String name, TYPE.Type type) {
+        super(name);
+        this.type = type;
+        this.options = null;
+    }
+
     public static Options options() {
         return new Options();
     }

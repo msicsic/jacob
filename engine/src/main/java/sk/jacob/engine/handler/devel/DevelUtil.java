@@ -2,10 +2,9 @@ package sk.jacob.engine.handler.devel;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import sk.jacob.engine.handler.HandlerInspector;
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DataPacket;
 
 // FIXME
 public class DevelUtil {

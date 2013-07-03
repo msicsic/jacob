@@ -1,6 +1,7 @@
 package sk.jacob.engine.handler;
 
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.annotation.Required;
+import sk.jacob.types.DataPacket;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;

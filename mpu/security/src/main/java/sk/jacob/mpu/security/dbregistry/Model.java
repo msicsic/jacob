@@ -14,6 +14,14 @@ public class Model {
     }
 
     public static Metadata get(Metadata metadata) {
+        /* Enum of usernames
+         *
+         * login - login name of user
+         * username - meaningful name of user
+         * md5pwd - md5 hashed password
+         * token - token string used for request authenticating
+         * admin - mark if user is admin. Only one admin is permitted.
+         */
         table("users", metadata,
                 column("login", String(255), options().primaryKey()),
                 column("username", String(255), options().nullable()),

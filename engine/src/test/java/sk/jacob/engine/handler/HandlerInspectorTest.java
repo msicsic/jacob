@@ -7,9 +7,10 @@ import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import sk.jacob.engine.types.DataPacket;
-import sk.jacob.engine.types.RequestType;
-import sk.jacob.engine.types.ResponseType;
+import sk.jacob.annotation.Required;
+import sk.jacob.types.DataPacket;
+import sk.jacob.types.RequestType;
+import sk.jacob.types.ResponseType;
 // FIXME:
 public class HandlerInspectorTest {
     class TestMpu {

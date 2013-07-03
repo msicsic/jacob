@@ -6,7 +6,8 @@ import java.util.List;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerInspector;
 import sk.jacob.engine.handler.Message;
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DATAPACKET_STATUS;
+import sk.jacob.types.DataPacket;
 import sk.jacob.mpu.context.tenant.Init;
 
 public class ContextModule implements Module {
@@ -24,6 +25,9 @@ public class ContextModule implements Module {
 
     @Override
     public DataPacket handle(DataPacket dataPacket) {
-        return this.handlerInspector.process(dataPacket);
+        if (dataPacket.dataPacketStatus == DATAPACKET_STATUS.AFP) {
+            dataPacket = this.handlerInspector.process(dataPacket);
+        }
+        return dataPacket;
     }
 }
