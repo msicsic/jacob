@@ -38,12 +38,16 @@ public class ContextModule implements Module {
 
     @Override
     public DataPacket handle(DataPacket dataPacket) {
-        Context.EXECUTION_CTX.set(dataPacket, this.dbEngine.getExecutionContext());
-        try {
-            return this.handlerInspector.process(dataPacket);
-        } finally {
-            Context.clear(dataPacket);
+        DataPacket resDataPacket = dataPacket;
+        if (dataPacket.dataPacketStatus == DATAPACKET_STATUS.AFP) {
+            Context.EXECUTION_CTX.set(dataPacket, this.dbEngine.getExecutionContext());
+            try {
+                return this.handlerInspector.process(dataPacket);
+            } finally {
+                Context.clear(dataPacket);
+            }
         }
+        return resDataPacket;
     }
 
     private void initDatabase() {

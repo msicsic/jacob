@@ -4,10 +4,15 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 import sk.jacob.engine.handler.Message;
+import sk.jacob.mpu.context.Context;
+import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.RequestDataType;
 import sk.jacob.types.ResponseDataType;
 import sk.jacob.types.Return;
+import static sk.jacob.sql.dml.Op.eq;
+import sk.jacob.sql.engine.ExecutionContext;
+import static sk.jacob.sql.dml.DML.select;
 
 public class FindByLogin {
     private static class FindByLoginReqd extends RequestDataType {
@@ -17,6 +22,7 @@ public class FindByLogin {
     private static class FindByLoginResd extends ResponseDataType {
         public static class TenantResponse {
             public String tenantId;
+
             public String tenantName;
 
             public TenantResponse(String id) {
@@ -26,6 +32,7 @@ public class FindByLogin {
         }
 
         public String login;
+
         public List<TenantResponse> tenants;
 
         public FindByLoginResd(String login, List<TenantResponse> tenants) {
@@ -54,6 +61,6 @@ public class FindByLogin {
             responseTenants.add(new FindByLoginResd.TenantResponse(rs.getString("tenant_fk")));
         }
 
-        return Return.OK(new FindByLoginResd(requestData.login, responseTenants), dataPacket);
+        return Return.RESPONSE(new FindByLoginResd(requestData.login, responseTenants), dataPacket);
     }
 }

@@ -3,7 +3,7 @@ package sk.jacob.mpu.context;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import sk.jacob.engine.types.DataPacket;
+import sk.jacob.types.DataPacket;
 
 public enum Context {
     EXECUTION_CTX;
