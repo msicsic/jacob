@@ -10,7 +10,6 @@ import sk.jacob.engine.handler.Message;
 import sk.jacob.types.DATAPACKET_STATUS;
 import sk.jacob.types.DataPacket;
 import sk.jacob.mpu.context.tenant.Init;
-import sk.jacob.mpu.context.tenant.Model;
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.engine.DbEngine;
 
