@@ -45,13 +45,13 @@ public class ExecutionContext {
         DMLStatement rootDMLStatement = dmlStatement.getRootStatement();
         Object returnValue = null;
         if(rootDMLStatement instanceof Select) {
-            returnValue = queryStatement((Select) rootDMLStatement);
+            returnValue = this.executeStatement((Select) rootDMLStatement);
         } else if(rootDMLStatement instanceof Insert) {
-            returnValue = insertStatement((Insert) rootDMLStatement);
+            returnValue = this.executeStatement((Insert) rootDMLStatement);
         } else if(rootDMLStatement instanceof Update) {
-            updateDeleteStatement((Update) rootDMLStatement);
+            this.executeStatement((Update) rootDMLStatement);
         } else if(rootDMLStatement instanceof Delete) {
-            updateDeleteStatement((Delete) rootDMLStatement);
+            this.executeStatement((Delete) rootDMLStatement);
         }
         return returnValue;
     }
@@ -63,7 +63,7 @@ public class ExecutionContext {
         }
     }
 
-    private ResultSet queryStatement(DMLStatement dmlStatement) {
+    private ResultSet executeStatement(Select dmlStatement) {
         ResultSet resultSet;
         try {
             PreparedStatement ps = toPreparedStatement(dmlStatement);
@@ -76,8 +76,8 @@ public class ExecutionContext {
         return resultSet;
     }
 
-    private Object insertStatement(DMLStatement dmlStatement) {
-        Object generatedId = this.checkIdColumn((Insert) dmlStatement);
+    private Object executeStatement(Insert dmlStatement) {
+        Object generatedId = this.checkIdColumn(dmlStatement);
         try {
             PreparedStatement ps = toPreparedStatement(dmlStatement);
             sqlStatements.add(ps);
@@ -110,7 +110,15 @@ public class ExecutionContext {
         return generatedId;
     }
 
-    private void updateDeleteStatement(DMLStatement dmlStatement) {
+    private void executeStatement(Update dmlStatement) {
+        this.executeUpdateOrDelete(dmlStatement);
+    }
+
+    private void executeStatement(Delete dmlStatement) {
+        this.executeUpdateOrDelete(dmlStatement);
+    }
+
+    private void executeUpdateOrDelete(DMLStatement dmlStatement) {
         try {
             PreparedStatement ps = toPreparedStatement(dmlStatement);
             sqlStatements.add(ps);
