@@ -27,17 +27,24 @@ public class GenericDialectVisitor implements DialectVisitor {
         return sb.toString();
     }
 
-    private List<String> normalizeColumnExpressions(List columnExpressions) {
+    protected List<String> normalizeColumnExpressions(List columnExpressions) {
         List<String> normalizedPredicates = new ArrayList<String>();
         for(Object expression : columnExpressions) {
-            if (expression instanceof String) {
-                normalizedPredicates.add((String)expression);
-            } else if(expression instanceof SqlExpression) {
-                String statement = ((SqlExpression)expression).sql(this);
-                normalizedPredicates.add(statement);
-            }
+            normalizedPredicates.add(normalizeColumnExpression(expression));
         }
         return normalizedPredicates;
+    }
+
+    protected String normalizeColumnExpression(Object columnExpression) {
+        String normalizedCE = null;
+        if (columnExpression instanceof String) {
+            normalizedCE = (String)columnExpression;
+        } else if(columnExpression instanceof SqlExpression) {
+            normalizedCE = ((SqlExpression)columnExpression).sql(this);
+        } else if(columnExpression instanceof Column) {
+            normalizedCE = ((Column)columnExpression).name;
+        }
+        return normalizedCE;
     }
 
     @Override
@@ -74,7 +81,8 @@ public class GenericDialectVisitor implements DialectVisitor {
     @Override
     public String sql(From from) {
         StringBuffer sb = new StringBuffer("FROM ");
-        sb.append((String) Functional.reduce(StringReducer.instance(", "), from.tableNames));
+        List<String> normalizeTables = normalizeTableExpressions(from.tableExpressions);
+        sb.append((String) Functional.reduce(StringReducer.instance(", "), normalizeTables));
         Where whereClause = from.getWhereClause();
         if(whereClause != null) {
             sb.append("\n");
@@ -82,6 +90,24 @@ public class GenericDialectVisitor implements DialectVisitor {
             sb.append(whereSql);
         }
         return sb.toString();
+    }
+
+    protected List<String> normalizeTableExpressions(List tableExpressions) {
+        List<String> normalizedPredicates = new ArrayList<String>();
+        for(Object expression : tableExpressions) {
+            normalizedPredicates.add(normalizeTableExpression(expression));
+        }
+        return normalizedPredicates;
+    }
+
+    protected String normalizeTableExpression(Object tableExpression) {
+        String normalizedTE = null;
+        if (tableExpression instanceof String) {
+            normalizedTE = (String)tableExpression;
+        } else if(tableExpression instanceof Table) {
+            normalizedTE = ((Table)tableExpression).name;
+        }
+        return normalizedTE;
     }
 
     @Override

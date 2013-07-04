@@ -1,12 +1,7 @@
 package sk.jacob.sql.ddl;
 
-import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.dialect.GenericDialectVisitor;
 import sk.jacob.sql.engine.DbEngine;
-
-import java.sql.Connection;
-import java.sql.Statement;
-import java.util.List;
 
 public abstract class DbObject implements DDLEpression {
     public final String name;

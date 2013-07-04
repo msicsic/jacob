@@ -8,7 +8,7 @@ public class DDL {
     }
 
     public static Column column(String name, TYPE.Type type, IColumnOptions columnOptions) {
-        return new Column(name, type, (ColumnOptions)columnOptions);
+        return new Column(name, type, columnOptions);
     }
 
     public static Column column(String name, TYPE.Type type) {

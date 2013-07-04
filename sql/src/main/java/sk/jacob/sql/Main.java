@@ -1,9 +1,6 @@
 package sk.jacob.sql;
 
-import sk.jacob.sql.ddl.DDLStatement;
-import sk.jacob.sql.ddl.DbObject;
-import sk.jacob.sql.ddl.Sequence;
-import sk.jacob.sql.ddl.Table;
+import sk.jacob.sql.ddl.*;
 import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.sql.engine.DbEngine;
 import sk.jacob.sql.engine.ExecutionContext;
@@ -46,6 +43,30 @@ public class Main {
                 column("admin", Boolean(), options().nullable(false)));
         dumpObject(users);
 
+        Users2 users2 = new Users2(metadata);
+        dumpObject(users2);
+
+        dmlStatement = select(count("*"), users2.login, "col2")
+                       .from("table1", users2)
+                       .where(and(eq("col2", 2),
+                                  le("col4", "abc")));
+        dumpStatement(dmlStatement);
+    }
+
+    private static class Users2 extends Table {
+        public Users2(Metadata metadata) {
+            super("USERS2", metadata);
+        }
+
+        public final Column login = new Column("login",
+                                               Long(),
+                                               options().nullable(false),
+                                               this);
+
+        public final Column username = new Column("username",
+                                                  String(255),
+                                                  options().foreignKey("refTable.refColumn"),
+                                                  this);
     }
 
     private static void dumpStatement(DMLStatement dmlStatement) {

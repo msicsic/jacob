@@ -7,14 +7,26 @@ public class Column extends DbObject {
     public final ColumnOptions options;
     private Table parentTable;
 
-    Column(String name, TYPE.Type type) {
+    public Column(String name, TYPE.Type type) {
         this(name, type, new ColumnOptions());
     }
 
-    Column(String name, TYPE.Type type, ColumnOptions options) {
+    public Column(String name, TYPE.Type type, IColumnOptions options) {
         super(name);
         this.type = type;
-        this.options = options;
+        this.options = (ColumnOptions)options;
+    }
+
+    public Column(String name, TYPE.Type type, Table parentTable) {
+        this(name, type, new ColumnOptions(), parentTable);
+    }
+
+    public Column(String name, TYPE.Type type, IColumnOptions options, Table parentTable) {
+        super(name);
+        this.type = type;
+        this.options = (ColumnOptions)options;
+        this.setParentTable(parentTable);
+        parentTable.columns.add(this);
     }
 
     public static IColumnOptions options() {

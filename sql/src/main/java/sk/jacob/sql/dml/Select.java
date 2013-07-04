@@ -14,8 +14,8 @@ public class Select extends DMLStatement {
         this.columnExpressions = Arrays.asList(columnExpressions);
     }
 
-    public From from(String ... tableNames) {
-        return from( new From(this, tableNames) );
+    public From from(Object ... tableExpressions) {
+        return from( new From(this, tableExpressions) );
     }
 
     public From from(From from) {

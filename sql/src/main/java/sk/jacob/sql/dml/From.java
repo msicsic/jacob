@@ -6,12 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class From extends DMLStatement {
-    public final List<String> tableNames;
+    public final List<Object> tableExpressions;
     private Where where;
 
-    public From(DMLStatement parentDMLStatement, String ... tableNames) {
+    public From(DMLStatement parentDMLStatement, Object ... tableExpressions) {
         super(parentDMLStatement);
-        this.tableNames = Arrays.asList(tableNames);
+        this.tableExpressions = Arrays.asList(tableExpressions);
     }
 
     public Where where(ConditionalOperation conditionalOperation) {

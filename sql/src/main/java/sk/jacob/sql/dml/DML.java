@@ -4,8 +4,8 @@ import sk.jacob.sql.ddl.ColumnValue;
 import sk.jacob.sql.ddl.Table;
 
 public class DML {
-    public static Select select(Object ... columnPredicates) {
-        return new Select(columnPredicates);
+    public static Select select(Object ... columnExpressions) {
+        return new Select(columnExpressions);
     }
 
     public static Insert insert(String tableName) {
