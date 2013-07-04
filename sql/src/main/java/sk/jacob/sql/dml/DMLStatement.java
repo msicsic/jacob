@@ -104,18 +104,18 @@ public abstract class DMLStatement implements SqlExpression{
     }
 
     public CompiledStatement compile() {
-        return compile(new GenericDialectVisitor());
+        return compile(GenericDialectVisitor.INSTANCE);
+    }
+
+    public CompiledStatement compile(DbEngine dbEngine) {
+        return compile(dbEngine.getDialect());
     }
 
     public CompiledStatement compile(DialectVisitor visitor) {
         DMLStatement rootStatement = this.getRootStatement();
         rootStatement.paramCounter.reset();
         rootStatement.compiledStatement = new CompiledStatement(this.getRootStatement().sql(visitor),
-                                                                this.getRootStatement().paramCounter.parameters());
+                this.getRootStatement().paramCounter.parameters());
         return rootStatement.compiledStatement;
-    }
-
-    public CompiledStatement compile(DbEngine dbEngine) {
-        return compile(dbEngine.getDialect());
     }
 }

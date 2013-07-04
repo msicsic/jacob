@@ -15,17 +15,17 @@ public class Model {
         //TODO foreign keys
         table("tenants", metadata,
                 column("id", String(255), options().primaryKey()),
-                column("name", String(255), options()));
+                column("name", String(255)));
         
         table("tenants_params", metadata,
-                column("tenant_fk", String(255), options()),
-                column("param_name", String(255), options()),
-                column("param_value", String(255), options()),
-                column("scope", String(255), options()));
+                column("tenant_fk", String(255)),
+                column("param_name", String(255)),
+                column("param_value", String(255)),
+                column("scope", String(255)));
         
         table("users_tenants", metadata,
-                column("login", String(255), options()),
-                column("tenant_fk", String(255), options()));
+                column("login", String(255)),
+                column("tenant_fk", String(255)));
         
         //TODO ds table
         

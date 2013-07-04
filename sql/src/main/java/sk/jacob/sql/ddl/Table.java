@@ -9,6 +9,9 @@ public class Table extends DbObject {
     public Table(String name, Metadata metadata,  Column ... columns) {
         super(name);
         this.columns = columns;
+        for(Column column : columns) {
+            column.setParentTable(this);
+        }
         metadata.add(this);
     }
 

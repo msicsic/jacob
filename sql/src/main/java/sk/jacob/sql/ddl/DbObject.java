@@ -1,33 +1,27 @@
 package sk.jacob.sql.ddl;
 
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.GenericDialectVisitor;
 import sk.jacob.sql.engine.DbEngine;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.List;
 
-public abstract class DbObject {
+public abstract class DbObject implements DDLEpression {
     public final String name;
 
     protected DbObject(String name) {
         this.name = name;
     }
 
-    public void create(DbEngine engine) {
-        DialectVisitor dialect = engine.getDialect();
-        DDLStatement ddl = this.create(dialect);
-        Connection connection = engine.getConnection();
-        try {
-            Statement statement = connection.createStatement();
-            statement.execute(ddl.inline);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            DbEngine.close(connection);
-        }
+    public DDLStatement create() {
+        return create(GenericDialectVisitor.INSTANCE);
+    }
+
+    public DDLStatement create(DbEngine dbEngine) {
+        return create(dbEngine.getDialect());
     }
 
     public void drop(DbEngine dbEngine) {}
-
-    public abstract DDLStatement create(DialectVisitor dialect);
 }

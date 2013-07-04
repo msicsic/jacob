@@ -1,5 +1,7 @@
 package sk.jacob.sql;
 
+import sk.jacob.sql.ddl.DDLStatement;
+import sk.jacob.sql.ddl.DbObject;
 import sk.jacob.sql.ddl.Sequence;
 import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.dml.DMLStatement;
@@ -33,22 +35,17 @@ public class Main {
 
         Metadata metadata = new Metadata();
         Sequence sequence = sequence("SEQ_A", metadata);
-        Table users = table("users", metadata,
+        dumpObject(sequence);
+
+        Table users =
+                table("users", metadata,
                 column("login", Long(), options().primaryKey(sequenceIdGenerator(sequence))),
-                column("username", String(255), options().nullable()),
+                column("username", String(255), options().foreignKey("refTable.refColumn")),
                 column("md5pwd", String(255), options().nullable()),
                 column("token", String(255), options().nullable().unique()),
                 column("admin", Boolean(), options().nullable()));
+        dumpObject(users);
 
-        DbEngine dbEngine = new DbEngine("org.h2.Driver", "jdbc:h2:data/test", "sa", "sa");
-        metadata.createAll(dbEngine);
-
-        dmlStatement = insert(users).values(cv("username", "Administrator"));
-        ExecutionContext ectx = dbEngine.getExecutionContext();
-//        ectx.txBegin();
-//        System.out.println(ectx.execute(dmlStatement));
-//        ectx.txCommit();
-//        ectx.close();
     }
 
     private static void dumpStatement(DMLStatement dmlStatement) {
@@ -58,5 +55,14 @@ public class Main {
         System.out.println(compiledStatement.parameters());
         System.out.println(compiledStatement.normalizedStatement());
         System.out.println(compiledStatement.parameterList());
+    }
+
+    private static void dumpObject(DbObject dbObject) {
+        DDLStatement statement  = dbObject.create();
+        System.out.println(">>>");
+        System.out.println(statement.inline);
+        for(String outline : statement.outline) {
+            System.out.println(outline);
+        }
     }
 }

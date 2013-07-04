@@ -1,5 +1,6 @@
 package sk.jacob.sql.engine;
 
+import sk.jacob.sql.ddl.DDLStatement;
 import sk.jacob.sql.dml.*;
 import sk.jacob.sql.generator.IdGenerator;
 import sk.jacob.sql.ddl.Column;
@@ -53,6 +54,13 @@ public class ExecutionContext {
             updateDeleteStatement((Delete) rootDMLStatement);
         }
         return returnValue;
+    }
+
+    public void execute(DDLStatement ddl) {
+        execute(ddl.inline);
+        for(String outline : ddl.outline) {
+            execute(outline);
+        }
     }
 
     private ResultSet queryStatement(DMLStatement dmlStatement) {
@@ -114,7 +122,7 @@ public class ExecutionContext {
     }
 
     private PreparedStatement toPreparedStatement(DMLStatement dmlStatement) throws SQLException {
-        DMLStatement.CompiledStatement cs = dmlStatement.compile(dbEngine);
+        DMLStatement.CompiledStatement cs = dmlStatement.compile(this.dbEngine);
         PreparedStatement  preparedStatement = this.connection.prepareStatement(cs.normalizedStatement());
         DbEngine.bindParameters(preparedStatement, cs.parameterList());
         return preparedStatement;

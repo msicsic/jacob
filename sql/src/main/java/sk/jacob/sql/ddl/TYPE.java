@@ -20,7 +20,7 @@ public class TYPE {
 
         @Override
         public String sql(DialectVisitor visitor) {
-            return visitor.visit(this);
+            return visitor.sql(this);
         }
     }
     public static StringType String(Integer length) {
@@ -33,7 +33,7 @@ public class TYPE {
         }
         @Override
         public String sql(DialectVisitor visitor) {
-            return visitor.visit(this);
+            return visitor.sql(this);
         }
     }
     public static BooleanType Boolean() {
@@ -46,7 +46,7 @@ public class TYPE {
         }
         @Override
         public String sql(DialectVisitor visitor) {
-            return visitor.visit(this);
+            return visitor.sql(this);
         }
     }
     public static LongType Long() {

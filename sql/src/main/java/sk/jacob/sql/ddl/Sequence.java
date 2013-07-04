@@ -22,7 +22,7 @@ public class Sequence extends DbObject {
     public Long nextVal(DbEngine dbEngine) {
         Long nextVal = null;
         DialectVisitor visitor = dbEngine.getDialect();
-        String nextValStatement = visitor.nextVal(this);
+        String nextValStatement = visitor.sql(this);
         ExecutionContext ectx = dbEngine.getExecutionContext();
         ResultSet resultSet = ectx.execute(nextValStatement);
         try {

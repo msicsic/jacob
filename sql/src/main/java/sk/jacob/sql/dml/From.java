@@ -29,6 +29,6 @@ public class From extends DMLStatement {
 
     @Override
     public String sql(DialectVisitor visitor) {
-        return visitor.visit(this);
+        return visitor.sql(this);
     }
 }

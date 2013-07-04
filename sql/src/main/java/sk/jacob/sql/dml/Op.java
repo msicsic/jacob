@@ -15,7 +15,7 @@ public class Op {
 
         @Override
         public String sql(DialectVisitor visitor) {
-            return visitor.visit(this);
+            return visitor.sql(this);
         }
 
         @Override
@@ -42,7 +42,7 @@ public class Op {
 
         @Override
         public String sql(DialectVisitor visitor) {
-            return visitor.visit(this);
+            return visitor.sql(this);
         }
     }
 
@@ -61,7 +61,7 @@ public class Op {
 
         @Override
         public String sql(DialectVisitor visitor) {
-            return visitor.visit(this);
+            return visitor.sql(this);
         }
     }
 

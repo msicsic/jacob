@@ -11,7 +11,7 @@ public class Function {
 
         @Override
         public String sql(DialectVisitor visitor) {
-            return visitor.visit(this);
+            return visitor.sql(this);
         }
     }
     public static Count count(String columnName) {

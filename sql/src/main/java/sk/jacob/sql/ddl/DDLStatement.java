@@ -8,12 +8,11 @@ public class DDLStatement {
     public final List<String> outline = new ArrayList<String>();
 
     public DDLStatement(String inline) {
-        this(inline, null);
+        this.inline = inline;
     }
 
     public DDLStatement(String inline, List<String> outline) {
         this.inline = inline;
-        if(outline != null)
-            this.outline.addAll(outline);
+        this.outline.addAll(outline);
     }
 }
