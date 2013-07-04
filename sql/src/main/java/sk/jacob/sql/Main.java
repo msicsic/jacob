@@ -41,9 +41,9 @@ public class Main {
                 table("users", metadata,
                 column("login", Long(), options().primaryKey(sequenceIdGenerator(sequence))),
                 column("username", String(255), options().foreignKey("refTable.refColumn")),
-                column("md5pwd", String(255), options().nullable()),
-                column("token", String(255), options().nullable().unique()),
-                column("admin", Boolean(), options().nullable()));
+                column("md5pwd", String(255), options().nullable(false)),
+                column("token", String(255), options().nullable(false).unique(true)),
+                column("admin", Boolean(), options().nullable(false)));
         dumpObject(users);
 
     }

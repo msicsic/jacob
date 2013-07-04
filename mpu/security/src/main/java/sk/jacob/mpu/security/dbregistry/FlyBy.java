@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import static sk.jacob.sql.dml.DML.select;
 import static sk.jacob.sql.dml.Op.and;
 import static sk.jacob.sql.dml.Op.eq;
-import static sk.jacob.util.Crypto.md5String;
+import static sk.jacob.util.Security.md5String;
 
 public class FlyBy {
     private static class FlyByToken extends TokenType {

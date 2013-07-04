@@ -3,15 +3,17 @@ package sk.jacob.sql.ddl;
 import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.generator.IdGenerator;
 
-public class ColumnOptions implements DDLEpression {
+public class ColumnOptions implements DDLEpression, IColumnOptions {
     private Boolean primaryKey = Boolean.FALSE;
     private IdGenerator generator = null;
     private Column parentColumn;
 
-    public ColumnOptions primaryKey() {
+    @Override
+    public IColumnOptions primaryKey() {
         return primaryKey(null);
     }
-    public ColumnOptions primaryKey(IdGenerator generator) {
+    @Override
+    public IColumnOptions primaryKey(IdGenerator generator) {
         this.generator = generator;
         this.primaryKey = Boolean.TRUE;
         return this;
@@ -25,8 +27,9 @@ public class ColumnOptions implements DDLEpression {
 
 
     private Boolean nullable = Boolean.FALSE;
-    public ColumnOptions nullable() {
-        this.nullable = Boolean.TRUE;
+    @Override
+    public IColumnOptions nullable(Boolean nullable) {
+        this.nullable = nullable;
         return this;
     }
     public Boolean isNullable() {
@@ -35,8 +38,9 @@ public class ColumnOptions implements DDLEpression {
 
 
     private Boolean unique = Boolean.FALSE;
-    public ColumnOptions unique() {
-        this.unique = Boolean.TRUE;
+    @Override
+    public IColumnOptions unique(Boolean unique) {
+        this.unique = unique;
         return this;
     }
     public Boolean isUnique() {
@@ -45,11 +49,13 @@ public class ColumnOptions implements DDLEpression {
 
 
     private ForeignKey foreignKey= null;
-    public ColumnOptions foreignKey(String refTabCol) {
+    @Override
+    public IColumnOptions foreignKey(String refTabCol) {
         this.foreignKey = new ForeignKey(refTabCol);
         return this;
     }
-    public ColumnOptions foreignKey(String refTabCol, String constraintName) {
+    @Override
+    public IColumnOptions foreignKey(String refTabCol, String constraintName) {
         this.foreignKey = new ForeignKey(refTabCol, constraintName);
         return this;
     }

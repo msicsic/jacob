@@ -23,11 +23,11 @@ public class Model {
          * admin - mark if user is admin. Only one admin is permitted.
          */
         table("users", metadata,
-                column("login", String(255), options().primaryKey()),
-                column("username", String(255), options().nullable()),
-                column("md5pwd", String(255), options().nullable()),
-                column("token", String(255), options().nullable().unique()),
-                column("admin", Boolean(), options().nullable()));
+                column("login", String(50), options().primaryKey()),
+                column("username", String(100), options().nullable(false)),
+                column("md5pwd", String(32), options().nullable(false)),
+                column("token", String(256), options().nullable(false).unique(true)),
+                column("admin", Boolean(), options().nullable(false)));
         return metadata;
     }
 }

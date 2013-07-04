@@ -17,7 +17,7 @@ public class Column extends DbObject {
         this.options = options;
     }
 
-    public static ColumnOptions options() {
+    public static IColumnOptions options() {
         return new ColumnOptions();
     }
 

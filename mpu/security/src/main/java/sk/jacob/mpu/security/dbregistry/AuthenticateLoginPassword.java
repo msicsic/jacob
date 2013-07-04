@@ -6,7 +6,6 @@ import sk.jacob.types.DataPacket;
 import sk.jacob.types.ResponseDataType;
 import sk.jacob.types.Return;
 import sk.jacob.types.TokenType;
-import sk.jacob.mpu.security.TokenGenerator;
 import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.sql.engine.ExecutionContext;
 
@@ -17,7 +16,8 @@ import static sk.jacob.sql.dml.DML.select;
 import static sk.jacob.sql.dml.DML.update;
 import static sk.jacob.sql.dml.Op.and;
 import static sk.jacob.sql.dml.Op.eq;
-import static sk.jacob.util.Crypto.md5String;
+import static sk.jacob.util.Security.uniqueToken;
+import static sk.jacob.util.Security.md5String;
 
 public class AuthenticateLoginPassword {
     private static class AuthLogPassToken extends TokenType {
@@ -49,7 +49,8 @@ public class AuthenticateLoginPassword {
         if(rs.next() == Boolean.FALSE) {
             return Return.EXCEPTION("security.invalid.login.password", dataPacket);
         }
-        String generatedToken = TokenGenerator.getToken();
+
+        String generatedToken = uniqueToken();
         ectx.execute(update("users").set(cv("token", generatedToken)).where(eq("login", token.login)));
         AuthLogPassResd resd = new AuthLogPassResd();
         resd.token = generatedToken;

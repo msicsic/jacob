@@ -22,7 +22,6 @@ public class FindByLogin {
     private static class FindByLoginResd extends ResponseDataType {
         public static class TenantResponse {
             public String tenantId;
-
             public String tenantName;
 
             public TenantResponse(String id) {
@@ -32,7 +31,6 @@ public class FindByLogin {
         }
 
         public String login;
-
         public List<TenantResponse> tenants;
 
         public FindByLoginResd(String login, List<TenantResponse> tenants) {

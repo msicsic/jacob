@@ -1,9 +1,11 @@
 package sk.jacob.util;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
-public class Crypto {
+public class Security {
     public static String md5String(String inputString) {
         String md5String;
         try {
@@ -20,5 +22,10 @@ public class Crypto {
             throw new RuntimeException(e);
         }
         return md5String;
+    }
+
+    private static final SecureRandom RND_GENERATOR = new SecureRandom();
+    public static String uniqueToken() {
+        return new BigInteger(255, RND_GENERATOR).toString(32);
     }
 }
