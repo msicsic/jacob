@@ -3,6 +3,7 @@ package sk.jacob.mpu.context.tenant;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
+import sk.jacob.annotation.Required;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.mpu.context.Context;
 import sk.jacob.sql.dml.DMLStatement;
@@ -16,12 +17,15 @@ import static sk.jacob.sql.dml.DML.select;
 
 public class FindByLogin {
     private static class FindByLoginReqd extends RequestDataType {
+        @Required
         public String login;
     }
 
     private static class FindByLoginResd extends ResponseDataType {
         public static class TenantResponse {
+            @Required
             public String tenantId;
+            @Required
             public String tenantName;
 
             public TenantResponse(String id) {
@@ -29,8 +33,9 @@ public class FindByLogin {
                 this.tenantName = id;
             }
         }
-
+        @Required
         public String login;
+        @Required
         public List<TenantResponse> tenants;
 
         public FindByLoginResd(String login, List<TenantResponse> tenants) {
@@ -46,7 +51,7 @@ public class FindByLogin {
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         FindByLoginReqd requestData = (FindByLoginReqd) dataPacket.message.request.reqd;
 
-        
+
         System.out.println("requestData" + requestData.login);
         //kym nie je implementovany JOIN tak aspon takto...
         DMLStatement s = select("login", "tenant_fk")

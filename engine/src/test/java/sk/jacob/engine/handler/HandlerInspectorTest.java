@@ -4,54 +4,48 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.lang.reflect.Method;
 import java.util.List;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import sk.jacob.annotation.Required;
 import sk.jacob.types.DataPacket;
-import sk.jacob.types.RequestType;
-import sk.jacob.types.ResponseType;
+import sk.jacob.types.RequestDataType;
+import sk.jacob.types.ResponseDataType;
+
 // FIXME:
 public class HandlerInspectorTest {
-    class TestMpu {
-        public class User {
+    static class TestMpu {
+        static class User {
             String login;
-
             String name;
-
             String email;
         }
 
-        public abstract class ReqSuper extends RequestType {
+        static abstract class ReqSuper extends RequestDataType {
             @Required
             Long start;
-
             @Required
             Integer count;
         }
 
-        public class Req extends ReqSuper {
+        static class Req extends ReqSuper {
             String[] groups;
-
             @Length(max = 255)
             String login;
         }
 
-        public class Res extends ResponseType {
+        static class Res extends ResponseDataType {
             Integer totalCount;
-
             List<User> users;
         }
 
-//        @Message(type = "test",
-//                version = "0.1",
-//                reqd = Req.class,
-//                resd = Res.class)
-        public DataPacket method(DataPacket dataPacket) {
+        @Message(type = "test",
+                version = "0.1",
+                reqd = Req.class,
+                resd = Res.class)
+        public static DataPacket method(DataPacket dataPacket) {
             return dataPacket;
         }
     }
-
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Ignore
