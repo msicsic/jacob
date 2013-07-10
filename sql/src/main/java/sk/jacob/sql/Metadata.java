@@ -2,11 +2,9 @@ package sk.jacob.sql;
 
 import sk.jacob.sql.ddl.DDLStatement;
 import sk.jacob.sql.ddl.DbObject;
+import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.DbEngine;
-import sk.jacob.sql.engine.ExecutionContext;
 
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,12 +23,12 @@ public class Metadata{
     public void createAll(DbEngine dbEngine) {
         for(String objectName : createOrder) {
             DbObject dbObject = dbObjects.get(objectName);
-            ExecutionContext ectx = dbEngine.getExecutionContext();
+            Connection conn = dbEngine.getConnection();
             try {
                 DDLStatement ddl = dbObject.create(dbEngine);
-                ectx.execute(ddl);
+                conn.execute(ddl);
             } finally {
-                ectx.close();
+                conn.close();
             }
         }
     }

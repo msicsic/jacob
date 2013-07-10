@@ -2,8 +2,8 @@ package sk.jacob.sql.ddl;
 
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.DbEngine;
-import sk.jacob.sql.engine.ExecutionContext;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,15 +23,15 @@ public class Sequence extends DbObject {
         Long nextVal = null;
         DialectVisitor visitor = dbEngine.getDialect();
         String nextValStatement = visitor.sql(this);
-        ExecutionContext ectx = dbEngine.getExecutionContext();
-        ResultSet resultSet = ectx.execute(nextValStatement);
+        Connection conn = dbEngine.getConnection();
+        ResultSet resultSet = conn.execute(nextValStatement);
         try {
             resultSet.next();
             nextVal = resultSet.getLong(1);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            ectx.close();
+            conn.close();
         }
         return nextVal;
     }

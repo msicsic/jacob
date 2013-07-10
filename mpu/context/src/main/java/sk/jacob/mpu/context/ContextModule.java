@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+
+import sk.jacob.common.CONTEXT;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerInspector;
 import sk.jacob.engine.handler.Message;
+import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DATAPACKET_STATUS;
 import sk.jacob.types.DataPacket;
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.engine.DbEngine;
+import sk.jacob.types.Return;
 
 public class ContextModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();
@@ -34,16 +38,24 @@ public class ContextModule implements Module {
 
     @Override
     public DataPacket handle(DataPacket dataPacket) {
-        DataPacket resDataPacket = dataPacket;
-        if (dataPacket.dataPacketStatus == DATAPACKET_STATUS.AFP) {
-            Context.EXECUTION_CTX.set(dataPacket, this.dbEngine.getExecutionContext());
-            try {
-                return this.handlerInspector.process(dataPacket);
-            } finally {
-                Context.clear(dataPacket);
-            }
+        if (dataPacket.dataPacketStatus == DATAPACKET_STATUS.FIN)
+            return dataPacket;
+
+        Connection conn = this.dbEngine.getConnection();
+        CONTEXT.CONNECTION.set(dataPacket, conn);
+
+        try {
+            conn.txBegin();
+            dataPacket = this.handlerInspector.process(dataPacket);
+            conn.txCommit();
+        } catch (Exception e) {
+            conn.txRollback();
+            dataPacket = Return.EXCEPTION("context.general.context.exception", e, dataPacket);
+        } finally {
+            conn.close();
         }
-        return resDataPacket;
+
+        return dataPacket;
     }
 
     private void initDatabase() {

@@ -44,16 +44,16 @@ public class DbEngine {
     }
 
 
-    public ExecutionContext getExecutionContext() {
-        return new ExecutionContext(this);
+    public Connection getConnection() {
+        return new Connection(this);
     }
 
-    public Connection getConnection() {
-        Connection connection = null;
+    java.sql.Connection dbConnect() {
+        java.sql.Connection connection = null;
         try {
             connection = DriverManager.getConnection(this.url, this.username, this.password);
             connection.setAutoCommit(Boolean.FALSE);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return connection;
@@ -71,7 +71,7 @@ public class DbEngine {
 
     public static void close(AutoCloseable closeable) {
         try {
-            closeable.close();
+            if (closeable != null) closeable.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

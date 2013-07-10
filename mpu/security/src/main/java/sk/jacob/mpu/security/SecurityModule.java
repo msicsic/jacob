@@ -4,12 +4,12 @@ import sk.jacob.common.SECURITY;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerInspector;
 import sk.jacob.engine.handler.Token;
+import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DataPacket;
 import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.mpu.security.dbregistry.Model;
 import sk.jacob.sql.dml.DMLStatement;
 import sk.jacob.sql.engine.DbEngine;
-import sk.jacob.sql.engine.ExecutionContext;
 import sk.jacob.sql.Metadata;
 import sk.jacob.types.Return;
 import sk.jacob.util.Log;
@@ -22,6 +22,7 @@ import java.util.Properties;
 import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.dml.Op.eq;
 import static sk.jacob.types.Return.stackToString;
+import static sk.jacob.util.Log.logger;
 
 public class SecurityModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<Class>();
@@ -44,19 +45,19 @@ public class SecurityModule implements Module {
 
     @Override
     public DataPacket handle(DataPacket dataPacket) {
-        ExecutionContext ectx = this.dbEngine.getExecutionContext();
-        SECURITY.EXECUTION_CTX.set(dataPacket, ectx);
+        Connection conn = this.dbEngine.getConnection();
+        SECURITY.CONNECTION.set(dataPacket, conn);
         try {
-            ectx.txBegin();
+            conn.txBegin();
             dataPacket = this.handlerInspector.process(dataPacket);
-            ectx.txCommit();
+            conn.txCommit();
         } catch (Exception e){
-            Log.sout(stackToString(e));
-            ectx.txRollback();
-            dataPacket = Return.EXCEPTION("security.general.token.exception", e, dataPacket);
+            String errorCode = "security.general.token.exception";
+            logger(this).error(errorCode, e);
+            conn.txRollback();
+            dataPacket = Return.EXCEPTION(errorCode, e, dataPacket);
         } finally {
-            ectx.close();
-            SECURITY.EXECUTION_CTX.set(dataPacket, null);
+            conn.close();
         }
         return dataPacket;
     }
@@ -74,12 +75,12 @@ public class SecurityModule implements Module {
                                                   cv("username", "Administrator"),
                                                   cv("admin", Boolean.TRUE),
                                                   cv("md5pwd", adminMd5Pwd));
-        ExecutionContext ectx = this.dbEngine.getExecutionContext();
-        ectx.txBegin();
-        ectx.execute(deleteDMLStatement);
-        ectx.execute(insertDMLStatement);
-        ectx.txCommit();
-        ectx.close();
+        Connection conn = this.dbEngine.getConnection();
+        conn.txBegin();
+        conn.execute(deleteDMLStatement);
+        conn.execute(insertDMLStatement);
+        conn.txCommit();
+        conn.close();
     }
 }
 

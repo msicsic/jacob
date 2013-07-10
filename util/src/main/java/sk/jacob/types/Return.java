@@ -12,7 +12,14 @@ public class Return {
     }
 
     public static DataPacket EXCEPTION(String exceptionCode, Throwable throwable, DataPacket dataPacket) {
-        return EXCEPTION(exceptionCode, stackToString(throwable), dataPacket);
+        String stackTrace = null;
+
+        try {
+            stackTrace = stackToString(throwable);
+        } catch (Exception e) {
+            stackTrace = exceptionCode;
+        }
+        return EXCEPTION(exceptionCode, stackTrace, dataPacket);
     }
 
     public static DataPacket EXCEPTION(String exceptionCode, String exceptionText, DataPacket dataPacket) {

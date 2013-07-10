@@ -5,15 +5,17 @@ import java.util.LinkedList;
 import java.util.List;
 import sk.jacob.annotation.Required;
 import sk.jacob.engine.handler.Message;
-import sk.jacob.mpu.context.Context;
+import sk.jacob.common.CONTEXT;
 import sk.jacob.sql.dml.DMLStatement;
+import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.RequestDataType;
 import sk.jacob.types.ResponseDataType;
 import sk.jacob.types.Return;
 import static sk.jacob.sql.dml.Op.eq;
-import sk.jacob.sql.engine.ExecutionContext;
 import static sk.jacob.sql.dml.DML.select;
+import static sk.jacob.util.Log.logger;
+import static sk.jacob.util.Log.sout;
 
 public class FindByLogin {
     private static class FindByLoginReqd extends RequestDataType {
@@ -33,6 +35,7 @@ public class FindByLogin {
                 this.tenantName = id;
             }
         }
+
         @Required
         public String login;
         @Required
@@ -45,21 +48,20 @@ public class FindByLogin {
     }
 
     @Message(type = "context.tenant.findByLogin",
-            version = "1.0",
-            reqd = FindByLoginReqd.class,
-            resd = FindByLoginResd.class)
+             version = "1.0",
+             reqd = FindByLoginReqd.class,
+             resd = FindByLoginResd.class)
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         FindByLoginReqd requestData = (FindByLoginReqd) dataPacket.message.request.reqd;
 
-
-        System.out.println("requestData" + requestData.login);
+        sout("requestData" + requestData.login);
         //kym nie je implementovany JOIN tak aspon takto...
         DMLStatement s = select("login", "tenant_fk")
-                .from("users_tenants")
-                .where(eq("login", requestData.login));
+                         .from("users_tenants")
+                         .where(eq("login", requestData.login));
 
-        ExecutionContext ectx = (ExecutionContext) Context.EXECUTION_CTX.get(dataPacket);
-        ResultSet rs = (ResultSet) ectx.execute(s);
+        Connection conn = (Connection) CONTEXT.CONNECTION.get(dataPacket);
+        ResultSet rs = (ResultSet) conn.execute(s);
 
         List<FindByLoginResd.TenantResponse> responseTenants = new LinkedList<>();
         while (rs.next()) {

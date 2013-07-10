@@ -4,24 +4,38 @@ import sk.jacob.types.DataPacket;
 import sk.jacob.types.Principal;
 import sk.jacob.types.TokenType;
 
+import java.util.Map;
+
 public enum SECURITY {
-    EXECUTION_CTX;
+    CONNECTION,
+    PRINCIPAL,
+    TOKEN;
+
+    private static final String CONTEXT_KEY = "SECURITY_CONTEXT";
+
     public Object get(DataPacket dataPacket) {
-        return dataPacket.security.context.get(this.name());
+        Map<String, Object> bc = dataPacket.context.get(CONTEXT_KEY);
+        return bc.get(this.name());
     }
+
     public void set(DataPacket dataPacket, Object value) {
-        dataPacket.security.context.put(this.name(), value);
+        Map<String, Object> bc = dataPacket.context.get(CONTEXT_KEY);
+        bc.put(this.name(), value);
     }
+
     public static TokenType getToken(DataPacket dataPacket) {
-        return dataPacket.message.request.reqh.token;
+        return (TokenType)SECURITY.TOKEN.get(dataPacket);
     }
+
     public static void setToken(DataPacket dataPacket, TokenType token) {
-        dataPacket.message.request.reqh.token = token;
+        SECURITY.PRINCIPAL.set(dataPacket, token);
     }
+
     public static Principal getPrincipal(DataPacket dataPacket) {
-        return dataPacket.security.principal;
+        return (Principal)SECURITY.PRINCIPAL.get(dataPacket);
     }
+
     public static void setPrincipal(DataPacket dataPacket, Principal principal) {
-        dataPacket.security.principal = principal;
+        SECURITY.PRINCIPAL.set(dataPacket, principal);
     }
 }

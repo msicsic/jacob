@@ -2,12 +2,12 @@ package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.common.SECURITY;
 import sk.jacob.engine.handler.Token;
+import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.Principal;
 import sk.jacob.types.Return;
 import sk.jacob.types.TokenType;
 import sk.jacob.sql.dml.DMLStatement;
-import sk.jacob.sql.engine.ExecutionContext;
 
 import java.sql.ResultSet;
 
@@ -28,8 +28,8 @@ public class FlyBy {
         DMLStatement s = select("login", "username", "admin")
                          .from("users")
                          .where(eq("token", token.value));
-        ExecutionContext ectx = (ExecutionContext) SECURITY.EXECUTION_CTX.get(dataPacket);
-        ResultSet rs = (ResultSet)ectx.execute(s);
+        Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
+        ResultSet rs = (ResultSet)conn.execute(s);
         if(rs.next() == Boolean.FALSE) {
             return Return.EXCEPTION("security.invalid.token", dataPacket);
         }
@@ -52,8 +52,8 @@ public class FlyBy {
                          .from("users")
                          .where(and(eq("login", token.login),
                                  eq("md5pwd", md5String(token.password))));
-        ExecutionContext ectx = (ExecutionContext) SECURITY.EXECUTION_CTX.get(dataPacket);
-        ResultSet rs = (ResultSet)ectx.execute(s);
+        Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
+        ResultSet rs = (ResultSet)conn.execute(s);
         if(rs.next() == Boolean.FALSE) {
             return Return.EXCEPTION("security.invalid.login.password", dataPacket);
         }

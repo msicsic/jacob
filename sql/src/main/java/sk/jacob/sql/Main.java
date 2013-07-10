@@ -2,8 +2,6 @@ package sk.jacob.sql;
 
 import sk.jacob.sql.ddl.*;
 import sk.jacob.sql.dml.DMLStatement;
-import sk.jacob.sql.engine.DbEngine;
-import sk.jacob.sql.engine.ExecutionContext;
 
 import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.ddl.Column.options;

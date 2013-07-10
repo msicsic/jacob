@@ -2,12 +2,12 @@ package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.common.SECURITY;
 import sk.jacob.engine.handler.Token;
+import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.ResponseDataType;
 import sk.jacob.types.Return;
 import sk.jacob.types.TokenType;
 import sk.jacob.sql.dml.DMLStatement;
-import sk.jacob.sql.engine.ExecutionContext;
 
 import java.sql.ResultSet;
 
@@ -44,14 +44,14 @@ public class AuthenticateLoginPassword {
                          .from("users")
                          .where(and(eq("login", token.login),
                                  eq("md5pwd", md5String(token.password))));
-        ExecutionContext ectx = (ExecutionContext) SECURITY.EXECUTION_CTX.get(dataPacket);
-        ResultSet rs = (ResultSet)ectx.execute(s);
+        Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
+        ResultSet rs = (ResultSet)conn.execute(s);
         if(rs.next() == Boolean.FALSE) {
             return Return.EXCEPTION("security.invalid.login.password", dataPacket);
         }
 
         String generatedToken = uniqueToken();
-        ectx.execute(update("users").set(cv("token", generatedToken)).where(eq("login", token.login)));
+        conn.execute(update("users").set(cv("token", generatedToken)).where(eq("login", token.login)));
         AuthLogPassResd resd = new AuthLogPassResd();
         resd.token = generatedToken;
         resd.principal.login = rs.getBoolean("admin") ? "ADMIN" : rs.getString("login");
@@ -70,8 +70,8 @@ public class AuthenticateLoginPassword {
         DMLStatement s = update("users")
                          .set(cv("token", null))
                          .where(eq("token", token.value));
-        ExecutionContext ectx = (ExecutionContext) SECURITY.EXECUTION_CTX.get(dataPacket);
-        ectx.execute(s);
+        Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
+        conn.execute(s);
         return Return.EMPTY_RESPONSE(dataPacket);
     }
 }

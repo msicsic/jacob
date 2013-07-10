@@ -7,7 +7,6 @@ import sk.jacob.sql.ddl.Column;
 import sk.jacob.sql.ddl.ColumnValue;
 import sk.jacob.sql.dml.DMLStatement;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,14 +17,14 @@ import static sk.jacob.sql.dml.DML.cv;
 
 // UNDER CONSTRUCTION
 // TO BE REVIEWED
-public class ExecutionContext {
+public class Connection {
     private final DbEngine dbEngine;
-    private final Connection connection;
+    private final java.sql.Connection connection;
     private final List<java.sql.Statement> sqlStatements = new ArrayList<>();
 
-    ExecutionContext(DbEngine dbEngine) {
+    Connection(DbEngine dbEngine) {
         this.dbEngine = dbEngine;
-        this.connection = dbEngine.getConnection();
+        this.connection = dbEngine.dbConnect();
     }
 
     public ResultSet execute(String stringStatement) {
@@ -35,7 +34,6 @@ public class ExecutionContext {
             sqlStatements.add(statement);
             resultSet = statement.executeQuery(stringStatement);
         } catch (Exception e) {
-            this.close();
             throw new RuntimeException(e);
         }
         return resultSet;
@@ -57,9 +55,20 @@ public class ExecutionContext {
     }
 
     public void execute(DDLStatement ddl) {
-        execute(ddl.inline);
+        executeDDL(ddl.inline);
         for(String outline : ddl.outline) {
-            execute(outline);
+            executeDDL(outline);
+        }
+    }
+
+    private void executeDDL(String ddl) {
+        java.sql.Statement statement = null;
+        try {
+            statement = this.connection.createStatement();
+            statement.execute(ddl);
+        } catch (SQLException e) {
+            DbEngine.close(statement);
+            throw new RuntimeException(e);
         }
     }
 
@@ -119,13 +128,15 @@ public class ExecutionContext {
     }
 
     private void executeUpdateOrDelete(DMLStatement dmlStatement) {
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = toPreparedStatement(dmlStatement);
-            sqlStatements.add(ps);
+            ps = toPreparedStatement(dmlStatement);
             ps.executeUpdate();
         } catch (SQLException e) {
             this.close();
             throw new RuntimeException(e);
+        } finally {
+            DbEngine.close(ps);
         }
     }
 
