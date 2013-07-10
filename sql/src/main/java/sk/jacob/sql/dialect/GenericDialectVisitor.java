@@ -264,7 +264,7 @@ public class GenericDialectVisitor implements DialectVisitor {
         StringBuffer inlineSb = new StringBuffer();
         List<String> outline = new ArrayList<String>();
 
-        if(columnOptions.isPrimaryKey() == Boolean.TRUE) {
+        if(columnOptions.isPrimaryKey() == true) {
             inlineSb.append(" PRIMARY KEY ");
         }
 

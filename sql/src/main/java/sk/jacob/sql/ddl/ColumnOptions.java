@@ -4,7 +4,7 @@ import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.generator.IdGenerator;
 
 public class ColumnOptions implements DDLEpression, IColumnOptions {
-    private Boolean primaryKey = Boolean.FALSE;
+    private boolean primaryKey = false;
     private IdGenerator generator = null;
     private Column parentColumn;
 
@@ -15,10 +15,10 @@ public class ColumnOptions implements DDLEpression, IColumnOptions {
     @Override
     public IColumnOptions primaryKey(IdGenerator generator) {
         this.generator = generator;
-        this.primaryKey = Boolean.TRUE;
+        this.primaryKey = true;
         return this;
     }
-    public Boolean isPrimaryKey() {
+    public boolean isPrimaryKey() {
         return this.primaryKey;
     }
     public IdGenerator getGenerator() {
@@ -26,24 +26,24 @@ public class ColumnOptions implements DDLEpression, IColumnOptions {
     }
 
 
-    private Boolean nullable = Boolean.FALSE;
+    private boolean nullable = false;
     @Override
-    public IColumnOptions nullable(Boolean nullable) {
+    public IColumnOptions nullable(boolean nullable) {
         this.nullable = nullable;
         return this;
     }
-    public Boolean isNullable() {
+    public boolean isNullable() {
         return this.nullable;
     }
 
 
-    private Boolean unique = Boolean.FALSE;
+    private boolean unique = false;
     @Override
-    public IColumnOptions unique(Boolean unique) {
+    public IColumnOptions unique(boolean unique) {
         this.unique = unique;
         return this;
     }
-    public Boolean isUnique() {
+    public boolean isUnique() {
         return this.unique;
     }
 

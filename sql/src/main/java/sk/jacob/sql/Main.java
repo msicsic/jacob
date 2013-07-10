@@ -19,10 +19,11 @@ public class Main {
                               leftJoin("table3", eq("table1.id", "table3.fk")).
                               join("table4", eq("table1.id", "table4.fk")).
                               where(and(eq("col2", 2),
-                                        le("col4", "abc")));
+                                        le("col4", "abc"),
+                                        eq("col6", true)));
         dumpClause(sqlClause);
 
-        sqlClause = delete("users").where(eq("ADMIN", Boolean.TRUE));
+        sqlClause = delete("users").where(eq("ADMIN", true));
         dumpClause(sqlClause);
 
         sqlClause = insert("users").values(cv("username", "Administrator"));

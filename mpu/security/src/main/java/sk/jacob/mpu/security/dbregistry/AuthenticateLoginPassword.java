@@ -52,7 +52,7 @@ public class AuthenticateLoginPassword {
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet)conn.execute(s);
 
-        if(rs.next() == Boolean.FALSE) {
+        if(rs.next() == false) {
             return Return.EXCEPTION("security.invalid.login.password", dataPacket);
         }
 

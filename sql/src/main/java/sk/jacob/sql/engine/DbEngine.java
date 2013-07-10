@@ -52,7 +52,7 @@ public class DbEngine {
         java.sql.Connection connection = null;
         try {
             connection = DriverManager.getConnection(this.url, this.username, this.password);
-            connection.setAutoCommit(Boolean.FALSE);
+            connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

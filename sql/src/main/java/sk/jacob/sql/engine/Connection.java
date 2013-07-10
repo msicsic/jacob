@@ -109,7 +109,7 @@ public class Connection {
         Column idColumn = insert.table.getIdColumn();
         if(idColumn == null) { return null; }
 
-        Boolean isIdColumnFilled = Boolean.FALSE;
+        boolean isIdColumnFilled = false;
         for(ColumnValue cv : insert.getColumnValues()) {
             isIdColumnFilled = cv.columnName.equalsIgnoreCase(idColumn.name);
             if(isIdColumnFilled) {
@@ -117,7 +117,7 @@ public class Connection {
             }
         }
 
-        if(isIdColumnFilled == Boolean.FALSE) {
+        if(isIdColumnFilled == false) {
             IdGenerator generator = idColumn.options.getGenerator();
             generatedId = generator.getIdValue(dbEngine);
             insert.addValue(cv(idColumn.name, generatedId));

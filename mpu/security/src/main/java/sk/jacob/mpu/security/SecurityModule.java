@@ -70,11 +70,11 @@ public class SecurityModule implements Module {
     private void initializeAdmin(String adminLogin, String adminMd5Pwd) {
         Users users = MODEL.table(Users.class);
         SqlClause deleteDMLClause = delete(users)
-                                    .where(eq(users.admin, Boolean.TRUE));
+                                    .where(eq(users.admin, true));
         SqlClause insertDMLClause = insert(users)
                                     .values(cv(users.login, adminLogin),
                                             cv(users.username, "Administrator"),
-                                            cv(users.admin, Boolean.TRUE),
+                                            cv(users.admin, true),
                                             cv(users.md5pwd, adminMd5Pwd));
         Connection conn = this.dbEngine.getConnection();
         conn.txBegin();

@@ -15,7 +15,7 @@ public enum CONTEXT {
     }
 
     public void set(DataPacket dataPacket, Object value) {
-        if(dataPacket.context.containsKey(CONTEXT_KEY) == Boolean.FALSE) {
+        if(dataPacket.context.containsKey(CONTEXT_KEY) == false) {
             dataPacket.context.put(CONTEXT_KEY, new HashMap<String, Object>());
         }
         Map<String, Object> bc = dataPacket.context.get(CONTEXT_KEY);
