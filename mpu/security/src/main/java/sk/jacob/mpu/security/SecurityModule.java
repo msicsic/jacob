@@ -28,7 +28,7 @@ public class SecurityModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();
     private final HandlerInspector<Token> handlerInspector;
     private final DbEngine dbEngine;
-    private final Metadata MODEL = SecurityModel.metadata();
+    private final Metadata MODEL = SecurityModel.METADATA;
 
     static {
         HANDLERS.addAll(Arrays.asList(Init.HANDLERS));

@@ -18,5 +18,10 @@ public abstract class DbObject implements DDLEpression {
         return create(dbEngine.getDialect());
     }
 
-    public void drop(DbEngine dbEngine) {}
+    public DDLStatement drop() {
+        return drop(GenericDialectVisitor.INSTANCE);
+    }
+    public DDLStatement drop(DbEngine dbEngine) {
+        return drop(dbEngine.getDialect());
+    }
 }

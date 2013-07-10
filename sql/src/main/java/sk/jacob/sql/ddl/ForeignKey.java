@@ -33,6 +33,11 @@ public class ForeignKey extends DbObject {
         return visitor.create(this);
     }
 
+    @Override
+    public DDLStatement drop(DialectVisitor visitor) {
+        throw new UnsupportedOperationException();
+    }
+
     public Column getParentColumn() {
         return this.parentColumn;
     }

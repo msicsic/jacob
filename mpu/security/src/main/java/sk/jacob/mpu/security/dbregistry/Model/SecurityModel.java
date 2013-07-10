@@ -10,12 +10,9 @@ import static sk.jacob.sql.ddl.TYPE.Boolean;
 import static sk.jacob.sql.ddl.TYPE.String;
 
 public class SecurityModel {
-    private static final Metadata METADATA = new Metadata();
-    public static Metadata metadata() {
-        return update(METADATA);
-    }
+    public static final Metadata METADATA = update(new Metadata());
 
-    public static Metadata update(Metadata metadata) {
+    private static Metadata update(Metadata metadata) {
         new Users(metadata);
         return metadata;
     }

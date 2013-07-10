@@ -38,6 +38,11 @@ public class Column extends DbObject {
         return dialect.create(this);
     }
 
+    @Override
+    public DDLStatement drop(DialectVisitor visitor) {
+        throw new UnsupportedOperationException();
+    }
+
     public Table getParentTable() {
         return this.parentTable;
     }

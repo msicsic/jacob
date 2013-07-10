@@ -7,10 +7,7 @@ import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.DbEngine;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Metadata{
@@ -36,8 +33,27 @@ public class Metadata{
         }
     }
 
+    public void dropAll(DbEngine dbEngine) {
+        List<String> dropOrder = new ArrayList<>(createOrder);
+        Collections.reverse(dropOrder);
+        for(String objectName : dropOrder) {
+            DbObject dbObject = dbObjects.get(objectName);
+            Connection conn = dbEngine.getConnection();
+            try {
+                DDLStatement ddl = dbObject.drop(dbEngine);
+                conn.execute(ddl);
+            } finally {
+                conn.close();
+            }
+        }
+    }
+
     public <T> T table(Class<T> name) {
-        return (T)dbObjects.get(getTableName(name));
+        return (T)table(getTableName(name));
+    }
+
+    public Table table(String tableName) {
+        return (Table)dbObjects.get(tableName);
     }
 
     private static String getTableName(Class<?> cls) {

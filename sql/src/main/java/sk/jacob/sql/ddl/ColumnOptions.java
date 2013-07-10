@@ -68,6 +68,11 @@ public class ColumnOptions implements DDLEpression, IColumnOptions {
         return dialect.create(this);
     }
 
+    @Override
+    public DDLStatement drop(DialectVisitor visitor) {
+        throw new UnsupportedOperationException();
+    }
+
     public Column getParentColumn() {
         return this.parentColumn;
     }

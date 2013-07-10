@@ -39,4 +39,9 @@ public class Table extends DbObject {
     public DDLStatement create(DialectVisitor visitor) {
         return visitor.create(this);
     }
+
+    @Override
+    public DDLStatement drop(DialectVisitor visitor) {
+        return visitor.drop(this);
+    }
 }

@@ -19,6 +19,11 @@ public class Sequence extends DbObject {
         return visitor.create(this);
     }
 
+    @Override
+    public DDLStatement drop(DialectVisitor visitor) {
+        return visitor.drop(this);
+    }
+
     public Long nextVal(DbEngine dbEngine) {
         Long nextVal = null;
         DialectVisitor visitor = dbEngine.getDialect();

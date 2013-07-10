@@ -268,6 +268,16 @@ public class GenericDialectVisitor implements DialectVisitor {
             inlineSb.append(" PRIMARY KEY ");
         }
 
+        if(   columnOptions.isNullable() == false
+           && columnOptions.isPrimaryKey() == false) {
+            inlineSb.append(" NOT NULL ");
+        }
+
+        if(   columnOptions.isUnique() == true
+           && columnOptions.isPrimaryKey() == false) {
+            inlineSb.append(" UNIQUE ");
+        }
+
         ForeignKey foreignKey = columnOptions.getForeignKey();
         if (foreignKey != null) {
             DDLStatement fkDdl = foreignKey.create(this);
@@ -297,6 +307,22 @@ public class GenericDialectVisitor implements DialectVisitor {
     public DDLStatement create(Sequence sequence) {
         StringBuffer sb = new StringBuffer("CREATE SEQUENCE IF NOT EXISTS ");
         sb.append(sequence.name);
+        sb.append(";");
+        return new DDLStatement(sb.toString());
+    }
+
+    @Override
+    public DDLStatement drop(Sequence sequence) {
+        StringBuffer sb = new StringBuffer("DROP SEQUENCE IF EXISTS ");
+        sb.append(sequence.name);
+        sb.append(";");
+        return new DDLStatement(sb.toString());
+    }
+
+    @Override
+    public DDLStatement drop(Table table) {
+        StringBuffer sb = new StringBuffer("DROP TABLE IF EXISTS ");
+        sb.append(table.name);
         sb.append(";");
         return new DDLStatement(sb.toString());
     }

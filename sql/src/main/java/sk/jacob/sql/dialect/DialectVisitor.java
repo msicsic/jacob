@@ -26,4 +26,6 @@ public interface DialectVisitor {
     DDLStatement create(Column column);
     DDLStatement create(ColumnOptions columnOptions);
     DDLStatement create(ForeignKey foreignKey);
+    DDLStatement drop(Sequence sequence);
+    DDLStatement drop(Table table);
 }
