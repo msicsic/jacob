@@ -2,6 +2,8 @@ package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.common.SECURITY;
 import sk.jacob.engine.handler.Token;
+import sk.jacob.mpu.security.dbregistry.Model.SecurityModel;
+import sk.jacob.mpu.security.dbregistry.Model.Users;
 import sk.jacob.sql.dml.DMLClause;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
@@ -26,17 +28,23 @@ public class FlyBy {
            token=FlyByToken.class)
     public static DataPacket flyByToken(DataPacket dataPacket) throws Exception {
         FlyByToken token = (FlyByToken) SECURITY.TOKEN.get(dataPacket);
-        SqlClause s = select("login", "username", "admin")
-                      .from("users")
-                      .where(eq("token", token.value));
+
+        Users users = SecurityModel.table(Users.class);
+        SqlClause s = select(users.login, users.username, users.admin)
+                      .from(users)
+                      .where(eq(users.token, token.value));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet)conn.execute(s);
+
         if(rs.next() == Boolean.FALSE) {
             return Return.EXCEPTION("security.invalid.token", dataPacket);
         }
-        String login = rs.getBoolean("admin") ? "ADMIN" : rs.getString("login");
-        String username = rs.getString("username");
+
+        String login = rs.getBoolean(users.admin.name) ? "ADMIN"
+                                                       : rs.getString(users.login.name);
+        String username = rs.getString(users.username.name);
         SECURITY.setPrincipal(dataPacket, new Principal(login, username));
+
         return dataPacket;
     }
 
@@ -49,19 +57,24 @@ public class FlyBy {
            token=FlyByLoginPassword.class)
     public static DataPacket flyByLoginPassword(DataPacket dataPacket) throws Exception {
         FlyByLoginPassword token = (FlyByLoginPassword)  SECURITY.TOKEN.get(dataPacket);
-        SqlClause s = select("login", "username", "admin")
-                      .from("users")
-                      .where(and(eq("login", token.login),
-                                 eq("md5pwd", md5String(token.password))));
+
+        Users users = SecurityModel.table(Users.class);
+        SqlClause s = select(users.login, users.username, users.admin)
+                      .from(users)
+                      .where(and(eq(users.login, token.login),
+                                 eq(users.md5pwd, md5String(token.password))));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet)conn.execute(s);
+
         if(rs.next() == Boolean.FALSE) {
             return Return.EXCEPTION("security.invalid.login.password", dataPacket);
         }
 
-        String login = rs.getBoolean("admin") ? "ADMIN" : rs.getString("login");
-        String username = rs.getString("username");
+        String login = rs.getBoolean(users.admin.name) ? "ADMIN"
+                                                       : rs.getString(users.login.name);
+        String username = rs.getString(users.username.name);
         SECURITY.setPrincipal(dataPacket, new Principal(login, username));
+
         return dataPacket;
     }
 }

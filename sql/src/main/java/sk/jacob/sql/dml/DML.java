@@ -21,6 +21,10 @@ public class DML {
         return new Update(tableName);
     }
 
+    public static UpdateClause update(Table table) {
+        return new Update(table);
+    }
+
     public static DeleteClause delete(String tableName) {
         return new Delete(tableName);
     }

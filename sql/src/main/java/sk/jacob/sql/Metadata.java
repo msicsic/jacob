@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Metadata{
     private final List<String> createOrder = new ArrayList<String>();
-    private final Map<String, DbObject> dbObjects = new HashMap<String, DbObject>();
+    private final Map<String, DbObject> dbObjects = new ConcurrentHashMap<>();
 
     public void add(DbObject dbObject) {
         // TODO: Implement order creation logic

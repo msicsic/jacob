@@ -4,15 +4,14 @@ import sk.jacob.common.SECURITY;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerInspector;
 import sk.jacob.engine.handler.Token;
+import sk.jacob.mpu.security.dbregistry.Model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.Model.Users;
-import sk.jacob.sql.dml.DMLClause;
+import sk.jacob.sql.Metadata;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DataPacket;
 import sk.jacob.mpu.security.dbregistry.Init;
-import sk.jacob.mpu.security.dbregistry.Model.Model;
 import sk.jacob.sql.engine.DbEngine;
-import sk.jacob.sql.Metadata;
 import sk.jacob.types.Return;
 
 import java.util.ArrayList;
@@ -26,10 +25,10 @@ import static sk.jacob.sql.dml.Op.eq;
 import static sk.jacob.util.Log.logger;
 
 public class SecurityModule implements Module {
-    private static final List<Class> HANDLERS = new ArrayList<Class>();
-    private static final Metadata MODEL = Model.get();
+    private static final List<Class> HANDLERS = new ArrayList<>();
     private final HandlerInspector<Token> handlerInspector;
     private final DbEngine dbEngine;
+    private final Metadata MODEL = SecurityModel.metadata();
 
     static {
         HANDLERS.addAll(Arrays.asList(Init.HANDLERS));
@@ -64,7 +63,7 @@ public class SecurityModule implements Module {
     }
 
     private void initDatabase(String adminLogin, String adminMd5Pwd) {
-        this.MODEL.createAll(this.dbEngine);
+        SecurityModel.createAll(this.dbEngine);
         initializeAdmin(adminLogin, adminMd5Pwd);
     }
 

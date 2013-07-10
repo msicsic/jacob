@@ -118,4 +118,25 @@ public abstract class DMLClause implements SqlClause {
                 this.getRootClause().paramCounter.parameters());
         return rootStatement.compiledStatement;
     }
+
+    public String dump() {
+        CompiledStatement compiledStatement = this.compile();
+        StringBuffer sb = new StringBuffer();
+        sb.append("Compiled statement:\n");
+        sb.append(compiledStatement.compiledStatement());
+        sb.append("\n\nParameters:\n");
+        sb.append(compiledStatement.parameters());
+        sb.append("\n\nNormalized statement:\n");
+        sb.append(compiledStatement.normalizedStatement());
+        sb.append("\n\nPositional parameters:\n");
+        sb.append(compiledStatement.parameterList());
+        sb.append("\n");
+        return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        CompiledStatement compiledStatement = this.compile();
+        return compiledStatement.compiledStatement();
+    }
 }

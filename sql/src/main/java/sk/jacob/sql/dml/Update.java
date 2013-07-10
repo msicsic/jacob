@@ -1,6 +1,7 @@
 package sk.jacob.sql.dml;
 
 import sk.jacob.sql.ddl.ColumnValue;
+import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.dialect.GenericDialectVisitor;
 
@@ -10,6 +11,10 @@ public class Update extends DMLClause implements UpdateClause {
 
     public Update(String tableName) {
         this.tableName = tableName;
+    }
+
+    public Update(Table table) {
+        this.tableName = table.name;
     }
 
     @Override

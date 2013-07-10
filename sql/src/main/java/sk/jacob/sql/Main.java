@@ -71,13 +71,7 @@ public class Main {
     }
 
     private static void dumpClause(SqlClause sqlClause) {
-        DMLClause dmlClause = (DMLClause)sqlClause;
-        DMLClause.CompiledStatement compiledStatement = dmlClause.compile();
-        System.out.println(">>>");
-        System.out.println(compiledStatement.compiledStatement());
-        System.out.println(compiledStatement.parameters());
-        System.out.println(compiledStatement.normalizedStatement());
-        System.out.println(compiledStatement.parameterList());
+        System.out.println(((DMLClause)sqlClause).dump());
     }
 
     private static void dumpObject(DbObject dbObject) {
