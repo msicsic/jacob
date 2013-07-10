@@ -1,10 +1,10 @@
 package sk.jacob.mpu.context;
 
+import sk.jacob.mpu.context.model.ContextModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-
 import sk.jacob.common.CONTEXT;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerInspector;
@@ -18,7 +18,7 @@ import sk.jacob.types.Return;
 
 public class ContextModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();
-    private static final Metadata MODEL = Model.get();
+    private static final Metadata MODEL = ContextModel.metadata();
     private final DbEngine dbEngine;
 
     static {
