@@ -11,18 +11,21 @@ import sk.jacob.sql.ddl.Table;
  */
 public class UsersTenants extends Table {
     public static final String NAME = "USERS_TENANTS";
-    /**
-     * The login of user.
-     */
-    public final Column login = new Column(this, "login",
-            String(50), options().nullable(false));
-    /**
-     * The foreign key to id of tenant.
-     */
-    public final Column tenantFk = new Column(this, "tenant_fk",
-            String(150), options().foreignKey("tenants.id").nullable(false));
 
     public UsersTenants(Metadata metadata) {
         super(NAME, metadata);
     }
+
+    /**
+     * The login of user.
+     */
+    public final Column login = new Column(this, "login",
+                                           String(50), options().nullable(false));
+
+    /**
+     * The foreign key to id of tenant.
+     */
+    public final Column tenantFk = new Column(this, "tenant_fk",
+                                              String(150), options().foreignKey("tenants.id").nullable(false));
+
 }
