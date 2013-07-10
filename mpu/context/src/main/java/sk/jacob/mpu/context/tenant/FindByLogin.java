@@ -4,9 +4,11 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 import sk.jacob.annotation.Required;
-import sk.jacob.engine.handler.Message;
 import sk.jacob.common.CONTEXT;
-import sk.jacob.sql.dml.DMLClause;
+import sk.jacob.engine.handler.Message;
+import sk.jacob.mpu.context.model.ContextModel;
+import sk.jacob.mpu.context.model.Tenants;
+import sk.jacob.mpu.context.model.UsersTenants;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DataPacket;
@@ -15,7 +17,6 @@ import sk.jacob.types.ResponseDataType;
 import sk.jacob.types.Return;
 import static sk.jacob.sql.dml.Op.eq;
 import static sk.jacob.sql.dml.DML.select;
-import static sk.jacob.util.Log.sout;
 
 public class FindByLogin {
     private static class FindByLoginReqd extends RequestDataType {
@@ -30,12 +31,11 @@ public class FindByLogin {
             @Required
             public String tenantName;
 
-            public TenantResponse(String id) {
+            public TenantResponse(String id, String name) {
                 this.tenantId = id;
-                this.tenantName = id;
+                this.tenantName = name;
             }
         }
-
         @Required
         public String login;
         @Required
@@ -48,23 +48,26 @@ public class FindByLogin {
     }
 
     @Message(type = "context.tenant.findByLogin",
-             version = "1.0",
-             reqd = FindByLoginReqd.class,
-             resd = FindByLoginResd.class)
+            version = "1.0",
+            reqd = FindByLoginReqd.class,
+            resd = FindByLoginResd.class)
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         FindByLoginReqd requestData = (FindByLoginReqd) dataPacket.message.request.reqd;
 
-        sout("requestData" + requestData.login);
-        //kym nie je implementovany JOIN tak aspon takto...
-        SqlClause s = select("login", "tenant_fk")
-                      .from("users_tenants")
-                      .where(eq("login", requestData.login));
+        Tenants tenants = ContextModel.table(Tenants.class);
+        UsersTenants usersTenants = ContextModel.table(UsersTenants.class);
+
+        SqlClause s = select(tenants.id, tenants.name)
+                .from(tenants)
+                .join("USERS_TENANTS", eq("TENANTS.id", "USERS_TENANTS.tenant_fk"))
+                .where(eq(usersTenants.login, requestData.login));
         Connection conn = (Connection) CONTEXT.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet) conn.execute(s);
 
         List<FindByLoginResd.TenantResponse> responseTenants = new LinkedList<>();
         while (rs.next()) {
-            responseTenants.add(new FindByLoginResd.TenantResponse(rs.getString("tenant_fk")));
+            responseTenants.add(new FindByLoginResd.TenantResponse(
+                    rs.getString(tenants.id.name), rs.getString(tenants.name.name)));
         }
 
         return Return.RESPONSE(new FindByLoginResd(requestData.login, responseTenants), dataPacket);
