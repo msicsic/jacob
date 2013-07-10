@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Insert extends DMLStatement {
-    public final String tableName;
+public class Insert extends DMLClause implements InsertClause {
     public final Table table;
+    public final String tableName;
     private final List<ColumnValue> columnValues = new ArrayList<ColumnValue>();
 
     public Insert(String tableName) {
@@ -23,12 +23,14 @@ public class Insert extends DMLStatement {
         this.table = table;
     }
 
-    public DMLStatement values(ColumnValue ... columnValues) {
+    @Override
+    public SqlClause values(ColumnValue... columnValues) {
         this.columnValues.addAll(Arrays.asList(columnValues));
         return this;
     }
 
-    public DMLStatement addValue(ColumnValue columnValue) {
+    @Override
+    public SqlClause addValue(ColumnValue columnValue) {
         this.columnValues.add(columnValue);
         return this;
     }

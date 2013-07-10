@@ -4,15 +4,16 @@ import sk.jacob.common.SECURITY;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerInspector;
 import sk.jacob.engine.handler.Token;
+import sk.jacob.mpu.security.dbregistry.Model.Users;
+import sk.jacob.sql.dml.DMLClause;
+import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DataPacket;
 import sk.jacob.mpu.security.dbregistry.Init;
-import sk.jacob.mpu.security.dbregistry.Model;
-import sk.jacob.sql.dml.DMLStatement;
+import sk.jacob.mpu.security.dbregistry.Model.Model;
 import sk.jacob.sql.engine.DbEngine;
 import sk.jacob.sql.Metadata;
 import sk.jacob.types.Return;
-import sk.jacob.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +21,8 @@ import java.util.List;
 import java.util.Properties;
 
 import static sk.jacob.sql.dml.DML.*;
+import static sk.jacob.sql.dml.DML.cv;
 import static sk.jacob.sql.dml.Op.eq;
-import static sk.jacob.types.Return.stackToString;
 import static sk.jacob.util.Log.logger;
 
 public class SecurityModule implements Module {
@@ -68,17 +69,18 @@ public class SecurityModule implements Module {
     }
 
     private void initializeAdmin(String adminLogin, String adminMd5Pwd) {
-        DMLStatement deleteDMLStatement = delete("users")
-                                          .where(eq("admin", Boolean.TRUE));
-        DMLStatement insertDMLStatement = insert("users")
-                                          .values(cv("login", adminLogin),
-                                                  cv("username", "Administrator"),
-                                                  cv("admin", Boolean.TRUE),
-                                                  cv("md5pwd", adminMd5Pwd));
+        Users users = MODEL.table(Users.class);
+        SqlClause deleteDMLClause = delete(users)
+                                    .where(eq(users.admin, Boolean.TRUE));
+        SqlClause insertDMLClause = insert(users)
+                                    .values(cv(users.login, adminLogin),
+                                            cv(users.username, "Administrator"),
+                                            cv(users.admin, Boolean.TRUE),
+                                            cv(users.md5pwd, adminMd5Pwd));
         Connection conn = this.dbEngine.getConnection();
         conn.txBegin();
-        conn.execute(deleteDMLStatement);
-        conn.execute(insertDMLStatement);
+        conn.execute(deleteDMLClause);
+        conn.execute(insertDMLClause);
         conn.txCommit();
         conn.close();
     }

@@ -6,7 +6,8 @@ import java.util.List;
 import sk.jacob.annotation.Required;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.common.CONTEXT;
-import sk.jacob.sql.dml.DMLStatement;
+import sk.jacob.sql.dml.DMLClause;
+import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.RequestDataType;
@@ -14,7 +15,6 @@ import sk.jacob.types.ResponseDataType;
 import sk.jacob.types.Return;
 import static sk.jacob.sql.dml.Op.eq;
 import static sk.jacob.sql.dml.DML.select;
-import static sk.jacob.util.Log.logger;
 import static sk.jacob.util.Log.sout;
 
 public class FindByLogin {
@@ -56,10 +56,9 @@ public class FindByLogin {
 
         sout("requestData" + requestData.login);
         //kym nie je implementovany JOIN tak aspon takto...
-        DMLStatement s = select("login", "tenant_fk")
-                         .from("users_tenants")
-                         .where(eq("login", requestData.login));
-
+        SqlClause s = select("login", "tenant_fk")
+                      .from("users_tenants")
+                      .where(eq("login", requestData.login));
         Connection conn = (Connection) CONTEXT.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet) conn.execute(s);
 

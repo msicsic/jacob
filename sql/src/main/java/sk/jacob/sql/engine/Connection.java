@@ -5,7 +5,7 @@ import sk.jacob.sql.dml.*;
 import sk.jacob.sql.generator.IdGenerator;
 import sk.jacob.sql.ddl.Column;
 import sk.jacob.sql.ddl.ColumnValue;
-import sk.jacob.sql.dml.DMLStatement;
+import sk.jacob.sql.dml.DMLClause;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,17 +39,21 @@ public class Connection {
         return resultSet;
     }
 
-    public Object execute(DMLStatement dmlStatement) {
-        DMLStatement rootDMLStatement = dmlStatement.getRootStatement();
+    public Object execute(SqlClause sqlClause) {
+        return this.execute((DMLClause) sqlClause);
+    }
+
+    public Object execute(DMLClause dmlClause) {
+        DMLClause rootDMLClause = dmlClause.getRootClause();
         Object returnValue = null;
-        if(rootDMLStatement instanceof Select) {
-            returnValue = this.executeStatement((Select) rootDMLStatement);
-        } else if(rootDMLStatement instanceof Insert) {
-            returnValue = this.executeStatement((Insert) rootDMLStatement);
-        } else if(rootDMLStatement instanceof Update) {
-            this.executeStatement((Update) rootDMLStatement);
-        } else if(rootDMLStatement instanceof Delete) {
-            this.executeStatement((Delete) rootDMLStatement);
+        if(rootDMLClause instanceof Select) {
+            returnValue = this.executeStatement((Select) rootDMLClause);
+        } else if(rootDMLClause instanceof Insert) {
+            returnValue = this.executeStatement((Insert) rootDMLClause);
+        } else if(rootDMLClause instanceof Update) {
+            this.executeStatement((Update) rootDMLClause);
+        } else if(rootDMLClause instanceof Delete) {
+            this.executeStatement((Delete) rootDMLClause);
         }
         return returnValue;
     }
@@ -105,12 +109,15 @@ public class Connection {
         Column idColumn = insert.table.getIdColumn();
         if(idColumn == null) { return null; }
 
-        Boolean idColumnPresent = Boolean.FALSE;
+        Boolean isIdColumnFilled = Boolean.FALSE;
         for(ColumnValue cv : insert.getColumnValues()) {
-            idColumnPresent = cv.columnName.equalsIgnoreCase(idColumn.name);
+            isIdColumnFilled = cv.columnName.equalsIgnoreCase(idColumn.name);
+            if(isIdColumnFilled) {
+                break;
+            }
         }
 
-        if(idColumnPresent == Boolean.FALSE) {
+        if(isIdColumnFilled == Boolean.FALSE) {
             IdGenerator generator = idColumn.options.getGenerator();
             generatedId = generator.getIdValue(dbEngine);
             insert.addValue(cv(idColumn.name, generatedId));
@@ -127,10 +134,10 @@ public class Connection {
         this.executeUpdateOrDelete(dmlStatement);
     }
 
-    private void executeUpdateOrDelete(DMLStatement dmlStatement) {
+    private void executeUpdateOrDelete(DMLClause dmlClause) {
         PreparedStatement ps = null;
         try {
-            ps = toPreparedStatement(dmlStatement);
+            ps = toPreparedStatement(dmlClause);
             ps.executeUpdate();
         } catch (SQLException e) {
             this.close();
@@ -140,8 +147,8 @@ public class Connection {
         }
     }
 
-    private PreparedStatement toPreparedStatement(DMLStatement dmlStatement) throws SQLException {
-        DMLStatement.CompiledStatement cs = dmlStatement.compile(this.dbEngine);
+    private PreparedStatement toPreparedStatement(DMLClause dmlClause) throws SQLException {
+        DMLClause.CompiledStatement cs = dmlClause.compile(this.dbEngine);
         PreparedStatement  preparedStatement = this.connection.prepareStatement(cs.normalizedStatement());
         DbEngine.bindParameters(preparedStatement, cs.parameterList());
         return preparedStatement;

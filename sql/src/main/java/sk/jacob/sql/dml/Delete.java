@@ -1,20 +1,31 @@
 package sk.jacob.sql.dml;
 
+import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.GenericDialectVisitor;
 
-public class Delete extends DMLStatement {
+public class Delete extends DMLClause implements DeleteClause {
+    public final Table table;
     public final String tableName;
     private Where where;
 
     public Delete(String tableName) {
         this.tableName = tableName;
+        this.table = null;
     }
 
-    public Where where(ConditionalOperation conditionalOperation) {
+    public Delete(Table table) {
+        this.tableName = table.name;
+        this.table = table;
+    }
+
+    @Override
+    public WhereClause where(ConditionalOperation conditionalOperation) {
         return where( new Where(this, conditionalOperation) );
     }
 
-    public Where where(Where where) {
+    @Override
+    public WhereClause where(Where where) {
         this.where = where;
         return this.where;
     }

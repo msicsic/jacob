@@ -17,11 +17,11 @@ public class Column extends DbObject {
         this.options = (ColumnOptions)options;
     }
 
-    public Column(String name, TYPE.Type type, Table parentTable) {
-        this(name, type, new ColumnOptions(), parentTable);
+    public Column(Table parentTable, String name, TYPE.Type type) {
+        this(parentTable, name, type, new ColumnOptions());
     }
 
-    public Column(String name, TYPE.Type type, IColumnOptions options, Table parentTable) {
+    public Column(Table parentTable, String name, TYPE.Type type, IColumnOptions options ) {
         super(name);
         this.type = type;
         this.options = (ColumnOptions)options;

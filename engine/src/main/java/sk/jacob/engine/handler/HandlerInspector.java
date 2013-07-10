@@ -50,7 +50,7 @@ public abstract class HandlerInspector<T extends Annotation> {
         if (this.handlerMap.containsKey(handlerKey)) {
             try {
                 Method handler = this.handlerMap.get(handlerKey);
-                deserializeMessageElement(dataPacket, handler.getAnnotation(supportedAnnotation));
+                deserializeMessageElement(dataPacket, handler.getAnnotation(this.supportedAnnotation));
                 dataPacket = (DataPacket) handler.invoke(null, dataPacket);
             } catch (Exception e) {
                 throw new RuntimeException(e);

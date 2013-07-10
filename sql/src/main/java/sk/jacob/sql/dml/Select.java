@@ -1,11 +1,12 @@
 package sk.jacob.sql.dml;
 
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.GenericDialectVisitor;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Select extends DMLStatement {
+public class Select extends DMLClause implements SelectClause {
     public final List<Object> columnExpressions;
     private From from;
 
@@ -14,22 +15,24 @@ public class Select extends DMLStatement {
         this.columnExpressions = Arrays.asList(columnExpressions);
     }
 
-    public From from(Object ... tableExpressions) {
+    @Override
+    public FromClause from(Object... tableExpressions) {
         return from( new From(this, tableExpressions) );
     }
 
-    public From from(From from) {
+    @Override
+    public FromClause from(From from) {
         this.from = from;
-        return this.from;
-    }
-
-    public From getFromClause() {
         return this.from;
     }
 
     @Override
     public String sql(DialectVisitor visitor){
         return visitor.sql(this);
+    }
+
+    public From getFromClause() {
+        return this.from;
     }
 }
 

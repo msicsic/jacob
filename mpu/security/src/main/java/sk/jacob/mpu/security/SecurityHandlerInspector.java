@@ -32,7 +32,7 @@ public class SecurityHandlerInspector extends HandlerInspector<Token> {
     protected void deserializeMessageElement(DataPacket dataPacket, Annotation annotation) {
         JsonObject securityElement = getSecurityElement(dataPacket);
         Token token = (Token)annotation;
-        SECURITY.setToken(dataPacket, GSON.fromJson(securityElement, token.token()));
+        SECURITY.TOKEN.set(dataPacket, GSON.fromJson(securityElement, token.token()));
     }
 
     private static JsonObject getSecurityElement(DataPacket dataPacket) {

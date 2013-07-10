@@ -1,12 +1,13 @@
 package sk.jacob.sql.dml;
 
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.GenericDialectVisitor;
 
-public class Where extends DMLStatement {
+public class Where extends DMLClause implements WhereClause {
     public final ConditionalOperation conditionalOperation;
 
-    public Where(DMLStatement parentDMLStatement, ConditionalOperation conditionalOperation) {
-        super(parentDMLStatement);
+    public Where(DMLClause parentDMLClause, ConditionalOperation conditionalOperation) {
+        super(parentDMLClause);
         this.conditionalOperation = conditionalOperation;
         this.conditionalOperation.setParentStatement(this);
     }

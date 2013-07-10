@@ -2,12 +2,13 @@ package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.common.SECURITY;
 import sk.jacob.engine.handler.Token;
+import sk.jacob.sql.dml.DMLClause;
+import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.Principal;
 import sk.jacob.types.Return;
 import sk.jacob.types.TokenType;
-import sk.jacob.sql.dml.DMLStatement;
 
 import java.sql.ResultSet;
 
@@ -24,10 +25,10 @@ public class FlyBy {
     @Token(type="security.flyby.token",
            token=FlyByToken.class)
     public static DataPacket flyByToken(DataPacket dataPacket) throws Exception {
-        FlyByToken token = (FlyByToken) SECURITY.getToken(dataPacket);
-        DMLStatement s = select("login", "username", "admin")
-                         .from("users")
-                         .where(eq("token", token.value));
+        FlyByToken token = (FlyByToken) SECURITY.TOKEN.get(dataPacket);
+        SqlClause s = select("login", "username", "admin")
+                      .from("users")
+                      .where(eq("token", token.value));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet)conn.execute(s);
         if(rs.next() == Boolean.FALSE) {
@@ -47,10 +48,10 @@ public class FlyBy {
     @Token(type="security.flyby.login.password",
            token=FlyByLoginPassword.class)
     public static DataPacket flyByLoginPassword(DataPacket dataPacket) throws Exception {
-        FlyByLoginPassword token = (FlyByLoginPassword)  SECURITY.getToken(dataPacket);
-        DMLStatement s = select("login", "username", "admin")
-                         .from("users")
-                         .where(and(eq("login", token.login),
+        FlyByLoginPassword token = (FlyByLoginPassword)  SECURITY.TOKEN.get(dataPacket);
+        SqlClause s = select("login", "username", "admin")
+                      .from("users")
+                      .where(and(eq("login", token.login),
                                  eq("md5pwd", md5String(token.password))));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet)conn.execute(s);

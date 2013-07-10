@@ -1,6 +1,8 @@
 package sk.jacob.sql.dml;
 
+import sk.jacob.sql.ddl.Column;
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.GenericDialectVisitor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,8 +21,8 @@ public class Op {
         }
 
         @Override
-        public void setParentStatement(DMLStatement parentDMLStatement) {
-            super.setParentStatement(parentDMLStatement);
+        public void setParentStatement(DMLClause parentDMLClause) {
+            super.setParentStatement(parentDMLClause);
             for (ConditionalOperation co : this.conditionalOperations) {
                 co.setParentStatement(this);
             }
@@ -40,6 +42,10 @@ public class Op {
             this.value = value;
         }
 
+        public Eq(Column column, Object value) {
+            this(column.name, value);
+        }
+
         @Override
         public String sql(DialectVisitor visitor) {
             return visitor.sql(this);
@@ -50,6 +56,9 @@ public class Op {
         return new Eq(columnName, value);
     }
 
+    public static ConditionalOperation eq(Column column, Object value) {
+        return new Eq(column, value);
+    }
 
     public static class Le extends ConditionalOperation {
         public final String columnName;

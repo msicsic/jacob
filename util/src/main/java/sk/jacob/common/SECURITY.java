@@ -4,6 +4,7 @@ import sk.jacob.types.DataPacket;
 import sk.jacob.types.Principal;
 import sk.jacob.types.TokenType;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public enum SECURITY {
@@ -19,16 +20,11 @@ public enum SECURITY {
     }
 
     public void set(DataPacket dataPacket, Object value) {
+        if(dataPacket.context.containsKey(CONTEXT_KEY) == Boolean.FALSE) {
+            dataPacket.context.put(CONTEXT_KEY, new HashMap<String, Object>());
+        }
         Map<String, Object> bc = dataPacket.context.get(CONTEXT_KEY);
         bc.put(this.name(), value);
-    }
-
-    public static TokenType getToken(DataPacket dataPacket) {
-        return (TokenType)SECURITY.TOKEN.get(dataPacket);
-    }
-
-    public static void setToken(DataPacket dataPacket, TokenType token) {
-        SECURITY.PRINCIPAL.set(dataPacket, token);
     }
 
     public static Principal getPrincipal(DataPacket dataPacket) {

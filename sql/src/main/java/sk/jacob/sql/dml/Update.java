@@ -2,8 +2,9 @@ package sk.jacob.sql.dml;
 
 import sk.jacob.sql.ddl.ColumnValue;
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.GenericDialectVisitor;
 
-public class Update extends DMLStatement {
+public class Update extends DMLClause implements UpdateClause {
     public final String tableName;
     private Set set;
 
@@ -11,10 +12,12 @@ public class Update extends DMLStatement {
         this.tableName = tableName;
     }
 
+    @Override
     public Set set(ColumnValue... columnValues) {
         return set(new Set(this, columnValues));
     }
 
+    @Override
     public Set set(Set set) {
         this.set = set;
         return this.set;

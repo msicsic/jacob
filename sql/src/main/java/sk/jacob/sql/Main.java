@@ -1,7 +1,8 @@
 package sk.jacob.sql;
 
 import sk.jacob.sql.ddl.*;
-import sk.jacob.sql.dml.DMLStatement;
+import sk.jacob.sql.dml.DMLClause;
+import sk.jacob.sql.dml.SqlClause;
 
 import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.ddl.Column.options;
@@ -13,20 +14,22 @@ import static sk.jacob.sql.ddl.TYPE.*;
 
 public class Main {
     public static void main(String[] args) {
-        DMLStatement dmlStatement = select(count("*"), "col1", "col2").
+        SqlClause sqlClause = select(count("*"), "col1", "col2").
                               from("table1", "table2").
+                              leftJoin("table3", eq("table1.id", "table3.fk")).
+                              join("table4", eq("table1.id", "table4.fk")).
                               where(and(eq("col2", 2),
-                                      le("col4", "abc")));
-        dumpStatement(dmlStatement);
+                                        le("col4", "abc")));
+        dumpClause(sqlClause);
 
-        dmlStatement = delete("users").where(eq("ADMIN", Boolean.TRUE));
-        dumpStatement(dmlStatement);
+        sqlClause = delete("users").where(eq("ADMIN", Boolean.TRUE));
+        dumpClause(sqlClause);
 
-        dmlStatement = insert("users").values(cv("username", "Administrator"));
-        dumpStatement(dmlStatement);
+        sqlClause = insert("users").values(cv("username", "Administrator"));
+        dumpClause(sqlClause);
 
-        dmlStatement = update("users").set(cv("token", null)).where(eq("token", "TOKEN_STRING"));
-        dumpStatement(dmlStatement);
+        sqlClause = update("users").set(cv("token", null)).where(eq("token", "TOKEN_STRING"));
+        dumpClause(sqlClause);
 
         Metadata metadata = new Metadata();
         Sequence sequence = sequence("SEQ_A", metadata);
@@ -44,31 +47,32 @@ public class Main {
         Users2 users2 = new Users2(metadata);
         dumpObject(users2);
 
-        dmlStatement = select(count("*"), users2.login, "col2")
+        sqlClause = select(count("*"), users2.login, "col2")
                        .from("table1", users2)
                        .where(and(eq("col2", 2),
                                   le("col4", "abc")));
-        dumpStatement(dmlStatement);
+        dumpClause(sqlClause);
     }
 
     private static class Users2 extends Table {
+        public static final String NAME = "USERS2";
         public Users2(Metadata metadata) {
-            super("USERS2", metadata);
+            super(NAME, metadata);
         }
 
-        public final Column login = new Column("login",
+        public final Column login = new Column(this,
+                                               "login",
                                                Long(),
-                                               options().nullable(false),
-                                               this);
+                                               options().nullable(false));
 
-        public final Column username = new Column("username",
+        public final Column username = new Column(this, "username",
                                                   String(255),
-                                                  options().foreignKey("refTable.refColumn"),
-                                                  this);
+                                                  options().foreignKey("refTable.refColumn"));
     }
 
-    private static void dumpStatement(DMLStatement dmlStatement) {
-        DMLStatement.CompiledStatement compiledStatement = dmlStatement.compile();
+    private static void dumpClause(SqlClause sqlClause) {
+        DMLClause dmlClause = (DMLClause)sqlClause;
+        DMLClause.CompiledStatement compiledStatement = dmlClause.compile();
         System.out.println(">>>");
         System.out.println(compiledStatement.compiledStatement());
         System.out.println(compiledStatement.parameters());

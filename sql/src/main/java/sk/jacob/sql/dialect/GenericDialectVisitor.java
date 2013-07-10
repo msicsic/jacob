@@ -39,8 +39,8 @@ public class GenericDialectVisitor implements DialectVisitor {
         String normalizedCE = null;
         if (columnExpression instanceof String) {
             normalizedCE = (String)columnExpression;
-        } else if(columnExpression instanceof SqlExpression) {
-            normalizedCE = ((SqlExpression)columnExpression).sql(this);
+        } else if(columnExpression instanceof SqlClause) {
+            normalizedCE = ((SqlClause)columnExpression).sql(this);
         } else if(columnExpression instanceof Column) {
             normalizedCE = ((Column)columnExpression).name;
         }
@@ -84,11 +84,36 @@ public class GenericDialectVisitor implements DialectVisitor {
         List<String> normalizeTables = normalizeTableExpressions(from.tableExpressions);
         sb.append((String) Functional.reduce(StringReducer.instance(", "), normalizeTables));
         Where whereClause = from.getWhereClause();
-        if(whereClause != null) {
+        if( from.joins.size() != 0 ) {
+            for(Join join : from.joins) {
+                sb.append("\n");
+                sb.append(join.sql(this));
+                sb.append(" ");
+            }
+        }
+        if( whereClause != null ) {
             sb.append("\n");
             String whereSql = whereClause.sql(this);
             sb.append(whereSql);
         }
+        return sb.toString();
+    }
+
+    @Override
+    public String sql(LeftJoin leftJoin) {
+        StringBuffer sb = new StringBuffer("LEFT OUTER JOIN ");
+        sb.append(normalizeTableExpression(leftJoin.tableExpression));
+        sb.append(" ON ");
+        sb.append(leftJoin.conditionalOperation.sql(this));
+        return sb.toString();
+    }
+
+    @Override
+    public String sql(InnerJoin innerJoin) {
+        StringBuffer sb = new StringBuffer("JOIN ");
+        sb.append(normalizeTableExpression(innerJoin.tableExpression));
+        sb.append(" ON ");
+        sb.append(innerJoin.conditionalOperation.sql(this));
         return sb.toString();
     }
 

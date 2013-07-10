@@ -2,17 +2,18 @@ package sk.jacob.sql.dml;
 
 import sk.jacob.sql.ddl.ColumnValue;
 import sk.jacob.sql.dialect.DialectVisitor;
+import sk.jacob.sql.dialect.GenericDialectVisitor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Set extends DMLStatement {
+public class Set extends DMLClause {
     private final List<ColumnValue> columnValues = new ArrayList<ColumnValue>();
     private Where where;
 
-    public Set(DMLStatement parentDMLStatement, ColumnValue... columnValues) {
-        super(parentDMLStatement);
+    public Set(DMLClause parentDMLClause, ColumnValue... columnValues) {
+        super(parentDMLClause);
         this.columnValues.addAll(Arrays.asList(columnValues));
     }
 

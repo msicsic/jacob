@@ -8,4 +8,8 @@ public class ColumnValue {
         this.columnName = columnName;
         this.value = value;
     }
+
+    public ColumnValue(Column column, Object value) {
+        this(column.name, value);
+    }
 }

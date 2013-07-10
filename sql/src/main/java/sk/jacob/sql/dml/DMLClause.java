@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class DMLStatement implements SqlExpression{
+public abstract class DMLClause implements SqlClause {
 
     public static class ParamCounter {
         private Integer counter = new Integer(1);
@@ -79,28 +79,28 @@ public abstract class DMLStatement implements SqlExpression{
     }
 
     private final ParamCounter paramCounter = new ParamCounter();
-    private DMLStatement parent;
+    private DMLClause parent;
     private CompiledStatement compiledStatement;
 
-    protected DMLStatement() {
+    protected DMLClause() {
         this(null);
     }
 
-    protected DMLStatement(DMLStatement parentDMLStatement) {
-        this.parent = parentDMLStatement;
+    protected DMLClause(DMLClause parentDMLClause) {
+        this.parent = parentDMLClause;
     }
 
-    public void setParentStatement(DMLStatement parentDMLStatement) {
-        this.parent = parentDMLStatement;
+    public void setParentStatement(DMLClause parentDMLClause) {
+        this.parent = parentDMLClause;
     }
 
-    public DMLStatement getRootStatement() {
+    public DMLClause getRootClause() {
         return (this.parent == null) ? this
-                                     : this.parent.getRootStatement();
+                                     : this.parent.getRootClause();
     }
 
     public ParamCounter getParamCounter() {
-        return getRootStatement().paramCounter;
+        return getRootClause().paramCounter;
     }
 
     public CompiledStatement compile() {
@@ -112,10 +112,10 @@ public abstract class DMLStatement implements SqlExpression{
     }
 
     public CompiledStatement compile(DialectVisitor visitor) {
-        DMLStatement rootStatement = this.getRootStatement();
+        DMLClause rootStatement = this.getRootClause();
         rootStatement.paramCounter.reset();
-        rootStatement.compiledStatement = new CompiledStatement(this.getRootStatement().sql(visitor),
-                this.getRootStatement().paramCounter.parameters());
+        rootStatement.compiledStatement = new CompiledStatement(this.getRootClause().sql(visitor),
+                this.getRootClause().paramCounter.parameters());
         return rootStatement.compiledStatement;
     }
 }

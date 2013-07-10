@@ -19,6 +19,8 @@ public interface DialectVisitor {
     String sql(Sequence sequence);
     String sql(Set set);
     String sql(Update update);
+    String sql(LeftJoin leftJoin);
+    String sql(InnerJoin innerJoin);
     DDLStatement create(Sequence sequence);
     DDLStatement create(Table table);
     DDLStatement create(Column column);
