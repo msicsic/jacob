@@ -11,13 +11,15 @@ public class TenantsParams extends Table {
 
     public TenantsParams(Metadata metadata) {
         super(NAME, metadata);
+        Tenants tenants = metadata.table(Tenants.class);
+        tenantFk = new Column(this, "tenant_fk",
+                              String(150), options().foreignKey(tenants.id).nullable(false));
     }
 
     /**
      * The foreign key to id of tenant.
      */
-    public final Column tenantFk = new Column(this, "tenant_fk",
-                                              String(150), options().foreignKey("tenants.id").nullable(false));
+    public final Column tenantFk;
 
     /**
      * The name of parameter.

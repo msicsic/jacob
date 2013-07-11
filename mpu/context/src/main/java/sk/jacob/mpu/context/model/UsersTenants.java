@@ -14,6 +14,9 @@ public class UsersTenants extends Table {
 
     public UsersTenants(Metadata metadata) {
         super(NAME, metadata);
+        Tenants tenants = metadata.table(Tenants.class);
+        tenantFk = new Column(this, "tenant_fk",
+                              String(150), options().foreignKey(tenants.id).nullable(false));
     }
 
     /**
@@ -25,7 +28,5 @@ public class UsersTenants extends Table {
     /**
      * The foreign key to id of tenant.
      */
-    public final Column tenantFk = new Column(this, "tenant_fk",
-                                              String(150), options().foreignKey("tenants.id").nullable(false));
-
+    public final Column tenantFk;
 }

@@ -18,7 +18,7 @@ import sk.jacob.types.Return;
 
 public class ContextModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();
-    private static final Metadata MODEL = ContextModel.metadata();
+    private static final Metadata MODEL = ContextModel.METADATA;
     private final DbEngine dbEngine;
 
     static {

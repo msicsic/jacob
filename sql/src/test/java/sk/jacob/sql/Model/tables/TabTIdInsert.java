@@ -15,14 +15,17 @@ import static sk.jacob.sql.generator.SequenceIdGenerator.sequenceIdGenerator;
 public class TabTIdInsert extends Table {
     public static final String NAME = "TABT_ID_INSERT";
 
-    public TabTIdInsert(Metadata metadata1) {
-        super(NAME, metadata1);
+    public TabTIdInsert(Metadata metadata) {
+        super(NAME, metadata);
+        idSequence = sequence("SEQUENCE_ID", metadata);
+        cId = new Column(this, "C_ID", Long(),
+                         options().primaryKey(sequenceIdGenerator(this.idSequence)));
     }
 
-    private Sequence idSequence = sequence("SEQUENCE_ID", super.metadata);
+    private Sequence idSequence;
 
-    public final Column cId = new Column(this, "C_ID", Long(),
-                                         options().primaryKey(sequenceIdGenerator(this.idSequence)));
+    public final Column cId;
+
     public final Column cStringValue = new Column(this, "C_STRING_VALUE",
                                                   String(255), options().nullable(false).unique(false));
 }

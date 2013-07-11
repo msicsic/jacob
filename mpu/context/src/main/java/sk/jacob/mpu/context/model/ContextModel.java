@@ -4,13 +4,9 @@ import sk.jacob.sql.Metadata;
 import sk.jacob.sql.engine.DbEngine;
 
 public class ContextModel {
-    private static final Metadata METADATA = new Metadata();
+    public static final Metadata METADATA = update(new Metadata());
 
-    public static Metadata metadata() {
-        return update(METADATA);
-    }
-
-    public static Metadata update(Metadata metadata) {
+    private static Metadata update(Metadata metadata) {
         new Ds(metadata);
         new Tenants(metadata);
         new TenantsParams(metadata);
