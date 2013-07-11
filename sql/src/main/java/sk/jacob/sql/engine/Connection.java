@@ -112,33 +112,43 @@ public class Connection {
     private Object checkIdColumn(Insert insert) {
         Object generatedId = null;
 
-        if(metadata == null && insert.table == null) {
+        if(this.metadata == null && insert.table == null) {
             throw new NullPointerException("Prior using plain SQL INSERT construction, metadata must be binded " +
                     "to connection. Call bindMetadata(metadataInstance) on connection before insert. " +
                     "Metadata is used to generate id for id column.");
         }
 
-        Table table = (insert.table == null) ? metadata.table(insert.tableName) : insert.table;
+        Table table = (insert.table == null) ? this.metadata.table(insert.tableName)
+                                             : insert.table;
 
         Column idColumn = table.getIdColumn();
-        if(idColumn == null) { return null; }
-
-        boolean isIdColumnFilled = false;
-        for(ColumnValue cv : insert.getColumnValues()) {
-            isIdColumnFilled = cv.columnName.equalsIgnoreCase(idColumn.name);
-            if(isIdColumnFilled) {
-                generatedId = cv.value;
-                break;
-            }
+        if(idColumn == null) {
+            return null;
         }
 
-        if(isIdColumnFilled == false) {
+        ColumnValue idValue = idValue(insert.getColumnValues(), idColumn);
+        if(idValue == null) {
             IdGenerator generator = idColumn.options.getGenerator();
             generatedId = generator.getIdValue(dbEngine);
             insert.addValue(cv(idColumn.name, generatedId));
+        } else {
+            generatedId = idValue.value;
+            IdGenerator generator = idColumn.options.getGenerator();
+            generator.equalize(dbEngine, idValue.value);
         }
 
         return generatedId;
+    }
+
+    private ColumnValue idValue(List<ColumnValue> filledColumns, Column tableIdColumn) {
+        ColumnValue filledIdColumn = null;
+        for(ColumnValue cv : filledColumns) {
+            if ( cv.columnName.equalsIgnoreCase(tableIdColumn.name) ) {
+                filledIdColumn = cv;
+                break;
+            }
+        }
+        return filledIdColumn;
     }
 
     private void executeStatement(Update dmlStatement) {

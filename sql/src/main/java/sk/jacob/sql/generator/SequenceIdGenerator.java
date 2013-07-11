@@ -12,7 +12,12 @@ public class SequenceIdGenerator implements IdGenerator<Long> {
 
     @Override
     public Long getIdValue(DbEngine dbEngine) {
-        return sequence.nextVal(dbEngine);
+        return this.sequence.nextVal(dbEngine);
+    }
+
+    @Override
+    public void equalize(DbEngine dbEngine, Long value) {
+        while(this.sequence.nextVal(dbEngine) < value) {}
     }
 
     public static SequenceIdGenerator sequenceIdGenerator(Sequence sequence) {

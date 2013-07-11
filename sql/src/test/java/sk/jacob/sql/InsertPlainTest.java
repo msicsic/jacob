@@ -85,4 +85,19 @@ public class InsertPlainTest extends BaseTest {
             // pass
         }
     }
+
+    @Test
+    public void sequenceEqualization() {
+        SqlClause ins = DML.insert("TABP_ID_INSERT")
+                           .values(cv("C_ID", 25L),
+                                   cv("C_STRING_VALUE", "C_STRING_VALUE"));
+        long id = (long)execInTx(ins);
+        assertEquals(25, id);
+
+        ins = DML.insert("TABP_ID_INSERT")
+                 .values(cv("C_STRING_VALUE", "C_STRING_VALUE"));
+
+        id = (long)execInTx(ins);
+        assertEquals(26, id);
+    }
 }
