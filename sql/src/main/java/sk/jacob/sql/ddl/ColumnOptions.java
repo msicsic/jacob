@@ -59,6 +59,23 @@ public class ColumnOptions implements DDLEpression, IColumnOptions {
         this.foreignKey = new ForeignKey(refTabCol, constraintName);
         return this;
     }
+
+    @Override
+    public IColumnOptions foreignKey(Column column) {
+        StringBuffer sb = new StringBuffer(column.getParentTable().name);
+        sb.append(".");
+        sb.append(column.name);
+        return foreignKey(sb.toString());
+    }
+
+    @Override
+    public IColumnOptions foreignKey(Column column, String constraintName) {
+        StringBuffer sb = new StringBuffer(column.getParentTable().name);
+        sb.append(".");
+        sb.append(column.name);
+        return foreignKey(sb.toString(), constraintName);
+    }
+
     public ForeignKey getForeignKey() {
         return this.foreignKey;
     }

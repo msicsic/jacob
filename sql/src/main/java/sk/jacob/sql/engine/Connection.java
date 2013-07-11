@@ -1,6 +1,8 @@
 package sk.jacob.sql.engine;
 
+import sk.jacob.sql.Metadata;
 import sk.jacob.sql.ddl.DDLStatement;
+import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.dml.*;
 import sk.jacob.sql.generator.IdGenerator;
 import sk.jacob.sql.ddl.Column;
@@ -21,10 +23,15 @@ public class Connection {
     private final DbEngine dbEngine;
     private final java.sql.Connection connection;
     private final List<java.sql.Statement> sqlStatements = new ArrayList<>();
+    private Metadata metadata;
 
     Connection(DbEngine dbEngine) {
         this.dbEngine = dbEngine;
         this.connection = dbEngine.dbConnect();
+    }
+
+    public void bindMetadata(Metadata metadata) {
+        this.metadata = metadata;
     }
 
     public ResultSet execute(String stringStatement) {
@@ -40,20 +47,20 @@ public class Connection {
     }
 
     public Object execute(SqlClause sqlClause) {
-        return this.execute((DMLClause) sqlClause);
+        return execute((DMLClause) sqlClause);
     }
 
     public Object execute(DMLClause dmlClause) {
         DMLClause rootDMLClause = dmlClause.getRootClause();
         Object returnValue = null;
         if(rootDMLClause instanceof Select) {
-            returnValue = this.executeStatement((Select) rootDMLClause);
+            returnValue = executeStatement((Select) rootDMLClause);
         } else if(rootDMLClause instanceof Insert) {
-            returnValue = this.executeStatement((Insert) rootDMLClause);
+            returnValue = executeStatement((Insert) rootDMLClause);
         } else if(rootDMLClause instanceof Update) {
-            this.executeStatement((Update) rootDMLClause);
+            executeStatement((Update) rootDMLClause);
         } else if(rootDMLClause instanceof Delete) {
-            this.executeStatement((Delete) rootDMLClause);
+            executeStatement((Delete) rootDMLClause);
         }
         return returnValue;
     }
@@ -90,7 +97,7 @@ public class Connection {
     }
 
     private Object executeStatement(Insert dmlStatement) {
-        Object generatedId = this.checkIdColumn(dmlStatement);
+        Object generatedId = checkIdColumn(dmlStatement);
         try {
             PreparedStatement ps = toPreparedStatement(dmlStatement);
             sqlStatements.add(ps);
@@ -104,15 +111,23 @@ public class Connection {
 
     private Object checkIdColumn(Insert insert) {
         Object generatedId = null;
-        if(insert.table == null) { return null; }
 
-        Column idColumn = insert.table.getIdColumn();
+        if(metadata == null && insert.table == null) {
+            throw new NullPointerException("Prior using plain SQL INSERT construction, metadata must be binded " +
+                    "to connection. Call bindMetadata(metadataInstance) on connection before insert. " +
+                    "Metadata is used to generate id for id column.");
+        }
+
+        Table table = (insert.table == null) ? metadata.table(insert.tableName) : insert.table;
+
+        Column idColumn = table.getIdColumn();
         if(idColumn == null) { return null; }
 
         boolean isIdColumnFilled = false;
         for(ColumnValue cv : insert.getColumnValues()) {
             isIdColumnFilled = cv.columnName.equalsIgnoreCase(idColumn.name);
             if(isIdColumnFilled) {
+                generatedId = cv.value;
                 break;
             }
         }
@@ -127,11 +142,11 @@ public class Connection {
     }
 
     private void executeStatement(Update dmlStatement) {
-        this.executeUpdateOrDelete(dmlStatement);
+        executeUpdateOrDelete(dmlStatement);
     }
 
     private void executeStatement(Delete dmlStatement) {
-        this.executeUpdateOrDelete(dmlStatement);
+        executeUpdateOrDelete(dmlStatement);
     }
 
     private void executeUpdateOrDelete(DMLClause dmlClause) {

@@ -25,14 +25,14 @@ public class ContextModule implements Module {
         HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.context.tenant.Init.HANDLERS));
         HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.context.devel.Init.HANDLERS));
     }
+
     private final HandlerInspector<Message> handlerInspector;
 
     public ContextModule(Properties config) {
         this.handlerInspector = new ContextHandleInspector(HANDLERS);
-        this.dbEngine = new DbEngine(
-                config.getProperty("context.url"),
-                config.getProperty("context.username"),
-                config.getProperty("context.password"));
+        this.dbEngine = new DbEngine(config.getProperty("context.url"),
+                                     config.getProperty("context.username"),
+                                     config.getProperty("context.password"));
         this.initDatabase();
     }
 

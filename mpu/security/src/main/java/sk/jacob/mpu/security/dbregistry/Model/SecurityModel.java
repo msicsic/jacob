@@ -1,13 +1,9 @@
-package sk.jacob.mpu.security.dbregistry.Model;
+package sk.jacob.mpu.security.dbregistry.model;
 
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.engine.DbEngine;
 
-import static sk.jacob.sql.ddl.Column.options;
 import static sk.jacob.sql.ddl.DDL.column;
-import static sk.jacob.sql.ddl.DDL.table;
-import static sk.jacob.sql.ddl.TYPE.Boolean;
-import static sk.jacob.sql.ddl.TYPE.String;
 
 public class SecurityModel {
     public static final Metadata METADATA = update(new Metadata());

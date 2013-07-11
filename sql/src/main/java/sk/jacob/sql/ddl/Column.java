@@ -51,4 +51,9 @@ public class Column extends DbObject {
         this.parentTable = parentTable;
         this.options.setParentColumn(this);
     }
+
+    @Override
+    public String dump() {
+        return this.create().inline;
+    }
 }

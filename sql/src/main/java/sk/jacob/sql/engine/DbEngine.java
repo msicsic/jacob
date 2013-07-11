@@ -1,5 +1,6 @@
 package sk.jacob.sql.engine;
 
+import sk.jacob.sql.Metadata;
 import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.dialect.H2DialectVisitor;
 import sk.jacob.sql.dialect.OracleDialectVisitor;

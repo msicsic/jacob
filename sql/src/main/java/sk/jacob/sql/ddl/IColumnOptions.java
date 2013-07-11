@@ -9,4 +9,6 @@ public interface IColumnOptions {
     IColumnOptions unique(boolean unique);
     IColumnOptions foreignKey(String refTabCol);
     IColumnOptions foreignKey(String refTabCol, String constraintName);
+    IColumnOptions foreignKey(Column column);
+    IColumnOptions foreignKey(Column column, String constraintName);
 }

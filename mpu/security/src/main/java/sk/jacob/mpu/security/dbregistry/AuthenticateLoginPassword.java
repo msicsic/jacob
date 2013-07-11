@@ -2,8 +2,8 @@ package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.common.SECURITY;
 import sk.jacob.engine.handler.Token;
-import sk.jacob.mpu.security.dbregistry.Model.SecurityModel;
-import sk.jacob.mpu.security.dbregistry.Model.Users;
+import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
+import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.DMLClause;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;

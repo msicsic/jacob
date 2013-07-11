@@ -1,4 +1,4 @@
-package sk.jacob.mpu.security.dbregistry.Model;
+package sk.jacob.mpu.security.dbregistry.model;
 
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.ddl.Column;

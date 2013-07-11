@@ -21,8 +21,4 @@ public class ContextModel {
     public static <T> T table(Class<T> name) {
         return METADATA.table(name);
     }
-
-    public static void createAll(DbEngine dbEngine) {
-        METADATA.createAll(dbEngine);
-    }
 }

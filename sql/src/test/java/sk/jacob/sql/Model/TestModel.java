@@ -1,33 +1,49 @@
-package sk.jacob.sql.Model;
+package sk.jacob.sql.model;
 
 import sk.jacob.sql.Metadata;
+import sk.jacob.sql.ddl.Sequence;
+import sk.jacob.sql.model.tables.TabTIdInsert;
+import sk.jacob.sql.model.tables.TabTNullable;
+import sk.jacob.sql.model.tables.TabTReferencing;
+import sk.jacob.sql.model.tables.TabTUnique;
 
 import static sk.jacob.sql.ddl.Column.options;
 import static sk.jacob.sql.ddl.DDL.column;
+import static sk.jacob.sql.ddl.DDL.sequence;
 import static sk.jacob.sql.ddl.DDL.table;
-import static sk.jacob.sql.ddl.TYPE.Boolean;
-import static sk.jacob.sql.ddl.TYPE.String;
+import static sk.jacob.sql.ddl.TYPE.*;
+import static sk.jacob.sql.generator.SequenceIdGenerator.sequenceIdGenerator;
 
 public class TestModel {
-    public static final Metadata METADATA = update(new Metadata());
+    public static final Metadata METADATA = new Metadata();
 
-    private static Metadata update(Metadata metadata) {
-        return plainObjects(typeObjects(metadata));
+    static {
+        typeObjects();
+        plainObjects();
     }
 
-    private static Metadata plainObjects(Metadata metadata) {
-        table("TAB_NULLABLE", metadata,
+    private static void plainObjects() {
+        table("TABP_NULLABLE", METADATA,
               column("C_STRING_NULLABLE", String(255), options().nullable(true).unique(false)),
               column("C_STRING_NOT_NULLABLE", String(255), options().nullable(false).unique(false)));
 
-        table("TAB_UNIQUE", metadata,
+        table("TABP_UNIQUE", METADATA,
               column("C_STRING_UNIQUE", String(255), options().nullable(true).unique(true)),
               column("C_STRING_NOT_UNIQUE", String(255), options().nullable(true).unique(false)));
 
-        return metadata;
+        Sequence sequence_id = sequence("SEQUENCE_ID", METADATA);
+        table("TABP_ID_INSERT", METADATA,
+              column("C_ID", Long(), options().primaryKey(sequenceIdGenerator(sequence_id))),
+              column("C_STRING_VALUE", String(255), options().nullable(false).unique(false)));
+
+        table("TABP_REFERENCING", METADATA,
+              column("C_FK", Long(), options().foreignKey("TABP_ID_INSERT.C_ID")));
     }
 
-    private static Metadata typeObjects(Metadata metadata) {
-        return metadata;
+    private static void typeObjects() {
+        new TabTNullable(METADATA);
+        new TabTUnique(METADATA);
+        new TabTIdInsert(METADATA);
+        new TabTReferencing(METADATA);
     }
 }

@@ -76,11 +76,6 @@ public class Main {
     }
 
     private static void dumpObject(DbObject dbObject) {
-        DDLStatement statement  = dbObject.create();
-        System.out.println(">>>");
-        System.out.println(statement.inline);
-        for(String outline : statement.outline) {
-            System.out.println(outline);
-        }
+        System.out.println(dbObject.dump());
     }
 }

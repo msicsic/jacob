@@ -1,5 +1,6 @@
 package sk.jacob.sql.ddl;
 
+import sk.jacob.sql.Metadata;
 import sk.jacob.sql.dialect.GenericDialectVisitor;
 import sk.jacob.sql.engine.DbEngine;
 
@@ -21,7 +22,21 @@ public abstract class DbObject implements DDLEpression {
     public DDLStatement drop() {
         return drop(GenericDialectVisitor.INSTANCE);
     }
+
     public DDLStatement drop(DbEngine dbEngine) {
         return drop(dbEngine.getDialect());
     }
+
+    public String toString() {
+        return dump();
+    }
+
+    public String dump() {
+        DDLStatement statement  = this.create();
+        StringBuffer sb = new StringBuffer(statement.inline);
+        for(String outline : statement.outline) {
+            sb.append(outline);
+        }
+        return sb.toString();
+    };
 }

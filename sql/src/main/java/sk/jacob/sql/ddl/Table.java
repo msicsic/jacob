@@ -9,10 +9,12 @@ import java.util.List;
 
 public class Table extends DbObject {
     public final List<Column> columns = new ArrayList<Column>();
+    public final Metadata metadata;
 
     public Table(String name, Metadata metadata) {
         super(name);
-        metadata.add(this);
+        this.metadata = metadata;
+        this.metadata.add(this);
     }
 
     public Table(String name, Metadata metadata,  Column ... columns) {
@@ -21,6 +23,7 @@ public class Table extends DbObject {
         for(Column column : columns) {
             column.setParentTable(this);
         }
+        this.metadata = metadata;
         metadata.add(this);
     }
 
