@@ -97,4 +97,20 @@ public class InsertTypeTest extends BaseTest {
             // pass
         }
     }
+
+    @Test
+    public void sequenceEqualization() {
+        TabTIdInsert tableId = MODEL.table(TabTIdInsert.class);
+        SqlClause ins = DML.insert(tableId)
+                           .values(cv(tableId.cId, 25L),
+                                   cv(tableId.cStringValue, "C_STRING_VALUE"));
+        long id = (long)execInTx(ins);
+        assertEquals(25, id);
+
+        ins = DML.insert(tableId)
+                 .values(cv(tableId.cStringValue, "C_STRING_VALUE"));
+
+        id = (long)execInTx(ins);
+        assertEquals(26, id);
+    }
 }
