@@ -63,11 +63,19 @@ public class Metadata{
     }
 
     public Table table(String tableName) {
-        return (Table)dbObjects.get(tableName);
+        Object table = dbObjects.get(tableName);
+        if (table == null) {
+            throw new NullPointerException("Table " + tableName + " is not defined");
+        }
+        return (Table)table;
     }
 
     public Sequence sequence(String sequenceName) {
-        return (Sequence)dbObjects.get(sequenceName);
+        Object sequence = dbObjects.get(sequenceName);
+        if (sequence == null) {
+            throw new NullPointerException("Sequence " + sequenceName + " is not defined");
+        }
+        return (Sequence)sequence;
     }
 
     public boolean isDefined(String objectName) {

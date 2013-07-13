@@ -19,11 +19,11 @@ public class DDL {
         return new Column(name, type);
     }
 
+    public static Column column(String tableColumn) {
+        return new Column(tableColumn);
+    }
+
     public static Sequence sequence(String sequenceName, Metadata metadata) {
-        if(metadata.isDefined(sequenceName)) {
-            return metadata.sequence(sequenceName);
-        } else {
-            return new Sequence(sequenceName, metadata);
-        }
+        return new Sequence(sequenceName, metadata);
     }
 }

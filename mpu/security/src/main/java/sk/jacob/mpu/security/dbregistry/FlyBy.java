@@ -30,8 +30,8 @@ public class FlyBy {
 
         Users users = SecurityModel.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
-                      .from(users)
-                      .where(eq(users.token, token.value));
+                .from(users)
+                .where(eq(users.token, token.value));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet)conn.execute(s);
 
@@ -59,9 +59,9 @@ public class FlyBy {
 
         Users users = SecurityModel.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
-                      .from(users)
-                      .where(and(eq(users.login, token.login),
-                                 eq(users.md5pwd, md5String(token.password))));
+                .from(users)
+                .where(and(eq(users.login, token.login),
+                           eq(users.md5pwd, md5String(token.password))));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet)conn.execute(s);
 

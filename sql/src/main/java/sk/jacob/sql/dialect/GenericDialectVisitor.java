@@ -28,11 +28,11 @@ public class GenericDialectVisitor implements DialectVisitor {
     }
 
     protected List<String> normalizeColumnExpressions(List columnExpressions) {
-        List<String> normalizedPredicates = new ArrayList<String>();
+        List<String> normalizedExpressions = new ArrayList<String>();
         for(Object expression : columnExpressions) {
-            normalizedPredicates.add(normalizeColumnExpression(expression));
+            normalizedExpressions.add(normalizeColumnExpression(expression));
         }
-        return normalizedPredicates;
+        return normalizedExpressions;
     }
 
     protected String normalizeColumnExpression(Object columnExpression) {
@@ -42,7 +42,11 @@ public class GenericDialectVisitor implements DialectVisitor {
         } else if(columnExpression instanceof SqlClause) {
             normalizedCE = ((SqlClause)columnExpression).sql(this);
         } else if(columnExpression instanceof Column) {
-            normalizedCE = ((Column)columnExpression).name;
+            Column c = (Column)columnExpression;
+            StringBuffer sb = new StringBuffer(c.name);
+            sb.append(" AS ");
+            sb.append(c.qname());
+            normalizedCE = sb.toString();
         }
         return normalizedCE;
     }
@@ -65,7 +69,6 @@ public class GenericDialectVisitor implements DialectVisitor {
         }
         lastComma = sb.lastIndexOf(",");
         sb.replace(lastComma, lastComma + 1, ")");
-
         return sb.toString();
     }
 
@@ -83,6 +86,7 @@ public class GenericDialectVisitor implements DialectVisitor {
         StringBuffer sb = new StringBuffer("FROM ");
         List<String> normalizeTables = normalizeTableExpressions(from.tableExpressions);
         sb.append((String) Functional.reduce(StringReducer.instance(", "), normalizeTables));
+
         Where whereClause = from.getWhereClause();
         if( from.joins.size() != 0 ) {
             for(Join join : from.joins) {
@@ -216,17 +220,49 @@ public class GenericDialectVisitor implements DialectVisitor {
 
     @Override
     public String sql(Op.Eq eq) {
-        StringBuffer sb = new StringBuffer(eq.columnName);
-        sb.append(" = ");
-        sb.append(eq.getParamCounter().addParam(eq.columnName, eq.value));
-        return sb.toString();
+        return  binaryColumnOperation(eq.column, eq.value, "=", eq.getParamCounter());
     }
 
     @Override
     public String sql(Op.Le le) {
-        StringBuffer sb = new StringBuffer(le.columnName);
-        sb.append(" < ");
-        sb.append(le.getParamCounter().addParam(le.columnName, le.value));
+        return  binaryColumnOperation(le.column, le.value, "<", le.getParamCounter());
+    }
+
+    protected String binaryColumnOperation(Object column, Object value, String sign, DMLClause.ParamCounter pc) {
+        String wc = whereColumn(column);
+        StringBuffer sb = new StringBuffer(wc);
+        sb.append(" ");
+        sb.append(sign);
+        sb.append(" ");
+
+        if (value instanceof Column) {
+            sb.append(columnValue((Column) value));
+        } else {
+            sb.append(pc.addParam(wc, value));
+        }
+
+        return sb.toString();
+    }
+
+    protected String whereColumn(Object columnExpression) {
+        String normalizedCE = null;
+        if (columnExpression instanceof String) {
+            normalizedCE = (String)columnExpression;
+        } else if(columnExpression instanceof Column) {
+            normalizedCE = columnValue((Column) columnExpression);
+        }
+        return normalizedCE;
+    }
+
+    protected String columnValue(Column column) {
+        StringBuffer sb = new StringBuffer();
+        if (column.name == null) {
+            sb.append(column.tableColumn);
+        } else {
+            sb.append(column.getParentTable().name);
+            sb.append(".");
+            sb.append(column.name);
+        }
         return sb.toString();
     }
 

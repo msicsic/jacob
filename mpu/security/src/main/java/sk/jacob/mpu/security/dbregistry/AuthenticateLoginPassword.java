@@ -46,9 +46,9 @@ public class AuthenticateLoginPassword {
 
         Users users = SecurityModel.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
-                      .from(users)
-                      .where(and(eq(users.login, token.login),
-                                 eq(users.md5pwd, md5String(token.password))));
+                .from(users)
+                .where(and(eq(users.login, token.login),
+                           eq(users.md5pwd, md5String(token.password))));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet)conn.execute(s);
 
@@ -58,8 +58,8 @@ public class AuthenticateLoginPassword {
 
         String generatedToken = uniqueToken();
         SqlClause u = update(users)
-                      .set(cv(users.token, generatedToken))
-                      .where(eq(users.login, token.login));
+                .set(cv(users.token, generatedToken))
+                .where(eq(users.login, token.login));
         conn.execute(u);
         AuthLogPassResd resd = new AuthLogPassResd();
         resd.token = generatedToken;
@@ -81,8 +81,8 @@ public class AuthenticateLoginPassword {
 
         Users users = SecurityModel.table(Users.class);
         DMLClause s = update(users)
-                      .set(cv(users.token, null))
-                      .where(eq(users.token, token.value));
+                .set(cv(users.token, null))
+                .where(eq(users.token, token.value));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
         conn.execute(s);
 

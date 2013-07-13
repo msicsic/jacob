@@ -35,15 +35,17 @@ public class Op {
 
 
     public static class Eq extends ConditionalOperation {
-        public final String columnName;
+        public final Object column;
         public final Object value;
+
         public Eq(String columnName, Object value) {
-            this.columnName = columnName;
+            this.column = columnName;
             this.value = value;
         }
 
         public Eq(Column column, Object value) {
-            this(column.name, value);
+            this.column = column;
+            this.value = value;
         }
 
         @Override
@@ -61,10 +63,16 @@ public class Op {
     }
 
     public static class Le extends ConditionalOperation {
-        public final String columnName;
+        public final Object column;
         public final Object value;
+
         public Le(String columnName, Object value) {
-            this.columnName = columnName;
+            this.column = columnName;
+            this.value = value;
+        }
+
+        public Le(Column column, Object value) {
+            this.column = column;
             this.value = value;
         }
 

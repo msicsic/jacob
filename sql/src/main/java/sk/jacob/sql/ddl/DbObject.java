@@ -1,6 +1,5 @@
 package sk.jacob.sql.ddl;
 
-import sk.jacob.sql.Metadata;
 import sk.jacob.sql.dialect.GenericDialectVisitor;
 import sk.jacob.sql.engine.DbEngine;
 

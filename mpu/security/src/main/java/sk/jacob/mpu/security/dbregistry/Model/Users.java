@@ -38,7 +38,7 @@ public class Users extends Table {
      * Token string used for request authenticating.
      */
     public final Column token = new Column(this, "token",
-                                           String(256), options().nullable(false).unique(true));
+                                           String(256), options().nullable(true).unique(true));
 
     /**
      * Mark if user is admin. Only one admin is permitted.

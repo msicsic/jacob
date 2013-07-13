@@ -17,7 +17,7 @@ public class TabTIdInsert extends Table {
 
     public TabTIdInsert(Metadata metadata) {
         super(NAME, metadata);
-        idSequence = sequence("SEQUENCE_ID", metadata);
+        idSequence = metadata.sequence("SEQUENCE_ID");
         cId = new Column(this, "C_ID", Long(),
                          options().primaryKey(sequenceIdGenerator(this.idSequence)));
     }

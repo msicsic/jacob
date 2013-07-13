@@ -41,6 +41,7 @@ public class TestModel {
     }
 
     private static void typeObjects() {
+        sequence("SEQUENCE_ID", METADATA);
         new TabTNullable(METADATA);
         new TabTUnique(METADATA);
         new TabTIdInsert(METADATA);
