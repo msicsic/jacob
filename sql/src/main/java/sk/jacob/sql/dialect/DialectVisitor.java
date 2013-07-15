@@ -9,6 +9,7 @@ public interface DialectVisitor {
     String sql(Op.And and);
     String sql(Op.Eq eq);
     String sql(Op.Le le);
+    String sql(Op.In in);
     String sql(TYPE.StringType stringType);
     String sql(Insert insert);
     String sql(TYPE.BooleanType booleanType);

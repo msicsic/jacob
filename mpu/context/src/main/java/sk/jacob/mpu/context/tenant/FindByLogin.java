@@ -59,7 +59,7 @@ public class FindByLogin {
 
         SqlClause s = select(tenants.id, tenants.name)
                 .from(tenants)
-                .join("USERS_TENANTS", eq("TENANTS.id", "USERS_TENANTS.tenant_fk"))
+                .join(usersTenants, eq(tenants.id, usersTenants.tenantFk))
                 .where(eq(usersTenants.login, requestData.login));
         Connection conn = (Connection) CONTEXT.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet) conn.execute(s);

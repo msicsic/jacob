@@ -55,15 +55,15 @@ define([
             var tennantId = this.tenantInput.get("value");
             var tenant = {
                 id: tennantId,
-                name: this.tenantStore.get(tennantId).tenant_name
+                name: this.tenantStore.get(tennantId).tenantName
             };
             connector.call("context.tenant.paramGet", {
                 data: {
-                    tenant_id: tennantId,
-                    param_names: ["magua.tenantColor"]
+                    tenantId: tennantId,
+                    paramNames: ["magua.tenantColor"]
                 }
             }).then(function(data) {
-                tenant.color = data["magua.tenantColor"];
+                tenant.color = data.paramValues["magua.tenantColor"];
                 app.changeTenant(tenant);
                 popup.close(dialog);
             });

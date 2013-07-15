@@ -6,6 +6,7 @@ import sk.jacob.util.func.Functional;
 import sk.jacob.util.func.StringReducer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GenericDialectVisitor implements DialectVisitor {
@@ -228,6 +229,26 @@ public class GenericDialectVisitor implements DialectVisitor {
         return  binaryColumnOperation(le.column, le.value, "<", le.getParamCounter());
     }
 
+    @Override
+    public String sql(Op.In in) {
+        String wc = whereColumn(in.column);
+        StringBuilder sb = new StringBuilder(wc);
+        sb.append(" IN (");
+        
+        Iterator<? extends Object> valutIterator = in.values.iterator();
+        while (valutIterator.hasNext()) {
+            Object value = valutIterator.next();
+            sb.append(" ");
+            sb.append(in.getParamCounter().addParam(wc, value));
+            sb.append(" ");
+            if (valutIterator.hasNext()) {
+                sb.append(",");
+            }
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+    
     protected String binaryColumnOperation(Object column, Object value, String sign, DMLClause.ParamCounter pc) {
         String wc = whereColumn(column);
         StringBuffer sb = new StringBuffer(wc);

@@ -5,6 +5,7 @@ import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.dialect.GenericDialectVisitor;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class Op {
@@ -84,5 +85,33 @@ public class Op {
 
     public static ConditionalOperation le(String columnName, Object value) {
         return new Le(columnName, value);
+    }
+    
+    public static class In extends ConditionalOperation {
+        public final Object column;
+        public final Collection<? extends Object> values;
+
+        public In(String columnName, Collection<? extends Object> values) {
+            this.column = columnName;
+            this.values = values;
+        }
+
+        public In(Column column, Collection<? extends Object> values) {
+            this.column = column;
+            this.values = values;
+        }
+
+        @Override
+        public String sql(DialectVisitor visitor) {
+            return visitor.sql(this);
+        }
+    }
+        
+    public static ConditionalOperation in(String columnName, Collection<? extends Object> values) {
+        return new In(columnName, values);
+    }
+
+    public static ConditionalOperation in(Column column, Collection<? extends Object> values) {
+        return new In(column, values);
     }
 }
