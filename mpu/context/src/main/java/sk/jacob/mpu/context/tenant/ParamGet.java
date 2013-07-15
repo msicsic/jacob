@@ -37,9 +37,9 @@ public class ParamGet {
     }
 
     @Message(type = "context.tenant.paramGet",
-            version = "1.0",
-            reqd = ParamGet.ParamGetReqd.class,
-            resd = ParamGet.ParamGetResd.class)
+             version = "1.0",
+             reqd = ParamGet.ParamGetReqd.class,
+             resd = ParamGet.ParamGetResd.class)
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         ParamGetReqd requestData = (ParamGetReqd) dataPacket.message.request.reqd;
 
@@ -48,8 +48,8 @@ public class ParamGet {
         SqlClause s = select(tenantsParams.paramName, tenantsParams.paramValue)
                 .from(tenantsParams)
                 .where(and(eq(tenantsParams.tenantFk, requestData.tenantId),
-                eq(tenantsParams.scope, "public"),
-                in(tenantsParams.paramName, requestData.paramNames)));
+                           eq(tenantsParams.scope, "public"),
+                           in(tenantsParams.paramName, requestData.paramNames)));
         Connection conn = (Connection) CONTEXT.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet) conn.execute(s);
 

@@ -61,15 +61,15 @@ public class GenericDialectVisitor implements DialectVisitor {
             sb.append(cv.columnName);
             sb.append(", ");
         }
-        int lastComma = sb.lastIndexOf(",");
-        sb.replace(lastComma, lastComma + 2, ")\nVALUES (");
+        sb.setLength(sb.length() - 2);
+        sb.append(")\nVALUES (");
 
         for(ColumnValue cv : insert.getColumnValues()) {
             sb.append(insert.getParamCounter().addParam(cv.columnName, cv.value));
             sb.append(", ");
         }
-        lastComma = sb.lastIndexOf(",");
-        sb.replace(lastComma, lastComma + 1, ")");
+        sb.setLength(sb.length() - 1);
+        sb.append(")");
         return sb.toString();
     }
 
@@ -234,17 +234,11 @@ public class GenericDialectVisitor implements DialectVisitor {
         String wc = whereColumn(in.column);
         StringBuilder sb = new StringBuilder(wc);
         sb.append(" IN (");
-        
-        Iterator<? extends Object> valutIterator = in.values.iterator();
-        while (valutIterator.hasNext()) {
-            Object value = valutIterator.next();
-            sb.append(" ");
+        for(Object value : in.values) {
             sb.append(in.getParamCounter().addParam(wc, value));
-            sb.append(" ");
-            if (valutIterator.hasNext()) {
-                sb.append(",");
-            }
+            sb.append(", ");
         }
+        sb.setLength(sb.length() - 2);
         sb.append(")");
         return sb.toString();
     }
