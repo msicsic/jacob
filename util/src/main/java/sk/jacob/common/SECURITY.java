@@ -2,7 +2,6 @@ package sk.jacob.common;
 
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.Principal;
-import sk.jacob.types.TokenType;
 
 import java.util.HashMap;
 import java.util.Map;

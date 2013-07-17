@@ -43,7 +43,7 @@ public class ParamGet {
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         ParamGetReqd requestData = (ParamGetReqd) dataPacket.message.request.reqd;
 
-        TenantsParams tenantsParams = ContextModel.table(TenantsParams.class);
+        TenantsParams tenantsParams = ContextModel.INSTANCE.table(TenantsParams.class);
 
         SqlClause s = select(tenantsParams.paramName, tenantsParams.paramValue)
                 .from(tenantsParams)

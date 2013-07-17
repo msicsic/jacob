@@ -28,7 +28,7 @@ public class SecurityModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();
     private final HandlerInspector<Token> handlerInspector;
     private final DbEngine dbEngine;
-    private final Metadata MODEL = SecurityModel.METADATA;
+    private final Metadata MODEL = SecurityModel.INSTANCE.METADATA;
 
     static {
         HANDLERS.addAll(Arrays.asList(Init.HANDLERS));
@@ -63,7 +63,7 @@ public class SecurityModule implements Module {
     }
 
     private void initDatabase(String adminLogin, String adminMd5Pwd) {
-        SecurityModel.createAll(this.dbEngine);
+        SecurityModel.INSTANCE.createAll(this.dbEngine);
         initializeAdmin(adminLogin, adminMd5Pwd);
     }
 

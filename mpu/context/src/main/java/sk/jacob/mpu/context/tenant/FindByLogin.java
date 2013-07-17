@@ -54,8 +54,8 @@ public class FindByLogin {
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         FindByLoginReqd requestData = (FindByLoginReqd) dataPacket.message.request.reqd;
 
-        Tenants tenants = ContextModel.table(Tenants.class);
-        UsersTenants usersTenants = ContextModel.table(UsersTenants.class);
+        Tenants tenants = ContextModel.INSTANCE.table(Tenants.class);
+        UsersTenants usersTenants = ContextModel.INSTANCE.table(UsersTenants.class);
 
         SqlClause s = select(tenants.id, tenants.name)
                 .from(tenants)

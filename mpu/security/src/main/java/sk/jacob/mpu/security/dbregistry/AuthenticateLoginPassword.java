@@ -44,7 +44,7 @@ public class AuthenticateLoginPassword {
     public static DataPacket authenticateLoginPassword(DataPacket dataPacket) throws Exception {
         AuthLogPassToken token = (AuthLogPassToken) SECURITY.TOKEN.get(dataPacket);
 
-        Users users = SecurityModel.table(Users.class);
+        Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
                 .from(users)
                 .where(and(eq(users.login, token.login),
@@ -79,7 +79,7 @@ public class AuthenticateLoginPassword {
     public static DataPacket invalidateToken(DataPacket dataPacket) throws Exception {
         InvalidateToken token = (InvalidateToken) SECURITY.TOKEN.get(dataPacket);
 
-        Users users = SecurityModel.table(Users.class);
+        Users users = SecurityModel.INSTANCE.table(Users.class);
         DMLClause s = update(users)
                 .set(cv(users.token, null))
                 .where(eq(users.token, token.value));

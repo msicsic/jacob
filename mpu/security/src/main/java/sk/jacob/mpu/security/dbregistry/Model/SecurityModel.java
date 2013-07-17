@@ -5,19 +5,21 @@ import sk.jacob.sql.engine.DbEngine;
 
 import static sk.jacob.sql.ddl.DDL.column;
 
-public class SecurityModel {
-    public static final Metadata METADATA = update(new Metadata());
+public enum SecurityModel {
+    INSTANCE;
 
-    private static Metadata update(Metadata metadata) {
+    public final Metadata METADATA = populate(new Metadata());
+
+    private Metadata populate(Metadata metadata) {
         new Users(metadata);
         return metadata;
     }
 
-    public static <T> T table(Class<T> name) {
+    public <T> T table(Class<T> name) {
         return METADATA.table(name);
     }
 
-    public static void createAll(DbEngine dbEngine) {
+    public void createAll(DbEngine dbEngine) {
         METADATA.createAll(dbEngine);
     }
 }

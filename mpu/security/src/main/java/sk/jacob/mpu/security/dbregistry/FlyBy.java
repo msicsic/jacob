@@ -28,7 +28,7 @@ public class FlyBy {
     public static DataPacket flyByToken(DataPacket dataPacket) throws Exception {
         FlyByToken token = (FlyByToken) SECURITY.TOKEN.get(dataPacket);
 
-        Users users = SecurityModel.table(Users.class);
+        Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
                 .from(users)
                 .where(eq(users.token, token.value));
@@ -58,7 +58,7 @@ public class FlyBy {
     public static DataPacket flyByLoginPassword(DataPacket dataPacket) throws Exception {
         FlyByLoginPassword token = (FlyByLoginPassword)  SECURITY.TOKEN.get(dataPacket);
 
-        Users users = SecurityModel.table(Users.class);
+        Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
                 .from(users)
                 .where(and(eq(users.login, token.login),
