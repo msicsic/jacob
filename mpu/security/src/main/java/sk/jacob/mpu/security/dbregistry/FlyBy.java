@@ -39,9 +39,10 @@ public class FlyBy {
             return Return.EXCEPTION("security.invalid.token", dataPacket);
         }
 
-        String login = rs.getBoolean(users.admin.name) ? "ADMIN"
-                                                       : rs.getString(users.login.name);
-        String username = rs.getString(users.username.name);
+        String login =   rs.getBoolean(users.admin.alias())
+                       ? "ADMIN"
+                       : rs.getString(users.login.alias());
+        String username = rs.getString(users.username.alias());
         SECURITY.setPrincipal(dataPacket, new Principal(login, username));
 
         return dataPacket;
@@ -66,7 +67,7 @@ public class FlyBy {
         ResultSet rs = (ResultSet)conn.execute(s);
 
         if(rs.next() == false) {
-            return Return.EXCEPTION("security.invalid.login.password", dataPacket);
+            return Return.ERROR("security.invalid.login.password", dataPacket);
         }
 
         String login = rs.getBoolean(users.admin.name) ? "ADMIN"

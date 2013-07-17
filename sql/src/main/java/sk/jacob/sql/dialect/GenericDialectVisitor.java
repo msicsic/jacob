@@ -44,9 +44,9 @@ public class GenericDialectVisitor implements DialectVisitor {
             normalizedCE = ((SqlClause)columnExpression).sql(this);
         } else if(columnExpression instanceof Column) {
             Column c = (Column)columnExpression;
-            StringBuffer sb = new StringBuffer(c.name);
+            StringBuffer sb = new StringBuffer(c.qname());
             sb.append(" AS ");
-            sb.append(c.qname());
+            sb.append(c.alias());
             normalizedCE = sb.toString();
         }
         return normalizedCE;
@@ -242,7 +242,7 @@ public class GenericDialectVisitor implements DialectVisitor {
         sb.append(")");
         return sb.toString();
     }
-    
+
     protected String binaryColumnOperation(Object column, Object value, String sign, DMLClause.ParamCounter pc) {
         String wc = whereColumn(column);
         StringBuffer sb = new StringBuffer(wc);

@@ -5,6 +5,9 @@ import sk.jacob.sql.dialect.DialectVisitor;
 public class Column extends DbObject {
     public final TYPE.Type type;
     public final ColumnOptions options;
+    /*
+     * TableColumn is used in plain query joins. Indicates that right operand is of type Column.
+     */
     public final String tableColumn;
     private Table parentTable;
 
@@ -63,6 +66,13 @@ public class Column extends DbObject {
     }
 
     public String qname() {
+        StringBuffer sb = new StringBuffer(this.parentTable.name);
+        sb.append(".");
+        sb.append(this.name);
+        return sb.toString();
+    }
+
+    public String alias() {
         StringBuffer sb = new StringBuffer(this.parentTable.name);
         sb.append("_");
         sb.append(this.name);

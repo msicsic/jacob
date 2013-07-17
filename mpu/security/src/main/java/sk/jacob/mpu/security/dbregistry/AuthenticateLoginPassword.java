@@ -51,9 +51,8 @@ public class AuthenticateLoginPassword {
                            eq(users.md5pwd, md5String(token.password))));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
         ResultSet rs = (ResultSet)conn.execute(s);
-
         if(rs.next() == false) {
-            return Return.EXCEPTION("security.invalid.login.password", dataPacket);
+            return Return.ERROR("security.invalid.login.password", dataPacket);
         }
 
         String generatedToken = uniqueToken();
@@ -63,9 +62,10 @@ public class AuthenticateLoginPassword {
         conn.execute(u);
         AuthLogPassResd resd = new AuthLogPassResd();
         resd.token = generatedToken;
-        resd.principal.login = rs.getBoolean(users.admin.name) ? "ADMIN"
-                                                               : rs.getString(users.login.name);
-        resd.principal.username = rs.getString(users.username.name);
+        resd.principal.login =   rs.getBoolean(users.admin.alias())
+                               ? "ADMIN"
+                               : rs.getString(users.login.alias());
+        resd.principal.username = rs.getString(users.username.alias());
 
         return Return.RESPONSE(resd, dataPacket);
     }
