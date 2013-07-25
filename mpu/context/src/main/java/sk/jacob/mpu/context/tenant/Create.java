@@ -65,6 +65,7 @@ public class Create {
                                                cv(tenantsParams.paramName, entry.getKey()),
                                                cv(tenantsParams.paramValue, entry.getValue()),
                                                cv(tenantsParams.scope, ParamScope.PUBLIC.name()));
+            conn.execute(sql);
         }
 
         // 4. Create ds entry
