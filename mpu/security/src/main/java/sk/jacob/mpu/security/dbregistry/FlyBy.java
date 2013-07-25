@@ -6,6 +6,7 @@ import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
+import sk.jacob.sql.engine.JacobResultSet;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.Principal;
 import sk.jacob.types.Return;
@@ -33,16 +34,16 @@ public class FlyBy {
                 .from(users)
                 .where(eq(users.token, token.value));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
-        ResultSet rs = (ResultSet)conn.execute(s);
+        JacobResultSet rs = (JacobResultSet)conn.execute(s);
 
         if(rs.next() == false) {
             return Return.EXCEPTION("security.invalid.token", dataPacket);
         }
 
-        String login =   rs.getBoolean(users.admin.alias())
+        String login =   rs.getBoolean(users.admin)
                        ? "ADMIN"
-                       : rs.getString(users.login.alias());
-        String username = rs.getString(users.username.alias());
+                       : rs.getString(users.login);
+        String username = rs.getString(users.username);
         SECURITY.setPrincipal(dataPacket, new Principal(login, username));
 
         return dataPacket;
@@ -64,15 +65,15 @@ public class FlyBy {
                 .where(and(eq(users.login, token.login),
                            eq(users.md5pwd, md5String(token.password))));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
-        ResultSet rs = (ResultSet)conn.execute(s);
+        JacobResultSet rs = (JacobResultSet)conn.execute(s);
 
         if(rs.next() == false) {
             return Return.ERROR("security.invalid.login.password", dataPacket);
         }
 
-        String login = rs.getBoolean(users.admin.name) ? "ADMIN"
-                                                       : rs.getString(users.login.name);
-        String username = rs.getString(users.username.name);
+        String login = rs.getBoolean(users.admin) ? "ADMIN"
+                                                  : rs.getString(users.login);
+        String username = rs.getString(users.username);
         SECURITY.setPrincipal(dataPacket, new Principal(login, username));
 
         return dataPacket;

@@ -11,6 +11,7 @@ import sk.jacob.mpu.context.model.Tenants;
 import sk.jacob.mpu.context.model.UsersTenants;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
+import sk.jacob.sql.engine.JacobResultSet;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.RequestDataType;
 import sk.jacob.types.ResponseDataType;
@@ -48,9 +49,9 @@ public class FindByLogin {
     }
 
     @Message(type = "context.tenant.findByLogin",
-            version = "1.0",
-            reqd = FindByLoginReqd.class,
-            resd = FindByLoginResd.class)
+             version = "1.0",
+             reqd = FindByLoginReqd.class,
+             resd = FindByLoginResd.class)
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         FindByLoginReqd requestData = (FindByLoginReqd) dataPacket.message.request.reqd;
 
@@ -62,12 +63,14 @@ public class FindByLogin {
                 .join(usersTenants, eq(tenants.id, usersTenants.tenantFk))
                 .where(eq(usersTenants.login, requestData.login));
         Connection conn = (Connection) CONTEXT.CONNECTION.get(dataPacket);
-        ResultSet rs = (ResultSet) conn.execute(s);
+        JacobResultSet rs = (JacobResultSet) conn.execute(s);
 
         List<FindByLoginResd.TenantResponse> responseTenants = new LinkedList<>();
         while (rs.next()) {
-            responseTenants.add(new FindByLoginResd.TenantResponse(
-                    rs.getString(tenants.id.name), rs.getString(tenants.name.name)));
+            responseTenants.add(
+                    new FindByLoginResd.TenantResponse(
+                            rs.getString(tenants.id),
+                            rs.getString(tenants.name)));
         }
 
         return Return.RESPONSE(new FindByLoginResd(requestData.login, responseTenants), dataPacket);

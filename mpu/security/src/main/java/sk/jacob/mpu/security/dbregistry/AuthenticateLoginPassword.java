@@ -7,6 +7,7 @@ import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.DMLClause;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
+import sk.jacob.sql.engine.JacobResultSet;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.ResponseDataType;
 import sk.jacob.types.Return;
@@ -50,7 +51,7 @@ public class AuthenticateLoginPassword {
                 .where(and(eq(users.login, token.login),
                            eq(users.md5pwd, md5String(token.password))));
         Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
-        ResultSet rs = (ResultSet)conn.execute(s);
+        JacobResultSet rs = (JacobResultSet)conn.execute(s);
         if(rs.next() == false) {
             return Return.ERROR("security.invalid.login.password", dataPacket);
         }
@@ -62,10 +63,10 @@ public class AuthenticateLoginPassword {
         conn.execute(u);
         AuthLogPassResd resd = new AuthLogPassResd();
         resd.token = generatedToken;
-        resd.principal.login =   rs.getBoolean(users.admin.alias())
+        resd.principal.login =   rs.getBoolean(users.admin)
                                ? "ADMIN"
-                               : rs.getString(users.login.alias());
-        resd.principal.username = rs.getString(users.username.alias());
+                               : rs.getString(users.login);
+        resd.principal.username = rs.getString(users.username);
 
         return Return.RESPONSE(resd, dataPacket);
     }

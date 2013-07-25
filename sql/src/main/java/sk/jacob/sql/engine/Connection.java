@@ -34,7 +34,7 @@ public class Connection {
         this.metadata = metadata;
     }
 
-    public ResultSet execute(String stringStatement) {
+    public JacobResultSet execute(String stringStatement) {
         ResultSet resultSet;
         try {
             java.sql.Statement statement = this.connection.createStatement();
@@ -43,7 +43,7 @@ public class Connection {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return resultSet;
+        return new JacobResultSet(resultSet);
     }
 
     public Object execute(SqlClause sqlClause) {
