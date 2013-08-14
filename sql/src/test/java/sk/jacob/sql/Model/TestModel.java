@@ -22,6 +22,14 @@ public class TestModel {
         plainObjects();
     }
 
+    private static void typeObjects() {
+        sequence("SEQUENCE_ID", METADATA);
+        new TabTNullable(METADATA);
+        new TabTUnique(METADATA);
+        new TabTIdInsert(METADATA);
+        new TabTReferencing(METADATA);
+    }
+
     private static void plainObjects() {
         table("TABP_NULLABLE", METADATA,
               column("C_STRING_NULLABLE", String(255), options().nullable(true).unique(false)),
@@ -38,13 +46,5 @@ public class TestModel {
 
         table("TABP_REFERENCING", METADATA,
               column("C_FK", Long(), options().foreignKey("TABP_ID_INSERT.C_ID")));
-    }
-
-    private static void typeObjects() {
-        sequence("SEQUENCE_ID", METADATA);
-        new TabTNullable(METADATA);
-        new TabTUnique(METADATA);
-        new TabTIdInsert(METADATA);
-        new TabTReferencing(METADATA);
     }
 }
