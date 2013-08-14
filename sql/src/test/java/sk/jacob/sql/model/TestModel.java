@@ -18,12 +18,12 @@ public class TestModel {
     public static final Metadata METADATA = new Metadata();
 
     static {
+        sequence("SEQUENCE_ID", METADATA);
         typeObjects();
         plainObjects();
     }
 
     private static void typeObjects() {
-        sequence("SEQUENCE_ID", METADATA);
         new TabTNullable(METADATA);
         new TabTUnique(METADATA);
         new TabTIdInsert(METADATA);

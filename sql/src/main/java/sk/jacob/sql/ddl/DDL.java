@@ -24,6 +24,10 @@ public class DDL {
     }
 
     public static Sequence sequence(String sequenceName, Metadata metadata) {
-        return new Sequence(sequenceName, metadata);
+        if(metadata.isDefined(sequenceName)) {
+            return metadata.sequence(sequenceName);
+        } else {
+            return new Sequence(sequenceName, metadata);
+        }
     }
 }
