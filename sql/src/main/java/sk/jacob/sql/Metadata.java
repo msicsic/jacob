@@ -12,11 +12,12 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Metadata{
-    private final List<String> createOrder = new ArrayList<String>();
+    private final List<String> createOrder = new ArrayList<>();
     private final Map<String, DbObject> dbObjects = new ConcurrentHashMap<>();
 
     public void add(DbObject dbObject) {
         // TODO: Implement order creation logic
+        // Metadata must allow add objects not constrained by foreign keys.
         if (dbObjects.containsKey(dbObject.name)) {
             return;
         }
@@ -83,9 +84,9 @@ public class Metadata{
     }
 
     private static String getTableName(Class<?> cls) {
-        String tableName = null;
+        String tableName;
         try {
-            Field f = null;
+            Field f;
             f = cls.getField("NAME");
             tableName = (String)f.get(null);
         } catch (NoSuchFieldException | IllegalAccessException e) {

@@ -3,17 +3,17 @@ package sk.jacob.mpu.security;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import sk.jacob.common.SECURITY;
-import sk.jacob.engine.handler.HandlerInspector;
+import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.Token;
 import sk.jacob.types.DataPacket;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-public class SecurityHandlerInspector extends HandlerInspector<Token> {
+public class SecurityHandlerRegistry extends HandlerRegistry<Token> {
     private static final Gson GSON = new Gson();
 
-    public SecurityHandlerInspector(List<Class> messageHandlers) {
+    public SecurityHandlerRegistry(List<Class> messageHandlers) {
         super(Token.class, messageHandlers);
     }
 

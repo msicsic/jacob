@@ -3,7 +3,7 @@ package sk.jacob.engine.handler.devel;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import sk.jacob.engine.handler.HandlerInspector;
+import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.types.DataPacket;
 
 // FIXME
@@ -13,13 +13,13 @@ public class DevelUtil {
     public static void mpuListAppendMpu(DataPacket dataPacket, Class<?> mpuClass, String moduleId) {
 //        MpuRegistryTypes response = initResponse(dataPacket);
 
-//        for (Object[] pair : HandlerInspector.inspect(mpuClass)) {
+//        for (Object[] pair : HandlerRegistry.inspect(mpuClass)) {
 //            response.getResd().add(createMpuNode((Method) pair[1], moduleId));
 //        }
     }
 
     private static Map<String, Object> createMpuNode(Method mpuMethod, String moduleId) {
-        Map<String, Object> mpuMap = HandlerInspector.serializeMethod(mpuMethod);
+        Map<String, Object> mpuMap = HandlerRegistry.serializeMethod(mpuMethod);
         mpuMap.put("module", moduleId);
         mpuMap.put("type", "message");
         return mpuMap;

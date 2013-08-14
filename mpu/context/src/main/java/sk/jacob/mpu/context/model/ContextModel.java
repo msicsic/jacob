@@ -1,6 +1,7 @@
 package sk.jacob.mpu.context.model;
 
 import sk.jacob.sql.Metadata;
+import sk.jacob.sql.ddl.Sequence;
 import sk.jacob.sql.engine.DbEngine;
 
 public enum ContextModel {
@@ -9,6 +10,7 @@ public enum ContextModel {
     public final Metadata METADATA = populate(new Metadata());
 
     private Metadata populate(Metadata metadata) {
+        new Sequence("DS_ID_SEQ", metadata);
         new Ds(metadata);
         new Tenants(metadata);
         new TenantsParams(metadata);

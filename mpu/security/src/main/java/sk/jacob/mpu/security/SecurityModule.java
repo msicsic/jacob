@@ -2,7 +2,7 @@ package sk.jacob.mpu.security;
 
 import sk.jacob.common.SECURITY;
 import sk.jacob.engine.Module;
-import sk.jacob.engine.handler.HandlerInspector;
+import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.Token;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
@@ -26,7 +26,7 @@ import static sk.jacob.util.Log.logger;
 
 public class SecurityModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();
-    private final HandlerInspector<Token> handlerInspector;
+    private final HandlerRegistry<Token> handlerRegistry;
     private final DbEngine dbEngine;
     private final Metadata MODEL = SecurityModel.INSTANCE.METADATA;
 
@@ -35,7 +35,7 @@ public class SecurityModule implements Module {
     }
 
     public SecurityModule(Properties config) {
-        this.handlerInspector = new SecurityHandlerInspector(HANDLERS);
+        this.handlerRegistry = new SecurityHandlerRegistry(HANDLERS);
         this.dbEngine = new DbEngine(config.getProperty("security.url"),
                                      config.getProperty("security.username"),
                                      config.getProperty("security.password"));
@@ -49,7 +49,7 @@ public class SecurityModule implements Module {
         SECURITY.CONNECTION.set(dataPacket, conn);
         try {
             conn.txBegin();
-            dataPacket = this.handlerInspector.process(dataPacket);
+            dataPacket = this.handlerRegistry.process(dataPacket);
             conn.txCommit();
         } catch (Exception e){
             String errorCode = "security.general.token.exception";

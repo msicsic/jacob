@@ -13,8 +13,6 @@ import sk.jacob.types.ResponseDataType;
 import sk.jacob.types.Return;
 import sk.jacob.types.TokenType;
 
-import java.sql.ResultSet;
-
 import static sk.jacob.sql.dml.DML.cv;
 import static sk.jacob.sql.dml.DML.select;
 import static sk.jacob.sql.dml.DML.update;

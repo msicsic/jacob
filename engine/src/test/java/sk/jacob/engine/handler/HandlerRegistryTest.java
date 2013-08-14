@@ -12,7 +12,7 @@ import sk.jacob.types.RequestDataType;
 import sk.jacob.types.ResponseDataType;
 
 // FIXME:
-public class HandlerInspectorTest {
+public class HandlerRegistryTest {
     static class TestMpu {
         static class User {
             String login;
@@ -56,6 +56,6 @@ public class HandlerInspectorTest {
         Class mpuClass = testMpu.getClass();
         Method handlerMethod = mpuClass.getMethod("method", DataPacket.class);
 
-        System.out.println(gson.toJson(HandlerInspector.serializeMethod(handlerMethod)));
+        System.out.println(gson.toJson(HandlerRegistry.serializeMethod(handlerMethod)));
     }
 }

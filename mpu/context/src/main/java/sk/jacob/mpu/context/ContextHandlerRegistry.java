@@ -5,15 +5,14 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import com.google.gson.JsonObject;
-import sk.jacob.engine.handler.HandlerInspector;
+import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.RequestHeaderType;
 import sk.jacob.types.RequestType;
 
-// FIXME:
-public class ContextHandleInspector extends HandlerInspector<Message> {
-    public ContextHandleInspector(List<Class> messageHandlers) {
+public class ContextHandlerRegistry extends HandlerRegistry<Message> {
+    public ContextHandlerRegistry(List<Class> messageHandlers) {
         super(Message.class, messageHandlers);
     }
 

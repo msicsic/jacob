@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Properties;
 import sk.jacob.common.CONTEXT;
 import sk.jacob.engine.Module;
-import sk.jacob.engine.handler.HandlerInspector;
+import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DATAPACKET_STATUS;
@@ -26,10 +26,10 @@ public class ContextModule implements Module {
         HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.context.devel.Init.HANDLERS));
     }
 
-    private final HandlerInspector<Message> handlerInspector;
+    private final HandlerRegistry<Message> handlerRegistry;
 
     public ContextModule(Properties config) {
-        this.handlerInspector = new ContextHandleInspector(HANDLERS);
+        this.handlerRegistry = new ContextHandlerRegistry(HANDLERS);
         this.dbEngine = new DbEngine(config.getProperty("context.url"),
                                      config.getProperty("context.username"),
                                      config.getProperty("context.password"));
@@ -46,7 +46,7 @@ public class ContextModule implements Module {
 
         try {
             conn.txBegin();
-            dataPacket = this.handlerInspector.process(dataPacket);
+            dataPacket = this.handlerRegistry.process(dataPacket);
             conn.txCommit();
         } catch (Exception e) {
             conn.txRollback();

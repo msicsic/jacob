@@ -5,6 +5,9 @@ import sk.jacob.sql.ddl.Column;
 import static sk.jacob.sql.ddl.Column.options;
 import static sk.jacob.sql.ddl.TYPE.Long;
 import static sk.jacob.sql.ddl.TYPE.String;
+import static sk.jacob.sql.generator.SequenceIdGenerator.sequenceIdGenerator;
+
+import sk.jacob.sql.ddl.Sequence;
 import sk.jacob.sql.ddl.Table;
 
 /**
@@ -15,13 +18,14 @@ public class Ds extends Table {
 
     public Ds(Metadata metadata) {
         super(NAME, metadata);
+        Sequence seq = metadata.sequence("DS_ID_SEQ");
+        id = new Column(this, "id", Long(), options().primaryKey(sequenceIdGenerator(seq)));
     }
 
     /**
      * The id of datastore.
      */
-    public final Column id = new Column(this, "id",
-                                        Long(), options().primaryKey());
+    public final Column id;
 
     /**
      * The url of datastore.

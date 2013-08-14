@@ -12,17 +12,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class HandlerInspector<T extends Annotation> {
+public abstract class HandlerRegistry<T extends Annotation> {
     private final Class<T> supportedAnnotation;
-    protected Map<String, Method> handlerMap = new HashMap<String, Method>();
+    protected Map<String, Method> handlerMap = new HashMap<>();
 
-    protected HandlerInspector(Class<T> supportedAnnotation, List<Class> messageHandlers) {
+    protected HandlerRegistry(Class<T> supportedAnnotation, List<Class> messageHandlers) {
         this.supportedAnnotation = supportedAnnotation;
         this.handlerMap = map(messageHandlers);
     }
 
     private Map<String, Method> map(List<Class> handlers) {
-        Map<String, Method> mappedHandlers = new HashMap<String, Method>();
+        Map<String, Method> mappedHandlers = new HashMap<>();
         for (Class<?> handler : handlers) {
             mappedHandlers.putAll(inspect(handler));
         }
@@ -30,7 +30,7 @@ public abstract class HandlerInspector<T extends Annotation> {
     }
 
     private Map<String, Method> inspect(Class<?> handler) {
-        Map<String, Method> mappedHandlers = new HashMap<String, Method>();
+        Map<String, Method> mappedHandlers = new HashMap<>();
         for (Method method : handler.getDeclaredMethods()) {
             if (!method.isAnnotationPresent(supportedAnnotation)) {
                 continue;
@@ -81,7 +81,7 @@ public abstract class HandlerInspector<T extends Annotation> {
     private static final Set<Class> BOXED_TYPES = initBoxedTypes();
 
     private static Set<Class> initBoxedTypes() {
-        Set<Class> set = new HashSet< Class>();
+        Set<Class> set = new HashSet<>();
         set.add(Byte.class);
         set.add(Character.class);
         set.add(Short.class);
@@ -95,7 +95,7 @@ public abstract class HandlerInspector<T extends Annotation> {
     }
 
     public static Map<String, Object> serializeMethod(Method method) {
-        Map<String, Object> handlerMap = new HashMap<String, Object>();
+        Map<String, Object> handlerMap = new HashMap<>();
         Message messageAnnotation = method.getAnnotation(Message.class);
 
         handlerMap.put("id", messageAnnotation.type());
@@ -108,7 +108,7 @@ public abstract class HandlerInspector<T extends Annotation> {
 
     //TODO pada pri java.util.Date
     private static Map<String, Object> serializeClass(Class resReqClass) {
-        Map<String, Object> resMap = new HashMap<String, Object>();
+        Map<String, Object> resMap = new HashMap<>();
 
         for (Field field : getAllFields(resReqClass)) {
             Class fieldClass = field.getType();
@@ -135,7 +135,7 @@ public abstract class HandlerInspector<T extends Annotation> {
     }
 
     private static Set<Field> getAllFields(Class fieldClass) {
-        Set<Field> fields = new HashSet<Field>();
+        Set<Field> fields = new HashSet<>();
         for (Class<?> c = fieldClass; c != null; c = c.getSuperclass()) {
             Collections.addAll(fields, c.getDeclaredFields());
         }
@@ -162,13 +162,13 @@ public abstract class HandlerInspector<T extends Annotation> {
     }
 
     private static Set<Object> serializeArray(Class fieldClass) {
-        Set<Object> set = new HashSet<Object>();
+        Set<Object> set = new HashSet<>();
         set.add(serializeClass(fieldClass.getComponentType()));
         return set;
     }
 
     private static Set<Object> serializeIterable(Field field) {
-        Set<Object> set = new HashSet<Object>();
+        Set<Object> set = new HashSet<>();
         ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
         set.add(serializeClass((Class) parameterizedType.getActualTypeArguments()[0]));
         return set;
