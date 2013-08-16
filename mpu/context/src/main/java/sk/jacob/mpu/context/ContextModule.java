@@ -1,10 +1,10 @@
 package sk.jacob.mpu.context;
 
+import sk.jacob.common.CONFIG;
 import sk.jacob.mpu.context.model.ContextModel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+
+import java.util.*;
+
 import sk.jacob.common.CONTEXT;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerRegistry;
@@ -20,6 +20,7 @@ public class ContextModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();
     private static final Metadata MODEL = ContextModel.INSTANCE.METADATA;
     private final DbEngine dbEngine;
+    private final Properties config;
 
     static {
         HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.context.tenant.Init.HANDLERS));
@@ -29,10 +30,11 @@ public class ContextModule implements Module {
     private final HandlerRegistry<Message> handlerRegistry;
 
     public ContextModule(Properties config) {
+        this.config = config;
         this.handlerRegistry = new ContextHandlerRegistry(HANDLERS);
-        this.dbEngine = new DbEngine(config.getProperty("context.url"),
-                                     config.getProperty("context.username"),
-                                     config.getProperty("context.password"));
+        this.dbEngine = new DbEngine(CONFIG.CONTEXT_URL.get(config),
+                                     CONFIG.CONTEXT_USERNAME.get(config),
+                                     CONFIG.CONTEXT_PASSWORD.get(config));
         this.initDatabase();
     }
 
@@ -43,6 +45,11 @@ public class ContextModule implements Module {
 
         Connection conn = this.dbEngine.getConnection();
         CONTEXT.CONNECTION.set(dataPacket, conn);
+        CONTEXT.LDS_BDS.set(dataPacket, new HashMap<CONFIG, String>() {{
+            put(CONFIG.LDS_BDS_URL, CONFIG.LDS_BDS_URL.get(config));
+            put(CONFIG.LDS_BDS_USERNAME,CONFIG.LDS_BDS_USERNAME.get(config));
+            put(CONFIG.LDS_BDS_PASSWORD, CONFIG.LDS_BDS_PASSWORD.get(config));
+        }});
 
         try {
             conn.txBegin();

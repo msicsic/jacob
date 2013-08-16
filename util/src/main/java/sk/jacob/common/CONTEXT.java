@@ -5,7 +5,7 @@ import java.util.Map;
 import sk.jacob.types.DataPacket;
 
 public enum CONTEXT {
-    CONNECTION;
+    CONNECTION, LDS_BDS;
 
     private static final String CONTEXT_KEY = "BUSSINESS_CONTEXT";
 

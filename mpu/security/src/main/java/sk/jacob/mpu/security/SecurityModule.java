@@ -1,5 +1,6 @@
 package sk.jacob.mpu.security;
 
+import sk.jacob.common.CONFIG;
 import sk.jacob.common.SECURITY;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerRegistry;
@@ -36,11 +37,11 @@ public class SecurityModule implements Module {
 
     public SecurityModule(Properties config) {
         this.handlerRegistry = new SecurityHandlerRegistry(HANDLERS);
-        this.dbEngine = new DbEngine(config.getProperty("security.url"),
-                                     config.getProperty("security.username"),
-                                     config.getProperty("security.password"));
-        this.initDatabase(config.getProperty("admin.login"),
-                          config.getProperty("admin.md5pwd"));
+        this.dbEngine = new DbEngine(CONFIG.SECURITY_URL.get(config),
+                                     CONFIG.SECURITY_USERNAME.get(config),
+                                     CONFIG.SECURITY_PASSWORD.get(config));
+        this.initDatabase(CONFIG.ADMIN_LOGIN.get(config),
+                          CONFIG.ADMIN_PASSWORD.get(config));
     }
 
     @Override
