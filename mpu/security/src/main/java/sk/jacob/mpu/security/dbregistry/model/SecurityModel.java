@@ -1,6 +1,7 @@
 package sk.jacob.mpu.security.dbregistry.model;
 
 import sk.jacob.sql.Metadata;
+import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.engine.DbEngine;
 
 import static sk.jacob.sql.ddl.DDL.column;
@@ -15,8 +16,8 @@ public enum SecurityModel {
         return metadata;
     }
 
-    public <T> T table(Class<T> name) {
-        return METADATA.table(name);
+    public <T extends Table> T table(Class<T> tableClass) {
+        return METADATA.table(tableClass);
     }
 
     public void createAll(DbEngine dbEngine) {

@@ -9,7 +9,7 @@ import static sk.jacob.sql.ddl.TYPE.*;
 
 
 public class TabTReferencing extends Table {
-    public static final String NAME = "TABT_REFERENCING";
+    private static final String NAME = "TABT_REFERENCING";
 
     public TabTReferencing(Metadata metadata1) {
         super(NAME, metadata1);

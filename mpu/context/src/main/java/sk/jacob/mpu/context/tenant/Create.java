@@ -73,12 +73,12 @@ public class Create {
             datasource_id = rs.getLong(ds.id);
         }
 
-        // 5. Create lds/BDS entry parameter
+        // 5. Associate tenant with DS
         String paramValue = String.format("%s.%s", datasource_id, "context.lds_bds_schema");
         conn.execute(insert(tenantsParams).values(cv(tenantsParams.tenantFk, tenantId),
-                                          cv(tenantsParams.paramName, "lds/BDS"),
-                                          cv(tenantsParams.paramValue, paramValue),
-                                          cv(tenantsParams.scope, "private")));
+                                                  cv(tenantsParams.paramName, "lds/BDS"),
+                                                  cv(tenantsParams.paramValue, paramValue),
+                                                  cv(tenantsParams.scope, ParamScope.PRIVATE .name())));
 
         return dataPacket;
     }

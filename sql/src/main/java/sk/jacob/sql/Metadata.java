@@ -7,13 +7,14 @@ import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.DbEngine;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Metadata{
     private final List<String> createOrder = new ArrayList<>();
     private final Map<String, DbObject> dbObjects = new ConcurrentHashMap<>();
+    // Stupid but works
+    private final Map<Class<? extends Table>, String> tableClassToStringMapping = new HashMap<>();
 
     public void add(DbObject dbObject) {
         // TODO: Implement order creation logic
@@ -23,6 +24,9 @@ public class Metadata{
         }
         createOrder.add(dbObject.name);
         dbObjects.put(dbObject.name, dbObject);
+        if (dbObject instanceof Table) {
+            tableClassToStringMapping.put((Class<? extends Table>) dbObject.getClass(), dbObject.name);
+        }
     }
 
     public void createAll(DbEngine dbEngine) {
@@ -59,8 +63,8 @@ public class Metadata{
         }
     }
 
-    public <T> T table(Class<T> name) {
-        return (T)table(getTableName(name));
+    public <T extends Table> T table(Class<T> tableClass) {
+        return (T)table(getTableName(tableClass));
     }
 
     public Table table(String tableName) {
@@ -83,15 +87,7 @@ public class Metadata{
         return dbObjects.containsKey(objectName);
     }
 
-    private static String getTableName(Class<?> cls) {
-        String tableName;
-        try {
-            Field f;
-            f = cls.getField("NAME");
-            tableName = (String)f.get(null);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        return tableName;
+    private String getTableName(Class<?> cls) {
+        return tableClassToStringMapping.get(cls);
     }
 }

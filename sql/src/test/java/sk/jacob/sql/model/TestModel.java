@@ -39,7 +39,7 @@ public class TestModel {
               column("C_STRING_UNIQUE", String(255), options().nullable(true).unique(true)),
               column("C_STRING_NOT_UNIQUE", String(255), options().nullable(true).unique(false)));
 
-        Sequence sequence_id = sequence("SEQUENCE_ID", METADATA);
+        Sequence sequence_id = METADATA.sequence("SEQUENCE_ID");
         table("TABP_ID_INSERT", METADATA,
               column("C_ID", Long(), options().primaryKey(sequenceIdGenerator(sequence_id))),
               column("C_STRING_VALUE", String(255), options().nullable(false).unique(false)));

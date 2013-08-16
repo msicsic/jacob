@@ -2,6 +2,7 @@ package sk.jacob.mpu.context.model;
 
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.ddl.Sequence;
+import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.engine.DbEngine;
 
 public enum ContextModel {
@@ -18,7 +19,7 @@ public enum ContextModel {
         return metadata;
     }
 
-    public  <T> T table(Class<T> name) {
-        return METADATA.table(name);
+    public <T extends Table> T table(Class<T> tableClass) {
+        return METADATA.table(tableClass);
     }
 }

@@ -9,7 +9,7 @@ import static sk.jacob.sql.ddl.Column.options;
 import static sk.jacob.sql.ddl.TYPE.*;
 
 public class TabTNullable extends Table {
-    public static final String NAME = "TABT_NULLABLE";
+    private static final String NAME = "TABT_NULLABLE";
 
     public TabTNullable(Metadata metadata1) {
         super(NAME, metadata1);

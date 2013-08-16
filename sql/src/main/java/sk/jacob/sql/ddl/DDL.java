@@ -5,7 +5,7 @@ import sk.jacob.sql.*;
 public class DDL {
     public static Table table(String tableName, Metadata metadata, Column... columns) {
         if(metadata.isDefined(tableName)) {
-            return metadata.table(tableName);
+            throw new RuntimeException(tableName + " already defined.");
         } else {
             return new Table(tableName, metadata, columns);
         }
@@ -25,7 +25,7 @@ public class DDL {
 
     public static Sequence sequence(String sequenceName, Metadata metadata) {
         if(metadata.isDefined(sequenceName)) {
-            return metadata.sequence(sequenceName);
+            throw new RuntimeException(sequenceName + " already defined.");
         } else {
             return new Sequence(sequenceName, metadata);
         }

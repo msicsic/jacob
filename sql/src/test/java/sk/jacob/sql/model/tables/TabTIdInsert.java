@@ -13,7 +13,7 @@ import static sk.jacob.sql.ddl.Column.options;
 import static sk.jacob.sql.generator.SequenceIdGenerator.sequenceIdGenerator;
 
 public class TabTIdInsert extends Table {
-    public static final String NAME = "TABT_ID_INSERT";
+    private static final String NAME = "TABT_ID_INSERT";
 
     public TabTIdInsert(Metadata metadata) {
         super(NAME, metadata);
