@@ -14,9 +14,9 @@ public enum CONFIG {
     SECURITY_USERNAME("security.username"),
     SECURITY_PASSWORD("security.password"),
 
-    LDS_BDS_URL("lds_bds.url"),
-    LDS_BDS_USERNAME("lds_bds.username"),
-    LDS_BDS_PASSWORD("lds_bds.password");
+    LDS_BDS_TEMPLATE_URL("lds_bds.url"),
+    LDS_BDS_TEMPLATE_USERNAME("lds_bds.username"),
+    LDS_BDS_TEMPLATE_PASSWORD("lds_bds.password");
 
     CONFIG(String key) {
         this.key = key;

@@ -46,6 +46,11 @@ public class Jetty implements Connector {
     }
 
     @Override
+    public String portId() {
+        return this.busPortId;
+    }
+
+    @Override
     public void start() {
         if (this.connectorInstance != null)
             return;

@@ -40,15 +40,15 @@ public class ContextModule implements Module {
 
     @Override
     public DataPacket handle(DataPacket dataPacket) {
-        if (dataPacket.dataPacketStatus == DATAPACKET_STATUS.FIN)
+        if (dataPacket.status == DATAPACKET_STATUS.FIN)
             return dataPacket;
 
         Connection conn = this.dbEngine.getConnection();
         CONTEXT.CONNECTION.set(dataPacket, conn);
         CONTEXT.LDS_BDS.set(dataPacket, new HashMap<CONFIG, String>() {{
-            put(CONFIG.LDS_BDS_URL, CONFIG.LDS_BDS_URL.get(config));
-            put(CONFIG.LDS_BDS_USERNAME,CONFIG.LDS_BDS_USERNAME.get(config));
-            put(CONFIG.LDS_BDS_PASSWORD, CONFIG.LDS_BDS_PASSWORD.get(config));
+            put(CONFIG.LDS_BDS_TEMPLATE_URL, CONFIG.LDS_BDS_TEMPLATE_URL.get(config));
+            put(CONFIG.LDS_BDS_TEMPLATE_USERNAME, CONFIG.LDS_BDS_TEMPLATE_USERNAME.get(config));
+            put(CONFIG.LDS_BDS_TEMPLATE_PASSWORD, CONFIG.LDS_BDS_TEMPLATE_PASSWORD.get(config));
         }});
 
         try {

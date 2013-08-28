@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import sk.jacob.annotation.Required;
 import sk.jacob.common.CONTEXT;
+import sk.jacob.common.MESSAGE;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.TenantsParams;
@@ -41,7 +42,7 @@ public class ParamGet {
              reqd = ParamGet.ParamGetReqd.class,
              resd = ParamGet.ParamGetResd.class)
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
-        ParamGetReqd requestData = (ParamGetReqd) dataPacket.message.request.reqd;
+        ParamGetReqd requestData = (ParamGetReqd) MESSAGE.current(dataPacket).request.reqd;
 
         TenantsParams tenantsParams = ContextModel.INSTANCE.table(TenantsParams.class);
 

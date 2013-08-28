@@ -2,6 +2,7 @@ package sk.jacob.mpu.security;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import sk.jacob.common.MESSAGE;
 import sk.jacob.common.SECURITY;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.Token;
@@ -36,7 +37,7 @@ public class SecurityHandlerRegistry extends HandlerRegistry<Token> {
     }
 
     private static JsonObject getSecurityElement(DataPacket dataPacket) {
-        JsonObject jsonRequest = dataPacket.message.jsonRequest;
+        JsonObject jsonRequest = MESSAGE.current(dataPacket).jsonRequest;
         JsonObject reqh = jsonRequest.get("reqh").getAsJsonObject();
         return reqh.get("security").getAsJsonObject();
     }

@@ -1,5 +1,6 @@
 package sk.jacob.mpu.business.settings;
 
+import sk.jacob.common.MESSAGE;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.RequestDataType;
@@ -26,8 +27,8 @@ public class Uom {
     public DataPacket method1(DataPacket dataPacket) {
         System.out.println("===========================================");
         System.out.println("method1");
-        System.out.println(dataPacket.message.rawRequest);
-        System.out.println(dataPacket.message.request);
+        System.out.println(MESSAGE.current(dataPacket).rawRequest);
+        System.out.println(MESSAGE.current(dataPacket).request);
         return dataPacket;
     }
 
@@ -38,8 +39,8 @@ public class Uom {
     public DataPacket method2(DataPacket dataPacket) {
         System.out.println("===========================================");
         System.out.println("method2");
-        System.out.println(dataPacket.message.rawRequest);
-        System.out.println(dataPacket.message.request);
+        System.out.println(MESSAGE.current(dataPacket).rawRequest);
+        System.out.println(MESSAGE.current(dataPacket).request);
         return dataPacket;
     }
 }

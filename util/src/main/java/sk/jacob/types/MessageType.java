@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 
 public class MessageType {
     public String rawRequest;
-    public JsonObject jsonRequest;
+    public String rawResponse;
     public RequestType request;
     public ResponseType response;
-    public String rawResponse;
+    public JsonObject jsonRequest;
 }

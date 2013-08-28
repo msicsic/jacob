@@ -3,6 +3,7 @@ package sk.jacob.mpu.context.tenant;
 import java.util.Map;
 import sk.jacob.annotation.Required;
 import sk.jacob.common.CONTEXT;
+import sk.jacob.common.MESSAGE;
 import sk.jacob.common.SECURITY;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.mpu.context.model.*;
@@ -37,7 +38,7 @@ public class Create {
              reqd = Create.CreateTenantReqd.class,
              resd = Create.CreateTenantResd.class)
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
-        CreateTenantReqd requestData = (CreateTenantReqd) dataPacket.message.request.reqd;
+        CreateTenantReqd requestData = (CreateTenantReqd) MESSAGE.current(dataPacket).request.reqd;
         String tenantName = requestData.name;
         String tenantId = tenantName.toUpperCase().replace(" ", "");
         Connection conn = (Connection) CONTEXT.CONNECTION.get(dataPacket);

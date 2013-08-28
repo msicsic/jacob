@@ -1,17 +1,15 @@
 package sk.jacob.common;
 
 import sk.jacob.types.DataPacket;
-import sk.jacob.types.Principal;
+import sk.jacob.types.MessageType;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum SECURITY {
-    CONNECTION,
-    PRINCIPAL,
-    TOKEN;
+public enum MESSAGE {
+    CURRENT;
 
-    private static final String CONTEXT_KEY = "SECURITY_CONTEXT";
+    private static final String CONTEXT_KEY = "MESSAGE_CONTEXT";
 
     public Object get(DataPacket dataPacket) {
         Map<String, Object> bc = dataPacket.CONTEXT.get(CONTEXT_KEY);
@@ -26,11 +24,17 @@ public enum SECURITY {
         bc.put(this.name(), value);
     }
 
-    public static Principal getPrincipal(DataPacket dataPacket) {
-        return (Principal)SECURITY.PRINCIPAL.get(dataPacket);
+    public static MessageType current(DataPacket dataPacket) {
+        return (MessageType)MESSAGE.CURRENT.get(dataPacket);
     }
 
-    public static void setPrincipal(DataPacket dataPacket, Principal principal) {
-        SECURITY.PRINCIPAL.set(dataPacket, principal);
+    public static DataPacket createDataPacket(String rawRequest) {
+        DataPacket dataPacket = new DataPacket();
+        MessageType message;
+        message = new MessageType();
+        message.rawRequest = rawRequest;
+        MESSAGE.CURRENT.set(dataPacket, message);
+        return dataPacket;
     }
+
 }

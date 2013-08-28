@@ -1,5 +1,6 @@
 package sk.jacob.types;
 
+import sk.jacob.common.MESSAGE;
 import sk.jacob.util.locale.MessageResolver;
 
 import java.io.PrintWriter;
@@ -67,19 +68,19 @@ public class Return {
     }
 
     private static MessageType initResponse(DataPacket dataPacket) {
-        MessageType message = dataPacket.message;
+        MessageType message = MESSAGE.current(dataPacket);
         message.response = new ResponseType();
         message.response.resh = new ResponseHeaderType();
         return message;
     }
 
     private static DataPacket FIN(DataPacket dataPacket) {
-        dataPacket.dataPacketStatus = DATAPACKET_STATUS.FIN;
+        dataPacket.status = DATAPACKET_STATUS.FIN;
         return dataPacket;
     }
 
     private static DataPacket AFP(DataPacket dataPacket) {
-        dataPacket.dataPacketStatus = DATAPACKET_STATUS.AFP;
+        dataPacket.status = DATAPACKET_STATUS.AFP;
         return dataPacket;
     }
 }
