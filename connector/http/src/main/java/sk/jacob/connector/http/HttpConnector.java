@@ -12,7 +12,7 @@ import sk.jacob.engine.Connector;
 
 import java.util.Properties;
 
-public class Jetty implements Connector {
+public class HttpConnector implements Connector {
     private final String httpPortContextPath;
     private final int httpPortPort;
 
@@ -25,14 +25,14 @@ public class Jetty implements Connector {
 
     private static final String GUI_CONTEXT_PATH = "/ui";
 
-    public Jetty(Properties config) {
+    public HttpConnector(Properties config) {
         this(config.getProperty("http_port.context_path"),
              Integer.valueOf(config.getProperty("http_port.port")),
              config.getProperty("gui.root_path"),
              config.getProperty("gui.name"));
     }
 
-    public Jetty(String httpPortContextPath, int httpPortPort, String guiRootPath, String guiName) {
+    public HttpConnector(String httpPortContextPath, int httpPortPort, String guiRootPath, String guiName) {
         this.httpPortContextPath = httpPortContextPath;
         this.guiRootPath = guiRootPath;
         this.guiName = guiName;
@@ -54,7 +54,7 @@ public class Jetty implements Connector {
     public void start() {
         if (this.connectorInstance != null)
             return;
-        this.connectorInstance = getInstance();
+        this.connectorInstance = getServer();
         try {
             this.connectorInstance.start();
         } catch (Exception e) {
@@ -73,7 +73,7 @@ public class Jetty implements Connector {
         }
     }
 
-    private Server getInstance() {
+    private Server getServer() {
         Server server = new Server(this.httpPortPort);
 
         HandlerList handlers = new HandlerList();

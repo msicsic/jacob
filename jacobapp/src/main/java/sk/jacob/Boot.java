@@ -1,6 +1,6 @@
 package sk.jacob;
 
-import sk.jacob.connector.http.Jetty;
+import sk.jacob.connector.http.HttpConnector;
 import sk.jacob.engine.Bus;
 
 import java.io.FileInputStream;
@@ -12,7 +12,7 @@ public class Boot {
         Properties config = loadConfig(args[0]);
 
         Bus bus = new Bus(new JacobFirmware(config));
-        bus.attach("HTTP_IN_OUT", new Jetty(config));
+        bus.attach(JacobFirmware.APP_PORT, new HttpConnector(config));
         bus.start();
     }
 
