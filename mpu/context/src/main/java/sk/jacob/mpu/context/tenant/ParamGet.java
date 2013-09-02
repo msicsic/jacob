@@ -17,18 +17,18 @@ import static sk.jacob.sql.dml.Op.in;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DataPacket;
-import sk.jacob.types.RequestDataType;
-import sk.jacob.types.ResponseDataType;
+import sk.jacob.types.RequestData;
+import sk.jacob.types.ResponseData;
 import sk.jacob.types.Return;
 
 public class ParamGet {
-    private static class ParamGetReqd extends RequestDataType {
+    private static class ParamGetReqd extends RequestData {
         @Required
         public String tenantId;
         public Set<String> paramNames;
     }
 
-    private static class ParamGetResd extends ResponseDataType {
+    private static class ParamGetResd extends ResponseData {
         @Required
         public Map<String, String> paramValues;
 
@@ -39,8 +39,8 @@ public class ParamGet {
 
     @Message(type = "context.tenant.paramGet",
              version = "1.0",
-             reqd = ParamGet.ParamGetReqd.class,
-             resd = ParamGet.ParamGetResd.class)
+             reqd = ParamGetReqd.class,
+             resd = ParamGetResd.class)
     public static DataPacket handle(DataPacket dataPacket) throws Exception {
         ParamGetReqd requestData = (ParamGetReqd) MESSAGE.current(dataPacket).request.reqd;
 

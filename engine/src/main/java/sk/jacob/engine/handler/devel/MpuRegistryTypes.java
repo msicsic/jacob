@@ -2,8 +2,8 @@ package sk.jacob.engine.handler.devel;
 
 import java.util.Map;
 import sk.jacob.annotation.Required;
-import sk.jacob.types.RequestDataType;
-import sk.jacob.types.ResponseDataType;
+import sk.jacob.types.RequestData;
+import sk.jacob.types.ResponseData;
 
 public class MpuRegistryTypes {
     public static class MpuItem {
@@ -18,11 +18,11 @@ public class MpuRegistryTypes {
         public Map<String, Object> resd;
     }
 
-    public static class MpuListReqd extends RequestDataType {
+    public static class MpuListReqd extends RequestData {
     }
 
     //TODO
-    //public static class MpuListResd extends Set<MpuItem> implements ResponseDataType
-    public static class MpuListResd extends ResponseDataType {
+    //public static class MpuListResd extends Set<MpuItem> implements ResponseData
+    public static class MpuListResd extends ResponseData {
     }
 }

@@ -1,5 +1,5 @@
 package sk.jacob.types;
 
-public abstract class TokenType {
+public abstract class Token {
     public String type;
 }

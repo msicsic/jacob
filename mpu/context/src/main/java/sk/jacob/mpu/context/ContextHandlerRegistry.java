@@ -9,8 +9,8 @@ import sk.jacob.common.MESSAGE;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.types.DataPacket;
-import sk.jacob.types.RequestHeaderType;
-import sk.jacob.types.RequestType;
+import sk.jacob.types.Request;
+import sk.jacob.types.RequestHeader;
 
 public class ContextHandlerRegistry extends HandlerRegistry<Message> {
     public ContextHandlerRegistry(List<Class> messageHandlers) {
@@ -31,9 +31,9 @@ public class ContextHandlerRegistry extends HandlerRegistry<Message> {
     protected void deserializeMessageElement(DataPacket dataPacket, Annotation annotation) {
         Message message = (Message) annotation;
         JsonObject jsonRequest = MESSAGE.current(dataPacket).jsonRequest;
-        RequestType request = new RequestType();
+        Request request = new Request();
 
-        request.reqh = new Gson().fromJson(jsonRequest.get("reqh"), RequestHeaderType.class);
+        request.reqh = new Gson().fromJson(jsonRequest.get("reqh"), RequestHeader.class);
         request.reqd = new Gson().fromJson(jsonRequest.get("reqd"), message.reqd());
 
         MESSAGE.current(dataPacket).request = request;

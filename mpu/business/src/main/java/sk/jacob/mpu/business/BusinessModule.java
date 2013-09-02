@@ -12,7 +12,6 @@ public class BusinessModule implements Module {
 
     static {
         HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.business.settings.Init.HANDLERS));
-        HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.business.devel.Init.HANDLERS));
     }
 
     @Override

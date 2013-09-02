@@ -1,6 +1,6 @@
 package sk.jacob.types;
 
-public class ResponseHeaderType {
+public class ResponseHeader {
     public String messageId;
     public String status;
 }

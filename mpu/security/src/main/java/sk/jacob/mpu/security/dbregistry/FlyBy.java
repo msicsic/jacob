@@ -1,7 +1,6 @@
 package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.common.SECURITY;
-import sk.jacob.engine.handler.Token;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.SqlClause;
@@ -10,9 +9,7 @@ import sk.jacob.sql.engine.JacobResultSet;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.Principal;
 import sk.jacob.types.Return;
-import sk.jacob.types.TokenType;
-
-import java.sql.ResultSet;
+import sk.jacob.types.Token;
 
 import static sk.jacob.sql.dml.DML.select;
 import static sk.jacob.sql.dml.Op.and;
@@ -20,11 +17,11 @@ import static sk.jacob.sql.dml.Op.eq;
 import static sk.jacob.util.Security.md5String;
 
 public class FlyBy {
-    private static class FlyByToken extends TokenType {
+    private static class FlyByToken extends Token {
         public String value;
     }
 
-    @Token(type="security.flyby.token",
+    @sk.jacob.engine.handler.Token(type="security.flyby.token",
            token=FlyByToken.class)
     public static DataPacket flyByToken(DataPacket dataPacket) throws Exception {
         FlyByToken token = (FlyByToken) SECURITY.TOKEN.get(dataPacket);
@@ -49,12 +46,12 @@ public class FlyBy {
         return dataPacket;
     }
 
-    private static class FlyByLoginPassword extends TokenType {
+    private static class FlyByLoginPassword extends Token {
         public String login;
         public String password;
     }
 
-    @Token(type="security.flyby.login.password",
+    @sk.jacob.engine.handler.Token(type="security.flyby.login.password",
            token=FlyByLoginPassword.class)
     public static DataPacket flyByLoginPassword(DataPacket dataPacket) throws Exception {
         FlyByLoginPassword token = (FlyByLoginPassword)  SECURITY.TOKEN.get(dataPacket);

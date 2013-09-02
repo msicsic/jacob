@@ -8,8 +8,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import sk.jacob.annotation.Required;
 import sk.jacob.types.DataPacket;
-import sk.jacob.types.RequestDataType;
-import sk.jacob.types.ResponseDataType;
+import sk.jacob.types.RequestData;
+import sk.jacob.types.ResponseData;
 
 // FIXME:
 public class HandlerRegistryTest {
@@ -20,7 +20,7 @@ public class HandlerRegistryTest {
             String email;
         }
 
-        static abstract class ReqSuper extends RequestDataType {
+        static abstract class ReqSuper extends RequestData {
             @Required
             Long start;
             @Required
@@ -33,7 +33,7 @@ public class HandlerRegistryTest {
             String login;
         }
 
-        static class Res extends ResponseDataType {
+        static class Res extends ResponseData {
             Integer totalCount;
             List<User> users;
         }

@@ -13,19 +13,19 @@ import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.JacobResultSet;
 import sk.jacob.types.DataPacket;
-import sk.jacob.types.RequestDataType;
-import sk.jacob.types.ResponseDataType;
+import sk.jacob.types.RequestData;
+import sk.jacob.types.ResponseData;
 import sk.jacob.types.Return;
 import static sk.jacob.sql.dml.Op.eq;
 import static sk.jacob.sql.dml.DML.select;
 
 public class FindByLogin {
-    private static class FindByLoginReqd extends RequestDataType {
+    private static class FindByLoginReqd extends RequestData {
         @Required
         public String login;
     }
 
-    private static class FindByLoginResd extends ResponseDataType {
+    private static class FindByLoginResd extends ResponseData {
         public static class TenantResponse {
             @Required
             public String tenantId;

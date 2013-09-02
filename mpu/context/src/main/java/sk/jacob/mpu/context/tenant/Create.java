@@ -12,21 +12,21 @@ import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.JacobResultSet;
 import sk.jacob.types.DataPacket;
 import sk.jacob.types.Principal;
-import sk.jacob.types.RequestDataType;
-import sk.jacob.types.ResponseDataType;
+import sk.jacob.types.RequestData;
+import sk.jacob.types.ResponseData;
 
 import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.dml.DML.cv;
 import static sk.jacob.sql.dml.Op.eq;
 
 public class Create {
-    private static class CreateTenantReqd extends RequestDataType {
+    private static class CreateTenantReqd extends RequestData {
         @Required
         public String name;
         public Map<String, String> params;
     }
 
-    private static class CreateTenantResd extends ResponseDataType {
+    private static class CreateTenantResd extends ResponseData {
         @Required
         public String tenantId;
         @Required

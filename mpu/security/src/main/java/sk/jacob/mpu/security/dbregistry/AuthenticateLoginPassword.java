@@ -1,7 +1,6 @@
 package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.common.SECURITY;
-import sk.jacob.engine.handler.Token;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.DMLClause;
@@ -9,9 +8,9 @@ import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.JacobResultSet;
 import sk.jacob.types.DataPacket;
-import sk.jacob.types.ResponseDataType;
+import sk.jacob.types.ResponseData;
 import sk.jacob.types.Return;
-import sk.jacob.types.TokenType;
+import sk.jacob.types.Token;
 
 import static sk.jacob.sql.dml.DML.cv;
 import static sk.jacob.sql.dml.DML.select;
@@ -22,12 +21,12 @@ import static sk.jacob.util.Security.uniqueToken;
 import static sk.jacob.util.Security.md5String;
 
 public class AuthenticateLoginPassword {
-    private static class AuthLogPassToken extends TokenType {
+    private static class AuthLogPassToken extends Token {
         public String login;
         public String password;
     }
 
-    private static class AuthLogPassResd extends ResponseDataType {
+    private static class AuthLogPassResd extends ResponseData {
         public static class Principal{
             public String login;
             public String username;
@@ -37,7 +36,7 @@ public class AuthenticateLoginPassword {
         public Principal principal = new Principal();
     }
 
-    @Token(type="security.authenticate.login.password",
+    @sk.jacob.engine.handler.Token(type="security.authenticate.login.password",
            token=AuthLogPassToken.class,
            resd=AuthLogPassResd.class)
     public static DataPacket authenticateLoginPassword(DataPacket dataPacket) throws Exception {
@@ -69,11 +68,11 @@ public class AuthenticateLoginPassword {
         return Return.RESPONSE(resd, dataPacket);
     }
 
-    private static class InvalidateToken extends TokenType {
+    private static class InvalidateToken extends Token {
         public String value;
     }
 
-    @Token(type="security.invalidate.token",
+    @sk.jacob.engine.handler.Token(type="security.invalidate.token",
            token=InvalidateToken.class)
     public static DataPacket invalidateToken(DataPacket dataPacket) throws Exception {
         InvalidateToken token = (InvalidateToken) SECURITY.TOKEN.get(dataPacket);

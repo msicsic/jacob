@@ -1,8 +1,7 @@
 package sk.jacob.engine.handler;
 
-import sk.jacob.engine.handler.devel.NoneResponseDataType;
-import sk.jacob.types.ResponseDataType;
-import sk.jacob.types.TokenType;
+import sk.jacob.engine.handler.devel.NoneResponseData;
+import sk.jacob.types.ResponseData;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,6 +12,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface Token {
     String type();
-    Class<? extends TokenType> token();
-    Class<? extends ResponseDataType> resd() default NoneResponseDataType.class;
+    Class<? extends sk.jacob.types.Token> token();
+    Class<? extends ResponseData> resd() default NoneResponseData.class;
 }

@@ -6,8 +6,8 @@ import com.google.gson.JsonParser;
 import sk.jacob.common.MESSAGE;
 import sk.jacob.engine.Module;
 import sk.jacob.types.DataPacket;
-import sk.jacob.types.RequestHeaderType;
-import sk.jacob.types.RequestType;
+import sk.jacob.types.Request;
+import sk.jacob.types.RequestHeader;
 
 public class DataPacketDeserializer implements Module {
     private static final JsonParser JSON_PARSER = new JsonParser();
@@ -17,9 +17,9 @@ public class DataPacketDeserializer implements Module {
     public DataPacket handle(DataPacket dataPacket) {
         MESSAGE.current(dataPacket).jsonRequest =
                 JSON_PARSER.parse(MESSAGE.current(dataPacket).rawRequest).getAsJsonObject();
-        MESSAGE.current(dataPacket).request = new RequestType();
+        MESSAGE.current(dataPacket).request = new Request();
         MESSAGE.current(dataPacket).request.reqh =
-                GSON.fromJson(getRequestHeader(dataPacket), RequestHeaderType.class);
+                GSON.fromJson(getRequestHeader(dataPacket), RequestHeader.class);
         return dataPacket;
     }
 

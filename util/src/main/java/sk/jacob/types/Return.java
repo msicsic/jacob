@@ -25,7 +25,7 @@ public class Return {
 
         try {
             stackTrace = stackToString(throwable);
-        } catch (Exception e) {
+        } catch (java.lang.Exception e) {
             stackTrace = exceptionCode;
         }
         return EXCEPTION(exceptionCode, stackTrace, dataPacket);
@@ -40,7 +40,7 @@ public class Return {
         MessageType message = initResponse(dataPacket);
         message.response.resh.status = MESSAGE_STATUS.INT.name();
 
-        ExceptionType exception = new ExceptionType();
+        Exception exception = new Exception();
         message.response.resd = exception;
         exception.reason = reason;
         exception.code = code;
@@ -54,7 +54,7 @@ public class Return {
         return stringWriter.toString();
     }
 
-    public static DataPacket RESPONSE(ResponseDataType responseData, DataPacket dataPacket) {
+    public static DataPacket RESPONSE(ResponseData responseData, DataPacket dataPacket) {
         dataPacket = FIN(dataPacket);
         MessageType message = initResponse(dataPacket);
         message.response.resh.status = MESSAGE_STATUS.OK.name();
@@ -64,13 +64,13 @@ public class Return {
     }
 
     public static DataPacket EMPTY_RESPONSE(DataPacket dataPacket) {
-        return RESPONSE(new ResponseDataType(){}, dataPacket);
+        return RESPONSE(new ResponseData(){}, dataPacket);
     }
 
     private static MessageType initResponse(DataPacket dataPacket) {
         MessageType message = MESSAGE.current(dataPacket);
-        message.response = new ResponseType();
-        message.response.resh = new ResponseHeaderType();
+        message.response = new Response();
+        message.response.resh = new ResponseHeader();
         return message;
     }
 

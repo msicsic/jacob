@@ -24,7 +24,6 @@ public class ContextModule implements Module {
 
     static {
         HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.context.tenant.Init.HANDLERS));
-        HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.context.devel.Init.HANDLERS));
     }
 
     private final HandlerRegistry<Message> handlerRegistry;
