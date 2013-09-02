@@ -1,7 +1,7 @@
 package sk.jacob.engine;
 
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 
 public interface Firmware {
-    DataPacket handle(String portId, DataPacket dataPacket);
+    ExecutionContext handle(String portId, ExecutionContext executionContext);
 }

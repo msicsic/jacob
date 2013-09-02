@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.Test;
 import sk.jacob.common.MESSAGE;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.mpu.business.BusinessModule;
 
 public class MpuListTest {
@@ -14,8 +14,8 @@ public class MpuListTest {
 
     @Test
     public void testMpuList() {
-        DataPacket dataPacket =  MESSAGE.createDataPacket("{type: 'devel.mpuList', version: '0.1'}");
-        dataPacket = module.handle(dataPacket);
-        System.out.println(gson.toJson(MESSAGE.current(dataPacket).response));
+        ExecutionContext executionContext =  MESSAGE.createDataPacket("{type: 'devel.mpuList', version: '0.1'}");
+        executionContext = module.handle(executionContext);
+        System.out.println(gson.toJson(MESSAGE.current(executionContext).response));
     }
 }

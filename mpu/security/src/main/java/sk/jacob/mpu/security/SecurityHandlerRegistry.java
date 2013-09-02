@@ -6,7 +6,7 @@ import sk.jacob.common.MESSAGE;
 import sk.jacob.common.SECURITY;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.Token;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -24,20 +24,20 @@ public class SecurityHandlerRegistry extends HandlerRegistry<Token> {
     }
 
     @Override
-    protected String getMessageType(DataPacket dataPacket) {
-        JsonObject securityElement = getSecurityElement(dataPacket);
+    protected String getMessageType(ExecutionContext executionContext) {
+        JsonObject securityElement = getSecurityElement(executionContext);
         return securityElement.get("type").getAsString();
     }
 
     @Override
-    protected void deserializeMessageElement(DataPacket dataPacket, Annotation annotation) {
-        JsonObject securityElement = getSecurityElement(dataPacket);
+    protected void deserializeMessageElement(ExecutionContext executionContext, Annotation annotation) {
+        JsonObject securityElement = getSecurityElement(executionContext);
         Token token = (Token)annotation;
-        SECURITY.TOKEN.set(dataPacket, GSON.fromJson(securityElement, token.token()));
+        SECURITY.TOKEN.set(executionContext, GSON.fromJson(securityElement, token.token()));
     }
 
-    private static JsonObject getSecurityElement(DataPacket dataPacket) {
-        JsonObject jsonRequest = MESSAGE.current(dataPacket).jsonRequest;
+    private static JsonObject getSecurityElement(ExecutionContext executionContext) {
+        JsonObject jsonRequest = MESSAGE.current(executionContext).jsonRequest;
         JsonObject reqh = jsonRequest.get("reqh").getAsJsonObject();
         return reqh.get("security").getAsJsonObject();
     }

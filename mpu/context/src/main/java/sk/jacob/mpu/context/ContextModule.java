@@ -11,7 +11,7 @@ import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.Message;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DATAPACKET_STATUS;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.engine.DbEngine;
 import sk.jacob.types.Return;
@@ -38,13 +38,13 @@ public class ContextModule implements Module {
     }
 
     @Override
-    public DataPacket handle(DataPacket dataPacket) {
-        if (dataPacket.status == DATAPACKET_STATUS.FIN)
-            return dataPacket;
+    public ExecutionContext handle(ExecutionContext executionContext) {
+        if (executionContext.status == DATAPACKET_STATUS.FIN)
+            return executionContext;
 
         Connection conn = this.dbEngine.getConnection();
-        CONTEXT.CONNECTION.set(dataPacket, conn);
-        CONTEXT.LDS_BDS.set(dataPacket, new HashMap<CONFIG, String>() {{
+        CONTEXT.CONNECTION.set(executionContext, conn);
+        CONTEXT.LDS_BDS.set(executionContext, new HashMap<CONFIG, String>() {{
             put(CONFIG.LDS_BDS_TEMPLATE_URL, CONFIG.LDS_BDS_TEMPLATE_URL.get(config));
             put(CONFIG.LDS_BDS_TEMPLATE_USERNAME, CONFIG.LDS_BDS_TEMPLATE_USERNAME.get(config));
             put(CONFIG.LDS_BDS_TEMPLATE_PASSWORD, CONFIG.LDS_BDS_TEMPLATE_PASSWORD.get(config));
@@ -52,16 +52,16 @@ public class ContextModule implements Module {
 
         try {
             conn.txBegin();
-            dataPacket = this.handlerRegistry.process(dataPacket);
+            executionContext = this.handlerRegistry.process(executionContext);
             conn.txCommit();
         } catch (Exception e) {
             conn.txRollback();
-            dataPacket = Return.EXCEPTION("context.general.context.exception", e, dataPacket);
+            executionContext = Return.EXCEPTION("context.general.context.exception", e, executionContext);
         } finally {
             conn.close();
         }
 
-        return dataPacket;
+        return executionContext;
     }
 
     private void initDatabase() {

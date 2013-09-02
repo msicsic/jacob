@@ -1,7 +1,7 @@
 package sk.jacob.engine;
 
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 
 public interface Module {
-    DataPacket handle(DataPacket dataPacket);
+    ExecutionContext handle(ExecutionContext executionContext);
 }

@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import sk.jacob.common.MESSAGE;
 import sk.jacob.engine.Module;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.Request;
 import sk.jacob.types.RequestHeader;
 
@@ -14,17 +14,17 @@ public class DataPacketDeserializer implements Module {
     private static final Gson GSON = new Gson();
 
     @Override
-    public DataPacket handle(DataPacket dataPacket) {
-        MESSAGE.current(dataPacket).jsonRequest =
-                JSON_PARSER.parse(MESSAGE.current(dataPacket).rawRequest).getAsJsonObject();
-        MESSAGE.current(dataPacket).request = new Request();
-        MESSAGE.current(dataPacket).request.reqh =
-                GSON.fromJson(getRequestHeader(dataPacket), RequestHeader.class);
-        return dataPacket;
+    public ExecutionContext handle(ExecutionContext executionContext) {
+        MESSAGE.current(executionContext).jsonRequest =
+                JSON_PARSER.parse(MESSAGE.current(executionContext).rawRequest).getAsJsonObject();
+        MESSAGE.current(executionContext).request = new Request();
+        MESSAGE.current(executionContext).request.reqh =
+                GSON.fromJson(getRequestHeader(executionContext), RequestHeader.class);
+        return executionContext;
     }
 
-    private JsonObject getRequestHeader(DataPacket dataPacket) {
-        JsonObject jsonRequest = MESSAGE.current(dataPacket).jsonRequest;
+    private JsonObject getRequestHeader(ExecutionContext executionContext) {
+        JsonObject jsonRequest = MESSAGE.current(executionContext).jsonRequest;
         return jsonRequest.get("reqh").getAsJsonObject();
     }
 }

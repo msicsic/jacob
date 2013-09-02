@@ -3,7 +3,7 @@ package sk.jacob;
 import sk.jacob.common.MESSAGE;
 import sk.jacob.engine.Firmware;
 import sk.jacob.engine.Module;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.mpu.business.BusinessModule;
 import sk.jacob.mpu.context.ContextModule;
 import sk.jacob.mpu.security.SecurityModule;
@@ -30,12 +30,12 @@ public class JacobFirmware implements Firmware {
                 new DataPacketSerializer()));
     }
 
-    public DataPacket handle(String portId, DataPacket dataPacket) {
-        logger(this).info(portId + " --->>> " + MESSAGE.current(dataPacket).rawRequest);
+    public ExecutionContext handle(String portId, ExecutionContext executionContext) {
+        logger(this).info(portId + " --->>> " + MESSAGE.current(executionContext).rawRequest);
         for(Module module : paths.get(portId)) {
-            dataPacket = module.handle(dataPacket);
+            executionContext = module.handle(executionContext);
         }
-        logger(this).info(portId + " <<<--- " + MESSAGE.current(dataPacket).rawResponse);
-        return dataPacket;
+        logger(this).info(portId + " <<<--- " + MESSAGE.current(executionContext).rawResponse);
+        return executionContext;
     }
 }

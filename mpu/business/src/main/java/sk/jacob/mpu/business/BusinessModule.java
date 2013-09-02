@@ -1,7 +1,7 @@
 package sk.jacob.mpu.business;
 
 import sk.jacob.engine.Module;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class BusinessModule implements Module {
     }
 
     @Override
-    public DataPacket handle(DataPacket dataPacket) {
-        return dataPacket;
+    public ExecutionContext handle(ExecutionContext executionContext) {
+        return executionContext;
     }
 }

@@ -4,7 +4,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import sk.jacob.common.MESSAGE;
 import sk.jacob.engine.Bus;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class CoreHandler extends AbstractHandler {
     public void handle(String target, Request baseRequest, HttpServletRequest httpServletRequest,
                        HttpServletResponse httpServletResponse) throws IOException, ServletException {
 
-        DataPacket dp = this.bus.send(this.portId, MESSAGE.createDataPacket(httpServletRequest.getParameter("m")));
+        ExecutionContext dp = this.bus.send(this.portId, MESSAGE.createDataPacket(httpServletRequest.getParameter("m")));
 
         httpServletResponse.setContentType("text/html;charset=utf-8");
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);

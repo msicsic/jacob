@@ -1,6 +1,7 @@
 package sk.jacob.engine;
 
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class Bus {
         logger(this).info("Bus started.");
     }
 
-    public DataPacket send(String portId, DataPacket dataPacket) {
-        return firmware.handle(portId, dataPacket);
+    public ExecutionContext send(String portId, ExecutionContext executionContext) {
+        return firmware.handle(portId, executionContext);
     }
 }

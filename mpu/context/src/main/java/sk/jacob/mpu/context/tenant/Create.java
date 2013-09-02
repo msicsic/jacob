@@ -10,7 +10,7 @@ import sk.jacob.mpu.context.model.*;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.JacobResultSet;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.Principal;
 import sk.jacob.types.RequestData;
 import sk.jacob.types.ResponseData;
@@ -37,11 +37,11 @@ public class Create {
              version = "1.0",
              reqd = Create.CreateTenantReqd.class,
              resd = Create.CreateTenantResd.class)
-    public static DataPacket handle(DataPacket dataPacket) throws Exception {
-        CreateTenantReqd requestData = (CreateTenantReqd) MESSAGE.current(dataPacket).request.reqd;
+    public static ExecutionContext handle(ExecutionContext executionContext) throws Exception {
+        CreateTenantReqd requestData = (CreateTenantReqd) MESSAGE.current(executionContext).request.reqd;
         String tenantName = requestData.name;
         String tenantId = tenantName.toUpperCase().replace(" ", "");
-        Connection conn = (Connection) CONTEXT.CONNECTION.get(dataPacket);
+        Connection conn = (Connection) CONTEXT.CONNECTION.get(executionContext);
 
         // 1. Create tenant entry
         Tenants tenants = ContextModel.INSTANCE.table(Tenants.class);
@@ -50,7 +50,7 @@ public class Create {
 
         // 2. Create tenant user association
         UsersTenants usersTenants = ContextModel.INSTANCE.table(UsersTenants.class);
-        Principal principal = SECURITY.getPrincipal(dataPacket);
+        Principal principal = SECURITY.getPrincipal(executionContext);
         conn.execute(insert(usersTenants).values(cv(usersTenants.login, principal.login),
                                                  cv(usersTenants.tenantFk, tenantId)));
 
@@ -81,6 +81,6 @@ public class Create {
                                                   cv(tenantsParams.paramValue, paramValue),
                                                   cv(tenantsParams.scope, ParamScope.PRIVATE .name())));
 
-        return dataPacket;
+        return executionContext;
     }
 }

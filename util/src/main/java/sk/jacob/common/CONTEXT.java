@@ -2,23 +2,23 @@ package sk.jacob.common;
 
 import java.util.HashMap;
 import java.util.Map;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 
 public enum CONTEXT {
     CONNECTION, LDS_BDS;
 
     private static final String CONTEXT_KEY = "BUSSINESS_CONTEXT";
 
-    public Object get(DataPacket dataPacket) {
-        Map<String, Object> bc = dataPacket.CONTEXT.get(CONTEXT_KEY);
+    public Object get(ExecutionContext executionContext) {
+        Map<String, Object> bc = executionContext.CONTEXT.get(CONTEXT_KEY);
         return bc.get(this.name());
     }
 
-    public void set(DataPacket dataPacket, Object value) {
-        if(dataPacket.CONTEXT.containsKey(CONTEXT_KEY) == false) {
-            dataPacket.CONTEXT.put(CONTEXT_KEY, new HashMap<String, Object>());
+    public void set(ExecutionContext executionContext, Object value) {
+        if(executionContext.CONTEXT.containsKey(CONTEXT_KEY) == false) {
+            executionContext.CONTEXT.put(CONTEXT_KEY, new HashMap<String, Object>());
         }
-        Map<String, Object> bc = dataPacket.CONTEXT.get(CONTEXT_KEY);
+        Map<String, Object> bc = executionContext.CONTEXT.get(CONTEXT_KEY);
         bc.put(this.name(), value);
     }
 }

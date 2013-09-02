@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 import sk.jacob.annotation.Required;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.RequestData;
 import sk.jacob.types.ResponseData;
 
@@ -42,8 +42,8 @@ public class HandlerRegistryTest {
                 version = "0.1",
                 reqd = Req.class,
                 resd = Res.class)
-        public static DataPacket method(DataPacket dataPacket) {
-            return dataPacket;
+        public static ExecutionContext method(ExecutionContext executionContext) {
+            return executionContext;
         }
     }
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -54,7 +54,7 @@ public class HandlerRegistryTest {
         TestMpu testMpu = new TestMpu();
 
         Class mpuClass = testMpu.getClass();
-        Method handlerMethod = mpuClass.getMethod("method", DataPacket.class);
+        Method handlerMethod = mpuClass.getMethod("method", ExecutionContext.class);
 
         System.out.println(gson.toJson(HandlerRegistry.serializeMethod(handlerMethod)));
     }

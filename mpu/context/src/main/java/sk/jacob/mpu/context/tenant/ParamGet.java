@@ -16,7 +16,7 @@ import static sk.jacob.sql.dml.Op.and;
 import static sk.jacob.sql.dml.Op.in;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.RequestData;
 import sk.jacob.types.ResponseData;
 import sk.jacob.types.Return;
@@ -41,8 +41,8 @@ public class ParamGet {
              version = "1.0",
              reqd = ParamGetReqd.class,
              resd = ParamGetResd.class)
-    public static DataPacket handle(DataPacket dataPacket) throws Exception {
-        ParamGetReqd requestData = (ParamGetReqd) MESSAGE.current(dataPacket).request.reqd;
+    public static ExecutionContext handle(ExecutionContext executionContext) throws Exception {
+        ParamGetReqd requestData = (ParamGetReqd) MESSAGE.current(executionContext).request.reqd;
 
         TenantsParams tenantsParams = ContextModel.INSTANCE.table(TenantsParams.class);
 
@@ -51,7 +51,7 @@ public class ParamGet {
                 .where(and(eq(tenantsParams.tenantFk, requestData.tenantId),
                            eq(tenantsParams.scope, "public"),
                            in(tenantsParams.paramName, requestData.paramNames)));
-        Connection conn = (Connection) CONTEXT.CONNECTION.get(dataPacket);
+        Connection conn = (Connection) CONTEXT.CONNECTION.get(executionContext);
         ResultSet rs = (ResultSet) conn.execute(s);
 
         Map<String, String> paramValues = new HashMap<>();
@@ -59,6 +59,6 @@ public class ParamGet {
             paramValues.put(rs.getString(tenantsParams.paramName.name), rs.getString(tenantsParams.paramValue.name));
         }
 
-        return Return.RESPONSE(new ParamGetResd(paramValues), dataPacket);
+        return Return.RESPONSE(new ParamGetResd(paramValues), executionContext);
     }
 }

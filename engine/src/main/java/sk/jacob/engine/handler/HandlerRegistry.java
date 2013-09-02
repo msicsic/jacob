@@ -1,7 +1,7 @@
 package sk.jacob.engine.handler;
 
 import sk.jacob.annotation.Required;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -41,22 +41,22 @@ public abstract class HandlerRegistry<T extends Annotation> {
         return mappedHandlers;
     }
 
-    public final DataPacket process(DataPacket dataPacket) {
-        String handlerKey = this.getMessageType(dataPacket);
-        return invokeMethod(handlerKey, dataPacket);
+    public final ExecutionContext process(ExecutionContext executionContext) {
+        String handlerKey = this.getMessageType(executionContext);
+        return invokeMethod(handlerKey, executionContext);
     }
 
-    private DataPacket invokeMethod(String handlerKey, DataPacket dataPacket) {
+    private ExecutionContext invokeMethod(String handlerKey, ExecutionContext executionContext) {
         if (this.handlerMap.containsKey(handlerKey)) {
             try {
                 Method handler = this.handlerMap.get(handlerKey);
-                deserializeMessageElement(dataPacket, handler.getAnnotation(this.supportedAnnotation));
-                dataPacket = (DataPacket) handler.invoke(null, dataPacket);
+                deserializeMessageElement(executionContext, handler.getAnnotation(this.supportedAnnotation));
+                executionContext = (ExecutionContext) handler.invoke(null, executionContext);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
-        return dataPacket;
+        return executionContext;
     }
 
     /**
@@ -69,12 +69,12 @@ public abstract class HandlerRegistry<T extends Annotation> {
      * Gets actual type of message.
      * Message type is then used by framework to lookup handler method.
      */
-    protected abstract String getMessageType(DataPacket dataPacket);
+    protected abstract String getMessageType(ExecutionContext executionContext);
 
     /**
      * Deserializes JSON raw request to corespondent Java object type.
      */
-    protected abstract void deserializeMessageElement(DataPacket dataPacket, Annotation annotation);
+    protected abstract void deserializeMessageElement(ExecutionContext executionContext, Annotation annotation);
 
 // TODO: Bude treba vyfaktorovat.
 //////////////////////////////////////////////////////////////////////////////////

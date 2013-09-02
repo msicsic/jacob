@@ -7,7 +7,7 @@ import sk.jacob.sql.dml.DMLClause;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.JacobResultSet;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.ResponseData;
 import sk.jacob.types.Return;
 import sk.jacob.types.Token;
@@ -39,18 +39,18 @@ public class AuthenticateLoginPassword {
     @sk.jacob.engine.handler.Token(type="security.authenticate.login.password",
            token=AuthLogPassToken.class,
            resd=AuthLogPassResd.class)
-    public static DataPacket authenticateLoginPassword(DataPacket dataPacket) throws Exception {
-        AuthLogPassToken token = (AuthLogPassToken) SECURITY.TOKEN.get(dataPacket);
+    public static ExecutionContext authenticateLoginPassword(ExecutionContext executionContext) throws Exception {
+        AuthLogPassToken token = (AuthLogPassToken) SECURITY.TOKEN.get(executionContext);
 
         Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
                 .from(users)
                 .where(and(eq(users.login, token.login),
                            eq(users.md5pwd, md5String(token.password))));
-        Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
+        Connection conn = (Connection) SECURITY.CONNECTION.get(executionContext);
         JacobResultSet rs = (JacobResultSet)conn.execute(s);
         if(rs.next() == false) {
-            return Return.ERROR("security.invalid.login.password", dataPacket);
+            return Return.ERROR("security.invalid.login.password", executionContext);
         }
 
         String generatedToken = uniqueToken();
@@ -65,7 +65,7 @@ public class AuthenticateLoginPassword {
                                : rs.getString(users.login);
         resd.principal.username = rs.getString(users.username);
 
-        return Return.RESPONSE(resd, dataPacket);
+        return Return.RESPONSE(resd, executionContext);
     }
 
     private static class InvalidateToken extends Token {
@@ -74,16 +74,16 @@ public class AuthenticateLoginPassword {
 
     @sk.jacob.engine.handler.Token(type="security.invalidate.token",
            token=InvalidateToken.class)
-    public static DataPacket invalidateToken(DataPacket dataPacket) throws Exception {
-        InvalidateToken token = (InvalidateToken) SECURITY.TOKEN.get(dataPacket);
+    public static ExecutionContext invalidateToken(ExecutionContext executionContext) throws Exception {
+        InvalidateToken token = (InvalidateToken) SECURITY.TOKEN.get(executionContext);
 
         Users users = SecurityModel.INSTANCE.table(Users.class);
         DMLClause s = update(users)
                 .set(cv(users.token, null))
                 .where(eq(users.token, token.value));
-        Connection conn = (Connection) SECURITY.CONNECTION.get(dataPacket);
+        Connection conn = (Connection) SECURITY.CONNECTION.get(executionContext);
         conn.execute(s);
 
-        return Return.EMPTY_RESPONSE(dataPacket);
+        return Return.EMPTY_RESPONSE(executionContext);
     }
 }

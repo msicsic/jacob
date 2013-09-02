@@ -10,7 +10,7 @@ import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.sql.engine.DbEngine;
 import sk.jacob.types.Return;
@@ -45,22 +45,22 @@ public class SecurityModule implements Module {
     }
 
     @Override
-    public DataPacket handle(DataPacket dataPacket) {
+    public ExecutionContext handle(ExecutionContext executionContext) {
         Connection conn = this.dbEngine.getConnection();
-        SECURITY.CONNECTION.set(dataPacket, conn);
+        SECURITY.CONNECTION.set(executionContext, conn);
         try {
             conn.txBegin();
-            dataPacket = this.handlerRegistry.process(dataPacket);
+            executionContext = this.handlerRegistry.process(executionContext);
             conn.txCommit();
         } catch (Exception e){
             String errorCode = "security.general.token.exception";
             logger(this).error(errorCode, e);
             conn.txRollback();
-            dataPacket = Return.EXCEPTION(errorCode, e, dataPacket);
+            executionContext = Return.EXCEPTION(errorCode, e, executionContext);
         } finally {
             conn.close();
         }
-        return dataPacket;
+        return executionContext;
     }
 
     private void initDatabase(String adminLogin, String adminMd5Pwd) {

@@ -1,10 +1,10 @@
 package sk.jacob.engine;
 
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 
 public class EngineConfig implements Module {
     @Override
-    public DataPacket handle(DataPacket dataPacket) {
-        return dataPacket;
+    public ExecutionContext handle(ExecutionContext executionContext) {
+        return executionContext;
     }
 }

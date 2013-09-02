@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import sk.jacob.common.MESSAGE;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.Message;
-import sk.jacob.types.DataPacket;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.Request;
 import sk.jacob.types.RequestHeader;
 
@@ -23,19 +23,19 @@ public class ContextHandlerRegistry extends HandlerRegistry<Message> {
     }
 
     @Override
-    protected String getMessageType(DataPacket dataPacket) {
-        return MESSAGE.current(dataPacket).request.reqh.type;
+    protected String getMessageType(ExecutionContext executionContext) {
+        return MESSAGE.current(executionContext).request.reqh.type;
     }
 
     @Override
-    protected void deserializeMessageElement(DataPacket dataPacket, Annotation annotation) {
+    protected void deserializeMessageElement(ExecutionContext executionContext, Annotation annotation) {
         Message message = (Message) annotation;
-        JsonObject jsonRequest = MESSAGE.current(dataPacket).jsonRequest;
+        JsonObject jsonRequest = MESSAGE.current(executionContext).jsonRequest;
         Request request = new Request();
 
         request.reqh = new Gson().fromJson(jsonRequest.get("reqh"), RequestHeader.class);
         request.reqd = new Gson().fromJson(jsonRequest.get("reqd"), message.reqd());
 
-        MESSAGE.current(dataPacket).request = request;
+        MESSAGE.current(executionContext).request = request;
     }
 }
