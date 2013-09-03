@@ -67,7 +67,7 @@ public abstract class HandlerRegistry<T extends Annotation> {
 
     /**
      * Gets actual type of message.
-     * Message type is then used by framework to lookup handler method.
+     * Signature type is then used by framework to lookup handler method.
      */
     protected abstract String getMessageType(ExecutionContext executionContext);
 
@@ -96,7 +96,7 @@ public abstract class HandlerRegistry<T extends Annotation> {
 
     public static Map<String, Object> serializeMethod(Method method) {
         Map<String, Object> handlerMap = new HashMap<>();
-        Message messageAnnotation = method.getAnnotation(Message.class);
+        Signature messageAnnotation = method.getAnnotation(Signature.class);
 
         handlerMap.put("id", messageAnnotation.type());
         handlerMap.put("version", messageAnnotation.version());

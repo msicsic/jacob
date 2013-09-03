@@ -37,7 +37,7 @@ public class Return {
 
     private static ExecutionContext ERROR_AND_EXCEPTION(String reason, String code, String text, ExecutionContext executionContext) {
         executionContext = FIN(executionContext);
-        MessageType message = initResponse(executionContext);
+        Message message = initResponse(executionContext);
         message.response.resh.status = MESSAGE_STATUS.INT.name();
 
         Exception exception = new Exception();
@@ -56,7 +56,7 @@ public class Return {
 
     public static ExecutionContext RESPONSE(ResponseData responseData, ExecutionContext executionContext) {
         executionContext = FIN(executionContext);
-        MessageType message = initResponse(executionContext);
+        Message message = initResponse(executionContext);
         message.response.resh.status = MESSAGE_STATUS.OK.name();
         message.response.resh.messageId = message.request.reqh.messageId;
         message.response.resd = responseData;
@@ -67,8 +67,8 @@ public class Return {
         return RESPONSE(new ResponseData(){}, executionContext);
     }
 
-    private static MessageType initResponse(ExecutionContext executionContext) {
-        MessageType message = MESSAGE.current(executionContext);
+    private static Message initResponse(ExecutionContext executionContext) {
+        Message message = MESSAGE.current(executionContext);
         message.response = new Response();
         message.response.resh = new ResponseHeader();
         return message;

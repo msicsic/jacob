@@ -1,6 +1,7 @@
 package sk.jacob.mpu.context;
 
 import sk.jacob.common.CONFIG;
+import sk.jacob.engine.handler.Signature;
 import sk.jacob.mpu.context.model.ContextModel;
 
 import java.util.*;
@@ -8,7 +9,6 @@ import java.util.*;
 import sk.jacob.common.CONTEXT;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerRegistry;
-import sk.jacob.engine.handler.Message;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.DATAPACKET_STATUS;
 import sk.jacob.types.ExecutionContext;
@@ -26,7 +26,7 @@ public class ContextModule implements Module {
         HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.context.tenant.Init.HANDLERS));
     }
 
-    private final HandlerRegistry<Message> handlerRegistry;
+    private final HandlerRegistry<Signature> handlerRegistry;
 
     public ContextModule(Properties config) {
         this.config = config;

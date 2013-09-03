@@ -7,18 +7,18 @@ import java.util.List;
 import com.google.gson.JsonObject;
 import sk.jacob.common.MESSAGE;
 import sk.jacob.engine.handler.HandlerRegistry;
-import sk.jacob.engine.handler.Message;
+import sk.jacob.engine.handler.Signature;
 import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.Request;
 import sk.jacob.types.RequestHeader;
 
-public class ContextHandlerRegistry extends HandlerRegistry<Message> {
+public class ContextHandlerRegistry extends HandlerRegistry<Signature> {
     public ContextHandlerRegistry(List<Class> messageHandlers) {
-        super(Message.class, messageHandlers);
+        super(Signature.class, messageHandlers);
     }
 
     @Override
-    protected String getHandlerKey(Message annotation) {
+    protected String getHandlerKey(Signature annotation) {
         return annotation.type();
     }
 
@@ -29,7 +29,7 @@ public class ContextHandlerRegistry extends HandlerRegistry<Message> {
 
     @Override
     protected void deserializeMessageElement(ExecutionContext executionContext, Annotation annotation) {
-        Message message = (Message) annotation;
+        Signature message = (Signature) annotation;
         JsonObject jsonRequest = MESSAGE.current(executionContext).jsonRequest;
         Request request = new Request();
 

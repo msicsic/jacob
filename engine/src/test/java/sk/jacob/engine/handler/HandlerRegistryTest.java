@@ -38,7 +38,7 @@ public class HandlerRegistryTest {
             List<User> users;
         }
 
-        @Message(type = "test",
+        @Signature(type = "test",
                 version = "0.1",
                 reqd = Req.class,
                 resd = Res.class)

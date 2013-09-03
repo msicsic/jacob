@@ -5,7 +5,7 @@ import java.util.List;
 import sk.jacob.annotation.Required;
 import sk.jacob.common.CONTEXT;
 import sk.jacob.common.MESSAGE;
-import sk.jacob.engine.handler.Message;
+import sk.jacob.engine.handler.Signature;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.Tenants;
 import sk.jacob.mpu.context.model.UsersTenants;
@@ -48,7 +48,7 @@ public class FindByLogin {
         }
     }
 
-    @Message(type = "context.tenant.findByLogin",
+    @Signature(type = "context.tenant.findByLogin",
              version = "1.0",
              reqd = FindByLoginReqd.class,
              resd = FindByLoginResd.class)

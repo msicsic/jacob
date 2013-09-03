@@ -1,7 +1,7 @@
 package sk.jacob.mpu.business.settings;
 
 import sk.jacob.common.MESSAGE;
-import sk.jacob.engine.handler.Message;
+import sk.jacob.engine.handler.Signature;
 import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.RequestData;
 import sk.jacob.types.ResponseData;
@@ -20,7 +20,7 @@ public class Uom {
     public class Res1 extends ResponseData {
     }
 
-    @Message(type="business.uom.add",
+    @Signature(type="business.uom.add",
              version="0.1",
              reqd=Req1.class,
              resd=Res1.class)
@@ -32,7 +32,7 @@ public class Uom {
         return executionContext;
     }
 
-    @Message(type="business.uom.add",
+    @Signature(type="business.uom.add",
              version="0.2",
              reqd=Req1.class,
              resd=Res1.class)

@@ -7,7 +7,7 @@ import java.util.Set;
 import sk.jacob.annotation.Required;
 import sk.jacob.common.CONTEXT;
 import sk.jacob.common.MESSAGE;
-import sk.jacob.engine.handler.Message;
+import sk.jacob.engine.handler.Signature;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.TenantsParams;
 import static sk.jacob.sql.dml.DML.select;
@@ -37,7 +37,7 @@ public class ParamGet {
         }
     }
 
-    @Message(type = "context.tenant.paramGet",
+    @Signature(type = "context.tenant.paramGet",
              version = "1.0",
              reqd = ParamGetReqd.class,
              resd = ParamGetResd.class)

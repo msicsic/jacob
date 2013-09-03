@@ -5,7 +5,7 @@ import sk.jacob.annotation.Required;
 import sk.jacob.common.CONTEXT;
 import sk.jacob.common.MESSAGE;
 import sk.jacob.common.SECURITY;
-import sk.jacob.engine.handler.Message;
+import sk.jacob.engine.handler.Signature;
 import sk.jacob.mpu.context.model.*;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
@@ -33,7 +33,7 @@ public class Create {
         public String tenantName;
     }
 
-    @Message(type = "context.tenant.create",
+    @Signature(type = "context.tenant.create",
              version = "1.0",
              reqd = Create.CreateTenantReqd.class,
              resd = Create.CreateTenantResd.class)

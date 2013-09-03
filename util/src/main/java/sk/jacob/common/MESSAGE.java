@@ -1,7 +1,7 @@
 package sk.jacob.common;
 
 import sk.jacob.types.ExecutionContext;
-import sk.jacob.types.MessageType;
+import sk.jacob.types.Message;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,14 +24,14 @@ public enum MESSAGE {
         bc.put(this.name(), value);
     }
 
-    public static MessageType current(ExecutionContext executionContext) {
-        return (MessageType)MESSAGE.CURRENT.get(executionContext);
+    public static Message current(ExecutionContext executionContext) {
+        return (Message)MESSAGE.CURRENT.get(executionContext);
     }
 
     public static ExecutionContext createDataPacket(String rawRequest) {
         ExecutionContext executionContext = new ExecutionContext();
-        MessageType message;
-        message = new MessageType();
+        Message message;
+        message = new Message();
         message.rawRequest = rawRequest;
         MESSAGE.CURRENT.set(executionContext, message);
         return executionContext;
