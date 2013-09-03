@@ -4,7 +4,7 @@ import sk.jacob.accessor.CONFIG;
 import sk.jacob.accessor.SECURITY;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerRegistry;
-import sk.jacob.engine.handler.Token;
+import sk.jacob.engine.handler.TokenTypes;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.Metadata;
@@ -27,7 +27,7 @@ import static sk.jacob.util.Log.logger;
 
 public class SecurityModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();
-    private final HandlerRegistry<Token> handlerRegistry;
+    private final HandlerRegistry<TokenTypes> handlerRegistry;
     private final DbEngine dbEngine;
     private final Metadata MODEL = SecurityModel.INSTANCE.METADATA;
 

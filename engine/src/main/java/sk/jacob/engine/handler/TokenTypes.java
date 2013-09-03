@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface Token {
+public @interface TokenTypes {
     String type();
     Class<? extends sk.jacob.types.Token> token();
     Class<? extends ResponseData> resd() default NoneResponseData.class;

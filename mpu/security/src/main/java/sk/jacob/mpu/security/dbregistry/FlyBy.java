@@ -1,6 +1,7 @@
 package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.accessor.SECURITY;
+import sk.jacob.engine.handler.TokenTypes;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.SqlClause;
@@ -21,7 +22,7 @@ public class FlyBy {
         public String value;
     }
 
-    @sk.jacob.engine.handler.Token(type="security.flyby.token",
+    @TokenTypes(type="security.flyby.token",
            token=FlyByToken.class)
     public static ExecutionContext flyByToken(ExecutionContext ec) throws Exception {
         FlyByToken token = (FlyByToken) SECURITY.TOKEN.get(ec);
@@ -51,7 +52,7 @@ public class FlyBy {
         public String password;
     }
 
-    @sk.jacob.engine.handler.Token(type="security.flyby.login.password",
+    @TokenTypes(type="security.flyby.login.password",
            token=FlyByLoginPassword.class)
     public static ExecutionContext flyByLoginPassword(ExecutionContext ec) throws Exception {
         FlyByLoginPassword token = (FlyByLoginPassword)  SECURITY.TOKEN.get(ec);

@@ -1,6 +1,7 @@
 package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.accessor.SECURITY;
+import sk.jacob.engine.handler.TokenTypes;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.DMLClause;
@@ -36,7 +37,7 @@ public class AuthenticateLoginPassword {
         public Principal principal = new Principal();
     }
 
-    @sk.jacob.engine.handler.Token(type="security.authenticate.login.password",
+    @TokenTypes(type="security.authenticate.login.password",
            token=AuthLogPassToken.class,
            resd=AuthLogPassResd.class)
     public static ExecutionContext authenticateLoginPassword(ExecutionContext ec) throws Exception {
@@ -72,7 +73,7 @@ public class AuthenticateLoginPassword {
         public String value;
     }
 
-    @sk.jacob.engine.handler.Token(type="security.invalidate.token",
+    @TokenTypes(type="security.invalidate.token",
            token=InvalidateToken.class)
     public static ExecutionContext invalidateToken(ExecutionContext ec) throws Exception {
         InvalidateToken token = (InvalidateToken) SECURITY.TOKEN.get(ec);

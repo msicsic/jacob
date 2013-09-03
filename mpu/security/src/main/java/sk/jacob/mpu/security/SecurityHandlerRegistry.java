@@ -5,21 +5,21 @@ import com.google.gson.JsonObject;
 import sk.jacob.accessor.COMMON;
 import sk.jacob.accessor.SECURITY;
 import sk.jacob.engine.handler.HandlerRegistry;
-import sk.jacob.engine.handler.Token;
+import sk.jacob.engine.handler.TokenTypes;
 import sk.jacob.types.ExecutionContext;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-public class SecurityHandlerRegistry extends HandlerRegistry<Token> {
+public class SecurityHandlerRegistry extends HandlerRegistry<TokenTypes> {
     private static final Gson GSON = new Gson();
 
     public SecurityHandlerRegistry(List<Class> messageHandlers) {
-        super(Token.class, messageHandlers);
+        super(TokenTypes.class, messageHandlers);
     }
 
     @Override
-    protected String getHandlerKey(Token annotation) {
+    protected String getHandlerKey(TokenTypes annotation) {
         return annotation.type();
     }
 
@@ -32,8 +32,8 @@ public class SecurityHandlerRegistry extends HandlerRegistry<Token> {
     @Override
     protected void deserializeMessageElement(ExecutionContext ec, Annotation annotation) {
         JsonObject securityElement = getSecurityElement(ec);
-        Token token = (Token)annotation;
-        SECURITY.TOKEN.set(ec, GSON.fromJson(securityElement, token.token()));
+        TokenTypes tokenTypes = (TokenTypes)annotation;
+        SECURITY.TOKEN.set(ec, GSON.fromJson(securityElement, tokenTypes.token()));
     }
 
     private static JsonObject getSecurityElement(ExecutionContext ec) {
