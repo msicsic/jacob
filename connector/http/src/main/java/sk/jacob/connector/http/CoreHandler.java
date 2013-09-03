@@ -31,6 +31,6 @@ public class CoreHandler extends AbstractHandler {
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
 
-        httpServletResponse.getWriter().println(MESSAGE.current(dp).rawResponse);
+        httpServletResponse.getWriter().println(MESSAGE.get(dp).rawResponse);
     }
 }

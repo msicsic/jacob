@@ -5,7 +5,7 @@ import java.util.List;
 import sk.jacob.annotation.Required;
 import sk.jacob.common.CONTEXT;
 import sk.jacob.common.MESSAGE;
-import sk.jacob.engine.handler.Signature;
+import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.Tenants;
 import sk.jacob.mpu.context.model.UsersTenants;
@@ -48,12 +48,12 @@ public class FindByLogin {
         }
     }
 
-    @Signature(type = "context.tenant.findByLogin",
-             version = "1.0",
-             reqd = FindByLoginReqd.class,
-             resd = FindByLoginResd.class)
-    public static ExecutionContext handle(ExecutionContext executionContext) throws Exception {
-        FindByLoginReqd requestData = (FindByLoginReqd) MESSAGE.current(executionContext).request.reqd;
+    @DataTypes(type = "context.tenant.findByLogin",
+               version = "1.0",
+               request = FindByLoginReqd.class,
+               response = FindByLoginResd.class)
+    public static ExecutionContext handle(ExecutionContext ec) throws Exception {
+        FindByLoginReqd requestData = (FindByLoginReqd) MESSAGE.get(ec).request.reqd;
 
         Tenants tenants = ContextModel.INSTANCE.table(Tenants.class);
         UsersTenants usersTenants = ContextModel.INSTANCE.table(UsersTenants.class);
@@ -62,7 +62,7 @@ public class FindByLogin {
                 .from(tenants)
                 .join(usersTenants, eq(tenants.id, usersTenants.tenantFk))
                 .where(eq(usersTenants.login, requestData.login));
-        Connection conn = (Connection) CONTEXT.CONNECTION.get(executionContext);
+        Connection conn = (Connection) CONTEXT.CONNECTION.get(ec);
         JacobResultSet rs = (JacobResultSet) conn.execute(s);
 
         List<FindByLoginResd.TenantResponse> responseTenants = new LinkedList<>();
@@ -73,6 +73,6 @@ public class FindByLogin {
                             rs.getString(tenants.name)));
         }
 
-        return Return.RESPONSE(new FindByLoginResd(requestData.login, responseTenants), executionContext);
+        return Return.RESPONSE(new FindByLoginResd(requestData.login, responseTenants), ec);
     }
 }

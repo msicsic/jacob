@@ -8,6 +8,5 @@ public class Message {
     public String rawResponse;
     public Request request;
     public Response response;
-    public transient JsonObject jsonRequest;
-    public final transient ExecutionContext executionContext = new ExecutionContext();
+    public JsonObject jsonRequest;
 }

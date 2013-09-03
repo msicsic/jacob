@@ -8,19 +8,19 @@ import java.io.StringWriter;
 import java.util.Locale;
 
 public class Return {
-    public static ExecutionContext ERROR(String errorCode, ExecutionContext executionContext) {
-        return ERROR(errorCode, MessageResolver.getMessage(errorCode, new Locale("SK")), executionContext);
+    public static ExecutionContext ERROR(String errorCode, ExecutionContext ec) {
+        return ERROR(errorCode, MessageResolver.getMessage(errorCode, new Locale("SK")), ec);
     }
 
-    public static ExecutionContext ERROR(String errorCode, String errorText, ExecutionContext executionContext) {
-        return ERROR_AND_EXCEPTION("ERROR", errorCode, errorText, executionContext);
+    public static ExecutionContext ERROR(String errorCode, String errorText, ExecutionContext ec) {
+        return ERROR_AND_EXCEPTION("ERROR", errorCode, errorText, ec);
     }
 
-    public static ExecutionContext EXCEPTION(String exceptionCode, ExecutionContext executionContext) {
-        return EXCEPTION(exceptionCode, MessageResolver.getMessage(exceptionCode, new Locale("SK")), executionContext);
+    public static ExecutionContext EXCEPTION(String exceptionCode, ExecutionContext ec) {
+        return EXCEPTION(exceptionCode, MessageResolver.getMessage(exceptionCode, new Locale("SK")), ec);
     }
 
-    public static ExecutionContext EXCEPTION(String exceptionCode, Throwable throwable, ExecutionContext executionContext) {
+    public static ExecutionContext EXCEPTION(String exceptionCode, Throwable throwable, ExecutionContext ec) {
         String stackTrace = null;
 
         try {
@@ -28,16 +28,16 @@ public class Return {
         } catch (java.lang.Exception e) {
             stackTrace = exceptionCode;
         }
-        return EXCEPTION(exceptionCode, stackTrace, executionContext);
+        return EXCEPTION(exceptionCode, stackTrace, ec);
     }
 
-    public static ExecutionContext EXCEPTION(String exceptionCode, String exceptionText, ExecutionContext executionContext) {
-        return ERROR_AND_EXCEPTION("EXCEPTION", exceptionCode, exceptionText, executionContext);
+    public static ExecutionContext EXCEPTION(String exceptionCode, String exceptionText, ExecutionContext ec) {
+        return ERROR_AND_EXCEPTION("EXCEPTION", exceptionCode, exceptionText, ec);
     }
 
-    private static ExecutionContext ERROR_AND_EXCEPTION(String reason, String code, String text, ExecutionContext executionContext) {
-        executionContext = FIN(executionContext);
-        Message message = initResponse(executionContext);
+    private static ExecutionContext ERROR_AND_EXCEPTION(String reason, String code, String text, ExecutionContext ec) {
+        ec = FIN(ec);
+        Message message = initResponse(ec);
         message.response.resh.status = MESSAGE_STATUS.INT.name();
 
         Exception exception = new Exception();
@@ -45,7 +45,7 @@ public class Return {
         exception.reason = reason;
         exception.code = code;
         exception.text = text;
-        return executionContext;
+        return ec;
     }
 
     public static String stackToString(Throwable t) {
@@ -54,33 +54,33 @@ public class Return {
         return stringWriter.toString();
     }
 
-    public static ExecutionContext RESPONSE(ResponseData responseData, ExecutionContext executionContext) {
-        executionContext = FIN(executionContext);
-        Message message = initResponse(executionContext);
+    public static ExecutionContext RESPONSE(ResponseData responseData, ExecutionContext ec) {
+        ec = FIN(ec);
+        Message message = initResponse(ec);
         message.response.resh.status = MESSAGE_STATUS.OK.name();
         message.response.resh.messageId = message.request.reqh.messageId;
         message.response.resd = responseData;
-        return executionContext;
+        return ec;
     }
 
-    public static ExecutionContext EMPTY_RESPONSE(ExecutionContext executionContext) {
-        return RESPONSE(new ResponseData(){}, executionContext);
+    public static ExecutionContext EMPTY_RESPONSE(ExecutionContext ec) {
+        return RESPONSE(new ResponseData(){}, ec);
     }
 
-    private static Message initResponse(ExecutionContext executionContext) {
-        Message message = MESSAGE.current(executionContext);
+    private static Message initResponse(ExecutionContext ec) {
+        Message message = MESSAGE.get(ec);
         message.response = new Response();
         message.response.resh = new ResponseHeader();
         return message;
     }
 
-    private static ExecutionContext FIN(ExecutionContext executionContext) {
-        executionContext.status = DATAPACKET_STATUS.FIN;
-        return executionContext;
+    private static ExecutionContext FIN(ExecutionContext ec) {
+        ec.status = EXECUTION_CONTEXT.FIN;
+        return ec;
     }
 
-    private static ExecutionContext AFP(ExecutionContext executionContext) {
-        executionContext.status = DATAPACKET_STATUS.AFP;
-        return executionContext;
+    private static ExecutionContext AFP(ExecutionContext ec) {
+        ec.status = EXECUTION_CONTEXT.AFP;
+        return ec;
     }
 }

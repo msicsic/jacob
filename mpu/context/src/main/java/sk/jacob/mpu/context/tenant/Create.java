@@ -5,7 +5,7 @@ import sk.jacob.annotation.Required;
 import sk.jacob.common.CONTEXT;
 import sk.jacob.common.MESSAGE;
 import sk.jacob.common.SECURITY;
-import sk.jacob.engine.handler.Signature;
+import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.*;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
@@ -33,15 +33,15 @@ public class Create {
         public String tenantName;
     }
 
-    @Signature(type = "context.tenant.create",
-             version = "1.0",
-             reqd = Create.CreateTenantReqd.class,
-             resd = Create.CreateTenantResd.class)
-    public static ExecutionContext handle(ExecutionContext executionContext) throws Exception {
-        CreateTenantReqd requestData = (CreateTenantReqd) MESSAGE.current(executionContext).request.reqd;
+    @DataTypes(type = "context.tenant.create",
+               version = "1.0",
+               request = CreateTenantReqd.class,
+               response = CreateTenantResd.class)
+    public static ExecutionContext handle(ExecutionContext ec) throws Exception {
+        CreateTenantReqd requestData = (CreateTenantReqd) MESSAGE.get(ec).request.reqd;
         String tenantName = requestData.name;
         String tenantId = tenantName.toUpperCase().replace(" ", "");
-        Connection conn = (Connection) CONTEXT.CONNECTION.get(executionContext);
+        Connection conn = (Connection) CONTEXT.CONNECTION.get(ec);
 
         // 1. Create tenant entry
         Tenants tenants = ContextModel.INSTANCE.table(Tenants.class);
@@ -50,7 +50,7 @@ public class Create {
 
         // 2. Create tenant user association
         UsersTenants usersTenants = ContextModel.INSTANCE.table(UsersTenants.class);
-        Principal principal = SECURITY.getPrincipal(executionContext);
+        Principal principal = SECURITY.getPrincipal(ec);
         conn.execute(insert(usersTenants).values(cv(usersTenants.login, principal.login),
                                                  cv(usersTenants.tenantFk, tenantId)));
 
@@ -81,6 +81,6 @@ public class Create {
                                                   cv(tenantsParams.paramValue, paramValue),
                                                   cv(tenantsParams.scope, ParamScope.PRIVATE .name())));
 
-        return executionContext;
+        return ec;
     }
 }

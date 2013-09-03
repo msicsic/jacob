@@ -39,18 +39,18 @@ public class AuthenticateLoginPassword {
     @sk.jacob.engine.handler.Token(type="security.authenticate.login.password",
            token=AuthLogPassToken.class,
            resd=AuthLogPassResd.class)
-    public static ExecutionContext authenticateLoginPassword(ExecutionContext executionContext) throws Exception {
-        AuthLogPassToken token = (AuthLogPassToken) SECURITY.TOKEN.get(executionContext);
+    public static ExecutionContext authenticateLoginPassword(ExecutionContext ec) throws Exception {
+        AuthLogPassToken token = (AuthLogPassToken) SECURITY.TOKEN.get(ec);
 
         Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
                 .from(users)
                 .where(and(eq(users.login, token.login),
                            eq(users.md5pwd, md5String(token.password))));
-        Connection conn = (Connection) SECURITY.CONNECTION.get(executionContext);
+        Connection conn = (Connection) SECURITY.CONNECTION.get(ec);
         JacobResultSet rs = (JacobResultSet)conn.execute(s);
         if(rs.next() == false) {
-            return Return.ERROR("security.invalid.login.password", executionContext);
+            return Return.ERROR("security.invalid.login.password", ec);
         }
 
         String generatedToken = uniqueToken();
@@ -65,7 +65,7 @@ public class AuthenticateLoginPassword {
                                : rs.getString(users.login);
         resd.principal.username = rs.getString(users.username);
 
-        return Return.RESPONSE(resd, executionContext);
+        return Return.RESPONSE(resd, ec);
     }
 
     private static class InvalidateToken extends Token {
@@ -74,16 +74,16 @@ public class AuthenticateLoginPassword {
 
     @sk.jacob.engine.handler.Token(type="security.invalidate.token",
            token=InvalidateToken.class)
-    public static ExecutionContext invalidateToken(ExecutionContext executionContext) throws Exception {
-        InvalidateToken token = (InvalidateToken) SECURITY.TOKEN.get(executionContext);
+    public static ExecutionContext invalidateToken(ExecutionContext ec) throws Exception {
+        InvalidateToken token = (InvalidateToken) SECURITY.TOKEN.get(ec);
 
         Users users = SecurityModel.INSTANCE.table(Users.class);
         DMLClause s = update(users)
                 .set(cv(users.token, null))
                 .where(eq(users.token, token.value));
-        Connection conn = (Connection) SECURITY.CONNECTION.get(executionContext);
+        Connection conn = (Connection) SECURITY.CONNECTION.get(ec);
         conn.execute(s);
 
-        return Return.EMPTY_RESPONSE(executionContext);
+        return Return.EMPTY_RESPONSE(ec);
     }
 }

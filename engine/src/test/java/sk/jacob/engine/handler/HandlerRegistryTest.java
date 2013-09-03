@@ -38,12 +38,12 @@ public class HandlerRegistryTest {
             List<User> users;
         }
 
-        @Signature(type = "test",
+        @DataTypes(type = "test",
                 version = "0.1",
-                reqd = Req.class,
-                resd = Res.class)
-        public static ExecutionContext method(ExecutionContext executionContext) {
-            return executionContext;
+                request = Req.class,
+                response = Res.class)
+        public static ExecutionContext method(ExecutionContext ec) {
+            return ec;
         }
     }
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();

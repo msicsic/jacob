@@ -41,22 +41,22 @@ public abstract class HandlerRegistry<T extends Annotation> {
         return mappedHandlers;
     }
 
-    public final ExecutionContext process(ExecutionContext executionContext) {
-        String handlerKey = this.getMessageType(executionContext);
-        return invokeMethod(handlerKey, executionContext);
+    public final ExecutionContext process(ExecutionContext ec) {
+        String handlerKey = this.getMessageType(ec);
+        return invokeMethod(handlerKey, ec);
     }
 
-    private ExecutionContext invokeMethod(String handlerKey, ExecutionContext executionContext) {
+    private ExecutionContext invokeMethod(String handlerKey, ExecutionContext ec) {
         if (this.handlerMap.containsKey(handlerKey)) {
             try {
                 Method handler = this.handlerMap.get(handlerKey);
-                deserializeMessageElement(executionContext, handler.getAnnotation(this.supportedAnnotation));
-                executionContext = (ExecutionContext) handler.invoke(null, executionContext);
+                deserializeMessageElement(ec, handler.getAnnotation(this.supportedAnnotation));
+                ec = (ExecutionContext) handler.invoke(null, ec);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
-        return executionContext;
+        return ec;
     }
 
     /**
@@ -67,14 +67,14 @@ public abstract class HandlerRegistry<T extends Annotation> {
 
     /**
      * Gets actual type of message.
-     * Signature type is then used by framework to lookup handler method.
+     * DataTypes type is then used by framework to lookup handler method.
      */
-    protected abstract String getMessageType(ExecutionContext executionContext);
+    protected abstract String getMessageType(ExecutionContext ec);
 
     /**
      * Deserializes JSON raw request to corespondent Java object type.
      */
-    protected abstract void deserializeMessageElement(ExecutionContext executionContext, Annotation annotation);
+    protected abstract void deserializeMessageElement(ExecutionContext ec, Annotation annotation);
 
 // TODO: Bude treba vyfaktorovat.
 //////////////////////////////////////////////////////////////////////////////////
@@ -96,12 +96,12 @@ public abstract class HandlerRegistry<T extends Annotation> {
 
     public static Map<String, Object> serializeMethod(Method method) {
         Map<String, Object> handlerMap = new HashMap<>();
-        Signature messageAnnotation = method.getAnnotation(Signature.class);
+        DataTypes dataTypesAnnotation = method.getAnnotation(DataTypes.class);
 
-        handlerMap.put("id", messageAnnotation.type());
-        handlerMap.put("version", messageAnnotation.version());
-        handlerMap.put("resd", serializeClass(messageAnnotation.reqd()));
-        handlerMap.put("reqd", serializeClass(messageAnnotation.resd()));
+        handlerMap.put("id", dataTypesAnnotation.type());
+        handlerMap.put("version", dataTypesAnnotation.version());
+        handlerMap.put("resd", serializeClass(dataTypesAnnotation.request()));
+        handlerMap.put("reqd", serializeClass(dataTypesAnnotation.response()));
 
         return handlerMap;
     }

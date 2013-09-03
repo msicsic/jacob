@@ -1,7 +1,7 @@
 package sk.jacob.mpu.business.settings;
 
 import sk.jacob.common.MESSAGE;
-import sk.jacob.engine.handler.Signature;
+import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.RequestData;
 import sk.jacob.types.ResponseData;
@@ -20,27 +20,27 @@ public class Uom {
     public class Res1 extends ResponseData {
     }
 
-    @Signature(type="business.uom.add",
-             version="0.1",
-             reqd=Req1.class,
-             resd=Res1.class)
-    public ExecutionContext method1(ExecutionContext executionContext) {
+    @DataTypes(type = "business.uom.add",
+               version = "0.1",
+               request = Req1.class,
+               response = Res1.class)
+    public ExecutionContext method1(ExecutionContext ec) {
         System.out.println("===========================================");
         System.out.println("method1");
-        System.out.println(MESSAGE.current(executionContext).rawRequest);
-        System.out.println(MESSAGE.current(executionContext).request);
-        return executionContext;
+        System.out.println(MESSAGE.get(ec).rawRequest);
+        System.out.println(MESSAGE.get(ec).request);
+        return ec;
     }
 
-    @Signature(type="business.uom.add",
-             version="0.2",
-             reqd=Req1.class,
-             resd=Res1.class)
-    public ExecutionContext method2(ExecutionContext executionContext) {
+    @DataTypes(type = "business.uom.add",
+          version = "0.2",
+          request = Req1.class,
+          response = Res1.class)
+    public ExecutionContext method2(ExecutionContext ec) {
         System.out.println("===========================================");
         System.out.println("method2");
-        System.out.println(MESSAGE.current(executionContext).rawRequest);
-        System.out.println(MESSAGE.current(executionContext).request);
-        return executionContext;
+        System.out.println(MESSAGE.get(ec).rawRequest);
+        System.out.println(MESSAGE.get(ec).request);
+        return ec;
     }
 }

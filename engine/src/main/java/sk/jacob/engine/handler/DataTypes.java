@@ -10,9 +10,9 @@ import java.lang.annotation.ElementType;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface Signature {
+public @interface DataTypes {
     String type();
     String version();
-    Class<? extends RequestData> reqd();
-    Class<? extends ResponseData> resd();
+    Class<? extends RequestData> request();
+    Class<? extends ResponseData> response();
 }

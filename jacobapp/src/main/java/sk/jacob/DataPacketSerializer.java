@@ -9,8 +9,8 @@ public class DataPacketSerializer implements Module {
     private Gson gson = new Gson();
 
     @Override
-    public ExecutionContext handle(ExecutionContext executionContext) {
-        MESSAGE.current(executionContext).rawResponse = this.gson.toJson(MESSAGE.current(executionContext).response);
-        return executionContext;
+    public ExecutionContext handle(ExecutionContext ec) {
+        MESSAGE.get(ec).rawResponse = this.gson.toJson(MESSAGE.get(ec).response);
+        return ec;
     }
 }

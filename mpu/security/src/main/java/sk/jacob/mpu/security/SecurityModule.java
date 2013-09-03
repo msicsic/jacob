@@ -45,22 +45,22 @@ public class SecurityModule implements Module {
     }
 
     @Override
-    public ExecutionContext handle(ExecutionContext executionContext) {
+    public ExecutionContext handle(ExecutionContext ec) {
         Connection conn = this.dbEngine.getConnection();
-        SECURITY.CONNECTION.set(executionContext, conn);
+        SECURITY.CONNECTION.set(ec, conn);
         try {
             conn.txBegin();
-            executionContext = this.handlerRegistry.process(executionContext);
+            ec = this.handlerRegistry.process(ec);
             conn.txCommit();
         } catch (Exception e){
             String errorCode = "security.general.token.exception";
             logger(this).error(errorCode, e);
             conn.txRollback();
-            executionContext = Return.EXCEPTION(errorCode, e, executionContext);
+            ec = Return.EXCEPTION(errorCode, e, ec);
         } finally {
             conn.close();
         }
-        return executionContext;
+        return ec;
     }
 
     private void initDatabase(String adminLogin, String adminMd5Pwd) {

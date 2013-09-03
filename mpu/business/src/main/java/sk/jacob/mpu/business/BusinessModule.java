@@ -15,7 +15,7 @@ public class BusinessModule implements Module {
     }
 
     @Override
-    public ExecutionContext handle(ExecutionContext executionContext) {
-        return executionContext;
+    public ExecutionContext handle(ExecutionContext ec) {
+        return ec;
     }
 }

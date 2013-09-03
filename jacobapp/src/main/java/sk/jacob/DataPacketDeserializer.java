@@ -14,17 +14,17 @@ public class DataPacketDeserializer implements Module {
     private static final Gson GSON = new Gson();
 
     @Override
-    public ExecutionContext handle(ExecutionContext executionContext) {
-        MESSAGE.current(executionContext).jsonRequest =
-                JSON_PARSER.parse(MESSAGE.current(executionContext).rawRequest).getAsJsonObject();
-        MESSAGE.current(executionContext).request = new Request();
-        MESSAGE.current(executionContext).request.reqh =
-                GSON.fromJson(getRequestHeader(executionContext), RequestHeader.class);
-        return executionContext;
+    public ExecutionContext handle(ExecutionContext ec) {
+        MESSAGE.get(ec).jsonRequest =
+                JSON_PARSER.parse(MESSAGE.get(ec).rawRequest).getAsJsonObject();
+        MESSAGE.get(ec).request = new Request();
+        MESSAGE.get(ec).request.reqh =
+                GSON.fromJson(getRequestHeader(ec), RequestHeader.class);
+        return ec;
     }
 
-    private JsonObject getRequestHeader(ExecutionContext executionContext) {
-        JsonObject jsonRequest = MESSAGE.current(executionContext).jsonRequest;
+    private JsonObject getRequestHeader(ExecutionContext ec) {
+        JsonObject jsonRequest = MESSAGE.get(ec).jsonRequest;
         return jsonRequest.get("reqh").getAsJsonObject();
     }
 }

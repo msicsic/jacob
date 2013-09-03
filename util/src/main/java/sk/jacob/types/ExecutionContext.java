@@ -4,6 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExecutionContext {
-    public DATAPACKET_STATUS status = DATAPACKET_STATUS.AFP;
-    public final Map<String, Map<String, Object>> CONTEXT = new HashMap<>();
+    public EXECUTION_CONTEXT status = EXECUTION_CONTEXT.AFP;
+    public final Map<String, Map<String, Object>> INSTANCE = new HashMap<>();
 }

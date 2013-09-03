@@ -7,7 +7,7 @@ import java.util.Set;
 import sk.jacob.annotation.Required;
 import sk.jacob.common.CONTEXT;
 import sk.jacob.common.MESSAGE;
-import sk.jacob.engine.handler.Signature;
+import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.TenantsParams;
 import static sk.jacob.sql.dml.DML.select;
@@ -37,12 +37,12 @@ public class ParamGet {
         }
     }
 
-    @Signature(type = "context.tenant.paramGet",
-             version = "1.0",
-             reqd = ParamGetReqd.class,
-             resd = ParamGetResd.class)
-    public static ExecutionContext handle(ExecutionContext executionContext) throws Exception {
-        ParamGetReqd requestData = (ParamGetReqd) MESSAGE.current(executionContext).request.reqd;
+    @DataTypes(type = "context.tenant.paramGet",
+               version = "1.0",
+               request = ParamGetReqd.class,
+               response = ParamGetResd.class)
+    public static ExecutionContext handle(ExecutionContext ec) throws Exception {
+        ParamGetReqd requestData = (ParamGetReqd) MESSAGE.get(ec).request.reqd;
 
         TenantsParams tenantsParams = ContextModel.INSTANCE.table(TenantsParams.class);
 
@@ -51,7 +51,7 @@ public class ParamGet {
                 .where(and(eq(tenantsParams.tenantFk, requestData.tenantId),
                            eq(tenantsParams.scope, "public"),
                            in(tenantsParams.paramName, requestData.paramNames)));
-        Connection conn = (Connection) CONTEXT.CONNECTION.get(executionContext);
+        Connection conn = (Connection) CONTEXT.CONNECTION.get(ec);
         ResultSet rs = (ResultSet) conn.execute(s);
 
         Map<String, String> paramValues = new HashMap<>();
@@ -59,6 +59,6 @@ public class ParamGet {
             paramValues.put(rs.getString(tenantsParams.paramName.name), rs.getString(tenantsParams.paramValue.name));
         }
 
-        return Return.RESPONSE(new ParamGetResd(paramValues), executionContext);
+        return Return.RESPONSE(new ParamGetResd(paramValues), ec);
     }
 }

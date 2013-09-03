@@ -1,6 +1,6 @@
 package sk.jacob.types;
 
-public enum DATAPACKET_STATUS {
+public enum EXECUTION_CONTEXT {
     FIN,
     AFP;
 }

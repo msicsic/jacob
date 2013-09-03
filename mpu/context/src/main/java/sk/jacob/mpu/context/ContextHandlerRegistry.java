@@ -6,36 +6,36 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 import sk.jacob.common.MESSAGE;
+import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.engine.handler.HandlerRegistry;
-import sk.jacob.engine.handler.Signature;
 import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.Request;
 import sk.jacob.types.RequestHeader;
 
-public class ContextHandlerRegistry extends HandlerRegistry<Signature> {
+public class ContextHandlerRegistry extends HandlerRegistry<DataTypes> {
     public ContextHandlerRegistry(List<Class> messageHandlers) {
-        super(Signature.class, messageHandlers);
+        super(DataTypes.class, messageHandlers);
     }
 
     @Override
-    protected String getHandlerKey(Signature annotation) {
+    protected String getHandlerKey(DataTypes annotation) {
         return annotation.type();
     }
 
     @Override
-    protected String getMessageType(ExecutionContext executionContext) {
-        return MESSAGE.current(executionContext).request.reqh.type;
+    protected String getMessageType(ExecutionContext ec) {
+        return MESSAGE.get(ec).request.reqh.type;
     }
 
     @Override
-    protected void deserializeMessageElement(ExecutionContext executionContext, Annotation annotation) {
-        Signature message = (Signature) annotation;
-        JsonObject jsonRequest = MESSAGE.current(executionContext).jsonRequest;
+    protected void deserializeMessageElement(ExecutionContext ec, Annotation annotation) {
+        DataTypes dataTypes = (DataTypes)annotation;
+        JsonObject jsonRequest = MESSAGE.get(ec).jsonRequest;
         Request request = new Request();
 
         request.reqh = new Gson().fromJson(jsonRequest.get("reqh"), RequestHeader.class);
-        request.reqd = new Gson().fromJson(jsonRequest.get("reqd"), message.reqd());
+        request.reqd = new Gson().fromJson(jsonRequest.get("reqd"), dataTypes.request());
 
-        MESSAGE.current(executionContext).request = request;
+        MESSAGE.get(ec).request = request;
     }
 }

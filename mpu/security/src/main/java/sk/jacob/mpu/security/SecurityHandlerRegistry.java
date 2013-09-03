@@ -24,20 +24,20 @@ public class SecurityHandlerRegistry extends HandlerRegistry<Token> {
     }
 
     @Override
-    protected String getMessageType(ExecutionContext executionContext) {
-        JsonObject securityElement = getSecurityElement(executionContext);
+    protected String getMessageType(ExecutionContext ec) {
+        JsonObject securityElement = getSecurityElement(ec);
         return securityElement.get("type").getAsString();
     }
 
     @Override
-    protected void deserializeMessageElement(ExecutionContext executionContext, Annotation annotation) {
-        JsonObject securityElement = getSecurityElement(executionContext);
+    protected void deserializeMessageElement(ExecutionContext ec, Annotation annotation) {
+        JsonObject securityElement = getSecurityElement(ec);
         Token token = (Token)annotation;
-        SECURITY.TOKEN.set(executionContext, GSON.fromJson(securityElement, token.token()));
+        SECURITY.TOKEN.set(ec, GSON.fromJson(securityElement, token.token()));
     }
 
-    private static JsonObject getSecurityElement(ExecutionContext executionContext) {
-        JsonObject jsonRequest = MESSAGE.current(executionContext).jsonRequest;
+    private static JsonObject getSecurityElement(ExecutionContext ec) {
+        JsonObject jsonRequest = MESSAGE.get(ec).jsonRequest;
         JsonObject reqh = jsonRequest.get("reqh").getAsJsonObject();
         return reqh.get("security").getAsJsonObject();
     }

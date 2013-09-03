@@ -9,16 +9,16 @@ public enum CONTEXT {
 
     private static final String CONTEXT_KEY = "BUSSINESS_CONTEXT";
 
-    public Object get(ExecutionContext executionContext) {
-        Map<String, Object> bc = executionContext.CONTEXT.get(CONTEXT_KEY);
+    public Object get(ExecutionContext ec) {
+        Map<String, Object> bc = ec.INSTANCE.get(CONTEXT_KEY);
         return bc.get(this.name());
     }
 
-    public void set(ExecutionContext executionContext, Object value) {
-        if(executionContext.CONTEXT.containsKey(CONTEXT_KEY) == false) {
-            executionContext.CONTEXT.put(CONTEXT_KEY, new HashMap<String, Object>());
+    public void set(ExecutionContext ec, Object value) {
+        if(ec.INSTANCE.containsKey(CONTEXT_KEY) == false) {
+            ec.INSTANCE.put(CONTEXT_KEY, new HashMap<String, Object>());
         }
-        Map<String, Object> bc = executionContext.CONTEXT.get(CONTEXT_KEY);
+        Map<String, Object> bc = ec.INSTANCE.get(CONTEXT_KEY);
         bc.put(this.name(), value);
     }
 }
