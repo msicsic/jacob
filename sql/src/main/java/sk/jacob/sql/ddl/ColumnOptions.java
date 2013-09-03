@@ -3,7 +3,7 @@ package sk.jacob.sql.ddl;
 import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.generator.IdGenerator;
 
-public class ColumnOptions implements DDLExpression, IColumnOptions {
+public class ColumnOptions implements DDLClause, IColumnOptions {
     private boolean primaryKey = false;
     private IdGenerator generator = null;
     private Column parentColumn;
