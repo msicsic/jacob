@@ -23,11 +23,11 @@ public class JacobFirmware implements Firmware {
 
     private void initModules(final Properties config) {
         paths.put(APP_PORT, Arrays.asList(
-                new DataPacketDeserializer(),
+                new MessageDeserializer(),
                 new SecurityModule(config),
                 new ContextModule(config),
                 new BusinessModule(),
-                new DataPacketSerializer()));
+                new MessageSerializer()));
     }
 
     public ExecutionContext handle(String portId, ExecutionContext ec) {

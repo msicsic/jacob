@@ -5,7 +5,7 @@ import sk.jacob.accessor.COMMON;
 import sk.jacob.engine.Module;
 import sk.jacob.types.ExecutionContext;
 
-public class DataPacketSerializer implements Module {
+public class MessageSerializer implements Module {
     private Gson gson = new Gson();
 
     @Override

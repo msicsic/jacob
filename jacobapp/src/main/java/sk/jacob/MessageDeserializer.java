@@ -9,7 +9,7 @@ import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.Request;
 import sk.jacob.types.RequestHeader;
 
-public class DataPacketDeserializer implements Module {
+public class MessageDeserializer implements Module {
     private static final JsonParser JSON_PARSER = new JsonParser();
     private static final Gson GSON = new Gson();
 
