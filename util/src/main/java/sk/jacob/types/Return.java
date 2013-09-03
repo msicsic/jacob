@@ -1,6 +1,6 @@
 package sk.jacob.types;
 
-import sk.jacob.common.MESSAGE;
+import sk.jacob.accessor.COMMON;
 import sk.jacob.util.locale.MessageResolver;
 
 import java.io.PrintWriter;
@@ -68,7 +68,7 @@ public class Return {
     }
 
     private static Message initResponse(ExecutionContext ec) {
-        Message message = MESSAGE.get(ec);
+        Message message = COMMON.getMessage(ec);
         message.response = new Response();
         message.response.resh = new ResponseHeader();
         return message;

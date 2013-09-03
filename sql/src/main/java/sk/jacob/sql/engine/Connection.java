@@ -34,6 +34,24 @@ public class Connection {
         this.metadata = metadata;
     }
 
+    public void execute(DDLStatement ddl) {
+        executeDDL(ddl.inline);
+        for(String outline : ddl.outline) {
+            executeDDL(outline);
+        }
+    }
+
+    private void executeDDL(String ddl) {
+        java.sql.Statement statement = null;
+        try {
+            statement = this.connection.createStatement();
+            statement.execute(ddl);
+        } catch (SQLException e) {
+            DbEngine.close(statement);
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Executes statements in raw string format.
      *
@@ -69,24 +87,6 @@ public class Connection {
             executeStatement((Delete) rootDMLClause);
         }
         return returnValue;
-    }
-
-    public void execute(DDLStatement ddl) {
-        executeDDL(ddl.inline);
-        for(String outline : ddl.outline) {
-            executeDDL(outline);
-        }
-    }
-
-    private void executeDDL(String ddl) {
-        java.sql.Statement statement = null;
-        try {
-            statement = this.connection.createStatement();
-            statement.execute(ddl);
-        } catch (SQLException e) {
-            DbEngine.close(statement);
-            throw new RuntimeException(e);
-        }
     }
 
     private JacobResultSet executeStatement(Select selectStatement) {

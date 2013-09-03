@@ -5,7 +5,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import com.google.gson.JsonObject;
-import sk.jacob.common.MESSAGE;
+import sk.jacob.accessor.COMMON;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.types.ExecutionContext;
@@ -24,18 +24,18 @@ public class ContextHandlerRegistry extends HandlerRegistry<DataTypes> {
 
     @Override
     protected String getMessageType(ExecutionContext ec) {
-        return MESSAGE.get(ec).request.reqh.type;
+        return COMMON.getMessage(ec).request.reqh.type;
     }
 
     @Override
     protected void deserializeMessageElement(ExecutionContext ec, Annotation annotation) {
         DataTypes dataTypes = (DataTypes)annotation;
-        JsonObject jsonRequest = MESSAGE.get(ec).jsonRequest;
+        JsonObject jsonRequest = COMMON.getMessage(ec).jsonRequest;
         Request request = new Request();
 
         request.reqh = new Gson().fromJson(jsonRequest.get("reqh"), RequestHeader.class);
         request.reqd = new Gson().fromJson(jsonRequest.get("reqd"), dataTypes.reqd());
 
-        MESSAGE.get(ec).request = request;
+        COMMON.getMessage(ec).request = request;
     }
 }

@@ -1,6 +1,6 @@
 package sk.jacob.mpu.security.dbregistry;
 
-import sk.jacob.common.SECURITY;
+import sk.jacob.accessor.SECURITY;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.DMLClause;

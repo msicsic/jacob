@@ -1,13 +1,17 @@
-package sk.jacob.common;
+package sk.jacob.accessor;
+
+import sk.jacob.types.ExecutionContext;
+import sk.jacob.types.Principal;
 
 import java.util.HashMap;
 import java.util.Map;
-import sk.jacob.types.ExecutionContext;
 
-public enum CONTEXT {
-    CONNECTION, LDS_BDS;
+public enum SECURITY {
+    CONNECTION,
+    PRINCIPAL,
+    TOKEN;
 
-    private static final String CONTEXT_KEY = "BUSSINESS_CONTEXT";
+    private static final String CONTEXT_KEY = "SECURITY_CONTEXT";
 
     public Object get(ExecutionContext ec) {
         Map<String, Object> bc = ec.INSTANCE.get(CONTEXT_KEY);
@@ -20,5 +24,13 @@ public enum CONTEXT {
         }
         Map<String, Object> bc = ec.INSTANCE.get(CONTEXT_KEY);
         bc.put(this.name(), value);
+    }
+
+    public static Principal getPrincipal(ExecutionContext ec) {
+        return (Principal)SECURITY.PRINCIPAL.get(ec);
+    }
+
+    public static void setPrincipal(ExecutionContext ec, Principal principal) {
+        SECURITY.PRINCIPAL.set(ec, principal);
     }
 }

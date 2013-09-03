@@ -1,10 +1,11 @@
 package sk.jacob.mpu.context.tenant;
 
 import java.util.Map;
+
+import sk.jacob.accessor.COMMON;
 import sk.jacob.annotation.Required;
-import sk.jacob.common.CONTEXT;
-import sk.jacob.common.MESSAGE;
-import sk.jacob.common.SECURITY;
+import sk.jacob.accessor.CONTEXT;
+import sk.jacob.accessor.SECURITY;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.*;
 import sk.jacob.sql.dml.SqlClause;
@@ -38,7 +39,7 @@ public class Create {
                reqd = CreateTenantReqd.class,
                resd = CreateTenantResd.class)
     public static ExecutionContext handle(ExecutionContext ec) throws Exception {
-        CreateTenantReqd requestData = (CreateTenantReqd) MESSAGE.get(ec).request.reqd;
+        CreateTenantReqd requestData = (CreateTenantReqd) COMMON.getMessage(ec).request.reqd;
         String tenantName = requestData.name;
         String tenantId = tenantName.toUpperCase().replace(" ", "");
         Connection conn = (Connection) CONTEXT.CONNECTION.get(ec);

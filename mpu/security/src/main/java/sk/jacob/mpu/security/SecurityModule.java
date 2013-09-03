@@ -1,7 +1,7 @@
 package sk.jacob.mpu.security;
 
-import sk.jacob.common.CONFIG;
-import sk.jacob.common.SECURITY;
+import sk.jacob.accessor.CONFIG;
+import sk.jacob.accessor.SECURITY;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.Token;

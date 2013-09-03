@@ -2,9 +2,10 @@ package sk.jacob.mpu.context.tenant;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import sk.jacob.accessor.COMMON;
 import sk.jacob.annotation.Required;
-import sk.jacob.common.CONTEXT;
-import sk.jacob.common.MESSAGE;
+import sk.jacob.accessor.CONTEXT;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.Tenants;
@@ -53,7 +54,7 @@ public class FindByLogin {
                reqd = FindByLoginReqd.class,
                resd = FindByLoginResd.class)
     public static ExecutionContext handle(ExecutionContext ec) throws Exception {
-        FindByLoginReqd requestData = (FindByLoginReqd) MESSAGE.get(ec).request.reqd;
+        FindByLoginReqd requestData = (FindByLoginReqd) COMMON.getMessage(ec).request.reqd;
 
         Tenants tenants = ContextModel.INSTANCE.table(Tenants.class);
         UsersTenants usersTenants = ContextModel.INSTANCE.table(UsersTenants.class);

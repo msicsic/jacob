@@ -1,11 +1,11 @@
 package sk.jacob.mpu.context;
 
-import sk.jacob.common.CONFIG;
+import sk.jacob.accessor.CONFIG;
 import sk.jacob.mpu.context.model.ContextModel;
 
 import java.util.*;
 
-import sk.jacob.common.CONTEXT;
+import sk.jacob.accessor.CONTEXT;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.DataTypes;

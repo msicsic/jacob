@@ -1,4 +1,4 @@
-package sk.jacob.common;
+package sk.jacob.accessor;
 
 import java.util.Properties;
 

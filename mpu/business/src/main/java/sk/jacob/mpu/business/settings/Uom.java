@@ -1,6 +1,6 @@
 package sk.jacob.mpu.business.settings;
 
-import sk.jacob.common.MESSAGE;
+import sk.jacob.accessor.COMMON;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.RequestData;
@@ -27,8 +27,8 @@ public class Uom {
     public ExecutionContext method1(ExecutionContext ec) {
         System.out.println("===========================================");
         System.out.println("method1");
-        System.out.println(MESSAGE.get(ec).rawRequest);
-        System.out.println(MESSAGE.get(ec).request);
+        System.out.println(COMMON.getMessage(ec).rawRequest);
+        System.out.println(COMMON.getMessage(ec).request);
         return ec;
     }
 
@@ -39,8 +39,8 @@ public class Uom {
     public ExecutionContext method2(ExecutionContext ec) {
         System.out.println("===========================================");
         System.out.println("method2");
-        System.out.println(MESSAGE.get(ec).rawRequest);
-        System.out.println(MESSAGE.get(ec).request);
+        System.out.println(COMMON.getMessage(ec).rawRequest);
+        System.out.println(COMMON.getMessage(ec).request);
         return ec;
     }
 }

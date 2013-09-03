@@ -4,9 +4,10 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import sk.jacob.accessor.COMMON;
 import sk.jacob.annotation.Required;
-import sk.jacob.common.CONTEXT;
-import sk.jacob.common.MESSAGE;
+import sk.jacob.accessor.CONTEXT;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.TenantsParams;
@@ -42,7 +43,7 @@ public class ParamGet {
                reqd = ParamGetReqd.class,
                resd = ParamGetResd.class)
     public static ExecutionContext handle(ExecutionContext ec) throws Exception {
-        ParamGetReqd requestData = (ParamGetReqd) MESSAGE.get(ec).request.reqd;
+        ParamGetReqd requestData = (ParamGetReqd) COMMON.getMessage(ec).request.reqd;
 
         TenantsParams tenantsParams = ContextModel.INSTANCE.table(TenantsParams.class);
 

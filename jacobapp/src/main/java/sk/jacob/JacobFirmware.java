@@ -1,6 +1,6 @@
 package sk.jacob;
 
-import sk.jacob.common.MESSAGE;
+import sk.jacob.accessor.COMMON;
 import sk.jacob.engine.Firmware;
 import sk.jacob.engine.Module;
 import sk.jacob.types.ExecutionContext;
@@ -31,11 +31,11 @@ public class JacobFirmware implements Firmware {
     }
 
     public ExecutionContext handle(String portId, ExecutionContext ec) {
-        logger(this).info(portId + " --->>> " + MESSAGE.get(ec).rawRequest);
+        logger(this).info(portId + " --->>> " + COMMON.getMessage(ec).rawRequest);
         for(Module module : paths.get(portId)) {
             ec = module.handle(ec);
         }
-        logger(this).info(portId + " <<<--- " + MESSAGE.get(ec).rawResponse);
+        logger(this).info(portId + " <<<--- " + COMMON.getMessage(ec).rawResponse);
         return ec;
     }
 }
