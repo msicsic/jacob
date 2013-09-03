@@ -1,9 +1,6 @@
 package sk.jacob.mpu.context;
 
 import com.google.gson.Gson;
-import java.lang.annotation.Annotation;
-import java.util.List;
-
 import com.google.gson.JsonObject;
 import sk.jacob.accessor.COMMON;
 import sk.jacob.engine.handler.DataTypes;
@@ -11,6 +8,9 @@ import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.Request;
 import sk.jacob.types.RequestHeader;
+
+import java.lang.annotation.Annotation;
+import java.util.List;
 
 public class ContextHandlerRegistry extends HandlerRegistry<DataTypes> {
     public ContextHandlerRegistry(List<Class> messageHandlers) {

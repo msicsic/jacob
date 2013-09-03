@@ -1,6 +1,6 @@
 package sk.jacob.sql.ddl;
 
-import sk.jacob.sql.*;
+import sk.jacob.sql.Metadata;
 
 public class DDL {
     public static Table table(String tableName, Metadata metadata, Column... columns) {

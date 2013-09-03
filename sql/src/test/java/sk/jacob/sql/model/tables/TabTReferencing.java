@@ -5,7 +5,7 @@ import sk.jacob.sql.ddl.Column;
 import sk.jacob.sql.ddl.Table;
 
 import static sk.jacob.sql.ddl.Column.options;
-import static sk.jacob.sql.ddl.TYPE.*;
+import static sk.jacob.sql.ddl.TYPE.Long;
 
 
 public class TabTReferencing extends Table {

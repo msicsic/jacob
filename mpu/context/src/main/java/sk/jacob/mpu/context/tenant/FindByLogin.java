@@ -1,11 +1,8 @@
 package sk.jacob.mpu.context.tenant;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import sk.jacob.accessor.COMMON;
-import sk.jacob.annotation.Required;
 import sk.jacob.accessor.CONTEXT;
+import sk.jacob.annotation.Required;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.Tenants;
@@ -17,8 +14,12 @@ import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.RequestData;
 import sk.jacob.types.ResponseData;
 import sk.jacob.types.Return;
-import static sk.jacob.sql.dml.Op.eq;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import static sk.jacob.sql.dml.DML.select;
+import static sk.jacob.sql.dml.Op.eq;
 
 public class FindByLogin {
     private static class FindByLoginReqd extends RequestData {

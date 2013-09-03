@@ -2,9 +2,10 @@ package sk.jacob.mpu.context.model;
 
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.ddl.Column;
+import sk.jacob.sql.ddl.Table;
+
 import static sk.jacob.sql.ddl.Column.options;
 import static sk.jacob.sql.ddl.TYPE.String;
-import sk.jacob.sql.ddl.Table;
 
 /**
  * Join table of tenants and users.

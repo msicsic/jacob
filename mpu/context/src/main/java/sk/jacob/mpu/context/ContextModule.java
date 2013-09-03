@@ -1,20 +1,19 @@
 package sk.jacob.mpu.context;
 
 import sk.jacob.accessor.CONFIG;
-import sk.jacob.mpu.context.model.ContextModel;
-
-import java.util.*;
-
 import sk.jacob.accessor.CONTEXT;
 import sk.jacob.engine.Module;
-import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.DataTypes;
+import sk.jacob.engine.handler.HandlerRegistry;
+import sk.jacob.mpu.context.model.ContextModel;
+import sk.jacob.sql.Metadata;
 import sk.jacob.sql.engine.Connection;
+import sk.jacob.sql.engine.DbEngine;
 import sk.jacob.types.EXECUTION_CONTEXT;
 import sk.jacob.types.ExecutionContext;
-import sk.jacob.sql.Metadata;
-import sk.jacob.sql.engine.DbEngine;
 import sk.jacob.types.Return;
+
+import java.util.*;
 
 public class ContextModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();

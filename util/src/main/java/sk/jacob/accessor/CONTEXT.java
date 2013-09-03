@@ -1,8 +1,9 @@
 package sk.jacob.accessor;
 
+import sk.jacob.types.ExecutionContext;
+
 import java.util.HashMap;
 import java.util.Map;
-import sk.jacob.types.ExecutionContext;
 
 public enum CONTEXT {
     CONNECTION, LDS_BDS;

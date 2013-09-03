@@ -5,7 +5,7 @@ import sk.jacob.sql.ddl.Column;
 import sk.jacob.sql.ddl.Table;
 
 import static sk.jacob.sql.ddl.Column.options;
-import static sk.jacob.sql.ddl.TYPE.*;
+import static sk.jacob.sql.ddl.TYPE.String;
 
 public class TabTUnique extends Table {
     private static final String NAME = "TABT_UNIQUE";

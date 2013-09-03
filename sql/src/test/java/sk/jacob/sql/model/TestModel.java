@@ -8,10 +8,9 @@ import sk.jacob.sql.model.tables.TabTReferencing;
 import sk.jacob.sql.model.tables.TabTUnique;
 
 import static sk.jacob.sql.ddl.Column.options;
-import static sk.jacob.sql.ddl.DDL.column;
-import static sk.jacob.sql.ddl.DDL.sequence;
-import static sk.jacob.sql.ddl.DDL.table;
-import static sk.jacob.sql.ddl.TYPE.*;
+import static sk.jacob.sql.ddl.DDL.*;
+import static sk.jacob.sql.ddl.TYPE.Long;
+import static sk.jacob.sql.ddl.TYPE.String;
 import static sk.jacob.sql.generator.SequenceIdGenerator.sequenceIdGenerator;
 
 public class TestModel {

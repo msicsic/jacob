@@ -3,10 +3,9 @@ package sk.jacob.sql.model.tables;
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.ddl.Column;
 import sk.jacob.sql.ddl.Table;
-import sk.jacob.sql.model.TestModel;
 
 import static sk.jacob.sql.ddl.Column.options;
-import static sk.jacob.sql.ddl.TYPE.*;
+import static sk.jacob.sql.ddl.TYPE.String;
 
 public class TabTNullable extends Table {
     private static final String NAME = "TABT_NULLABLE";

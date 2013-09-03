@@ -2,9 +2,6 @@ package sk.jacob.util;
 
 import org.apache.log4j.Logger;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class Log {
     private static final String SOUT_PREFIX = "SYSOUT-> ";
     public static void sout(Object object) {

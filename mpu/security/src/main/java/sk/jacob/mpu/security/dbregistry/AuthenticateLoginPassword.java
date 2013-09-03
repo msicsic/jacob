@@ -13,13 +13,11 @@ import sk.jacob.types.ResponseData;
 import sk.jacob.types.Return;
 import sk.jacob.types.Token;
 
-import static sk.jacob.sql.dml.DML.cv;
-import static sk.jacob.sql.dml.DML.select;
-import static sk.jacob.sql.dml.DML.update;
+import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.dml.Op.and;
 import static sk.jacob.sql.dml.Op.eq;
-import static sk.jacob.util.Security.uniqueToken;
 import static sk.jacob.util.Security.md5String;
+import static sk.jacob.util.Security.uniqueToken;
 
 public class AuthenticateLoginPassword {
     private static class AuthLogPassToken extends Token {

@@ -3,7 +3,6 @@ package sk.jacob.mpu.context.model;
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.ddl.Sequence;
 import sk.jacob.sql.ddl.Table;
-import sk.jacob.sql.engine.DbEngine;
 
 public enum ContextModel {
     INSTANCE;

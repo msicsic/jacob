@@ -4,12 +4,10 @@ import sk.jacob.sql.Metadata;
 import sk.jacob.sql.ddl.Column;
 import sk.jacob.sql.ddl.Sequence;
 import sk.jacob.sql.ddl.Table;
-import sk.jacob.sql.model.TestModel;
-
-import static sk.jacob.sql.ddl.DDL.sequence;
-import static sk.jacob.sql.ddl.TYPE.*;
 
 import static sk.jacob.sql.ddl.Column.options;
+import static sk.jacob.sql.ddl.TYPE.Long;
+import static sk.jacob.sql.ddl.TYPE.String;
 import static sk.jacob.sql.generator.SequenceIdGenerator.sequenceIdGenerator;
 
 public class TabTIdInsert extends Table {

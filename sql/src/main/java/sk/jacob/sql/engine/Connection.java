@@ -1,13 +1,12 @@
 package sk.jacob.sql.engine;
 
 import sk.jacob.sql.Metadata;
+import sk.jacob.sql.ddl.Column;
+import sk.jacob.sql.ddl.ColumnValue;
 import sk.jacob.sql.ddl.DDLStatement;
 import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.dml.*;
 import sk.jacob.sql.generator.IdGenerator;
-import sk.jacob.sql.ddl.Column;
-import sk.jacob.sql.ddl.ColumnValue;
-import sk.jacob.sql.dml.DMLClause;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

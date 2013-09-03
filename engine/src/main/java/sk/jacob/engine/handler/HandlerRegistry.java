@@ -4,13 +4,11 @@ import sk.jacob.annotation.Required;
 import sk.jacob.types.ExecutionContext;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.util.*;
 
 public abstract class HandlerRegistry<T extends Annotation> {
     private final Class<T> supportedAnnotation;

@@ -2,14 +2,15 @@ package sk.jacob.engine.handler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.lang.reflect.Method;
-import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 import sk.jacob.annotation.Required;
 import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.RequestData;
 import sk.jacob.types.ResponseData;
+
+import java.lang.reflect.Method;
+import java.util.List;
 
 // FIXME:
 public class HandlerRegistryTest {

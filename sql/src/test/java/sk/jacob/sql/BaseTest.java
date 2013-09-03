@@ -2,10 +2,10 @@ package sk.jacob.sql;
 
 import org.junit.After;
 import org.junit.Before;
-import sk.jacob.sql.model.TestModel;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.DbEngine;
+import sk.jacob.sql.model.TestModel;
 
 public class BaseTest {
     protected final Metadata MODEL = TestModel.METADATA;

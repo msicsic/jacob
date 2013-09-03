@@ -1,12 +1,13 @@
 package sk.jacob.sql.engine;
 
-import sk.jacob.sql.Metadata;
 import sk.jacob.sql.dialect.DialectVisitor;
 import sk.jacob.sql.dialect.H2DialectVisitor;
 import sk.jacob.sql.dialect.OracleDialectVisitor;
 import sk.jacob.sql.dialect.PostgreDialectVisitor;
 
-import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 public class DbEngine {

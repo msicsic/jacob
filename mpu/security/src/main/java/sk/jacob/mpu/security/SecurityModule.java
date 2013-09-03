@@ -5,14 +5,14 @@ import sk.jacob.accessor.SECURITY;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.TokenTypes;
+import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
-import sk.jacob.types.ExecutionContext;
-import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.sql.engine.DbEngine;
+import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.Return;
 
 import java.util.ArrayList;
@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Properties;
 
 import static sk.jacob.sql.dml.DML.*;
-import static sk.jacob.sql.dml.DML.cv;
 import static sk.jacob.sql.dml.Op.eq;
 import static sk.jacob.util.Log.logger;
 

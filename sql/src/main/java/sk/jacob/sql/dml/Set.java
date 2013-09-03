@@ -2,7 +2,6 @@ package sk.jacob.sql.dml;
 
 import sk.jacob.sql.ddl.ColumnValue;
 import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.GenericDialectVisitor;
 
 import java.util.ArrayList;
 import java.util.Arrays;

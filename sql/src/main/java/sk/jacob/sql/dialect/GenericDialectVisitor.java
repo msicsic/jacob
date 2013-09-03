@@ -6,7 +6,6 @@ import sk.jacob.util.func.Functional;
 import sk.jacob.util.func.StringReducer;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class GenericDialectVisitor implements DialectVisitor {

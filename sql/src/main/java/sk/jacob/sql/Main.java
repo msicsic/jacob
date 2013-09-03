@@ -1,17 +1,18 @@
 package sk.jacob.sql;
 
-import sk.jacob.sql.ddl.*;
+import sk.jacob.sql.ddl.Column;
+import sk.jacob.sql.ddl.DbObject;
+import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.dml.DMLClause;
 import sk.jacob.sql.dml.SqlClause;
 
-import static sk.jacob.sql.ddl.DDL.column;
-import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.ddl.Column.options;
-import static sk.jacob.sql.ddl.DDL.*;
+import static sk.jacob.sql.ddl.DDL.column;
+import static sk.jacob.sql.ddl.TYPE.Long;
+import static sk.jacob.sql.ddl.TYPE.String;
+import static sk.jacob.sql.dml.DML.select;
 import static sk.jacob.sql.dml.Function.count;
 import static sk.jacob.sql.dml.Op.*;
-import static sk.jacob.sql.generator.SequenceIdGenerator.sequenceIdGenerator;
-import static sk.jacob.sql.ddl.TYPE.*;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,11 +1,9 @@
 package sk.jacob.mpu.context.tenant;
 
-import java.util.Map;
-
 import sk.jacob.accessor.COMMON;
-import sk.jacob.annotation.Required;
 import sk.jacob.accessor.CONTEXT;
 import sk.jacob.accessor.SECURITY;
+import sk.jacob.annotation.Required;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.*;
 import sk.jacob.sql.dml.SqlClause;
@@ -16,8 +14,9 @@ import sk.jacob.types.Principal;
 import sk.jacob.types.RequestData;
 import sk.jacob.types.ResponseData;
 
+import java.util.Map;
+
 import static sk.jacob.sql.dml.DML.*;
-import static sk.jacob.sql.dml.DML.cv;
 import static sk.jacob.sql.dml.Op.eq;
 
 public class Create {

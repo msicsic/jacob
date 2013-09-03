@@ -2,13 +2,13 @@ package sk.jacob.mpu.context.model;
 
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.ddl.Column;
+import sk.jacob.sql.ddl.Sequence;
+import sk.jacob.sql.ddl.Table;
+
 import static sk.jacob.sql.ddl.Column.options;
 import static sk.jacob.sql.ddl.TYPE.Long;
 import static sk.jacob.sql.ddl.TYPE.String;
 import static sk.jacob.sql.generator.SequenceIdGenerator.sequenceIdGenerator;
-
-import sk.jacob.sql.ddl.Sequence;
-import sk.jacob.sql.ddl.Table;
 
 /**
  * Datasources

@@ -1,26 +1,25 @@
 package sk.jacob.mpu.context.tenant;
 
-import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import sk.jacob.accessor.COMMON;
-import sk.jacob.annotation.Required;
 import sk.jacob.accessor.CONTEXT;
+import sk.jacob.annotation.Required;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.TenantsParams;
-import static sk.jacob.sql.dml.DML.select;
-import static sk.jacob.sql.dml.Op.eq;
-import static sk.jacob.sql.dml.Op.and;
-import static sk.jacob.sql.dml.Op.in;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.types.ExecutionContext;
 import sk.jacob.types.RequestData;
 import sk.jacob.types.ResponseData;
 import sk.jacob.types.Return;
+
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import static sk.jacob.sql.dml.DML.select;
+import static sk.jacob.sql.dml.Op.*;
 
 public class ParamGet {
     private static class ParamGetReqd extends RequestData {

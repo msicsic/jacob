@@ -3,7 +3,6 @@ package sk.jacob.sql.dml;
 import sk.jacob.sql.ddl.ColumnValue;
 import sk.jacob.sql.ddl.Table;
 import sk.jacob.sql.dialect.DialectVisitor;
-import sk.jacob.sql.dialect.GenericDialectVisitor;
 
 public class Update extends DMLClause implements UpdateClause {
     public final String tableName;
