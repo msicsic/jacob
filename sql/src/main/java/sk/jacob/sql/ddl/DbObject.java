@@ -3,7 +3,7 @@ package sk.jacob.sql.ddl;
 import sk.jacob.sql.dialect.GenericDialectVisitor;
 import sk.jacob.sql.engine.DbEngine;
 
-public abstract class DbObject implements DDLEpression {
+public abstract class DbObject implements DDLExpression {
     public final String name;
 
     protected DbObject(String name) {

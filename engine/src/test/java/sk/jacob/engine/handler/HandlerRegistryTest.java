@@ -40,8 +40,8 @@ public class HandlerRegistryTest {
 
         @DataTypes(type = "test",
                 version = "0.1",
-                request = Req.class,
-                response = Res.class)
+                reqd = Req.class,
+                resd = Res.class)
         public static ExecutionContext method(ExecutionContext ec) {
             return ec;
         }

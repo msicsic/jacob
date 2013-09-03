@@ -100,8 +100,8 @@ public abstract class HandlerRegistry<T extends Annotation> {
 
         handlerMap.put("id", dataTypesAnnotation.type());
         handlerMap.put("version", dataTypesAnnotation.version());
-        handlerMap.put("resd", serializeClass(dataTypesAnnotation.request()));
-        handlerMap.put("reqd", serializeClass(dataTypesAnnotation.response()));
+        handlerMap.put("resd", serializeClass(dataTypesAnnotation.reqd()));
+        handlerMap.put("reqd", serializeClass(dataTypesAnnotation.resd()));
 
         return handlerMap;
     }

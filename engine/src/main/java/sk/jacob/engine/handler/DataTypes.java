@@ -13,6 +13,6 @@ import java.lang.annotation.ElementType;
 public @interface DataTypes {
     String type();
     String version();
-    Class<? extends RequestData> request();
-    Class<? extends ResponseData> response();
+    Class<? extends RequestData> reqd();
+    Class<? extends ResponseData> resd();
 }

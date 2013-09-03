@@ -39,8 +39,8 @@ public class ParamGet {
 
     @DataTypes(type = "context.tenant.paramGet",
                version = "1.0",
-               request = ParamGetReqd.class,
-               response = ParamGetResd.class)
+               reqd = ParamGetReqd.class,
+               resd = ParamGetResd.class)
     public static ExecutionContext handle(ExecutionContext ec) throws Exception {
         ParamGetReqd requestData = (ParamGetReqd) MESSAGE.get(ec).request.reqd;
 

@@ -34,6 +34,12 @@ public class Connection {
         this.metadata = metadata;
     }
 
+    /**
+     * Executes statements in raw string format.
+     *
+     * @param stringStatement
+     * @return
+     */
     public JacobResultSet execute(String stringStatement) {
         ResultSet resultSet;
         try {
@@ -50,7 +56,7 @@ public class Connection {
         return execute((DMLClause) sqlClause);
     }
 
-    public Object execute(DMLClause dmlClause) {
+    private Object execute(DMLClause dmlClause) {
         DMLClause rootDMLClause = dmlClause.getRootClause();
         Object returnValue = null;
         if(rootDMLClause instanceof Select) {
@@ -83,23 +89,23 @@ public class Connection {
         }
     }
 
-    private ResultSet executeStatement(Select dmlStatement) {
+    private JacobResultSet executeStatement(Select selectStatement) {
         ResultSet resultSet;
         try {
-            PreparedStatement ps = toPreparedStatement(dmlStatement);
+            PreparedStatement ps = toPreparedStatement(selectStatement);
             sqlStatements.add(ps);
             resultSet = ps.executeQuery();
         } catch (SQLException e) {
             this.close();
             throw new RuntimeException(e);
         }
-        return resultSet;
+        return new JacobResultSet(resultSet);
     }
 
-    private Object executeStatement(Insert dmlStatement) {
-        Object generatedId = checkIdColumn(dmlStatement);
+    private Object executeStatement(Insert insertStatement) {
+        Object generatedId = checkIdColumn(insertStatement);
         try {
-            PreparedStatement ps = toPreparedStatement(dmlStatement);
+            PreparedStatement ps = toPreparedStatement(insertStatement);
             sqlStatements.add(ps);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -152,18 +158,18 @@ public class Connection {
         return filledIdColumn;
     }
 
-    private void executeStatement(Update dmlStatement) {
-        executeUpdateOrDelete(dmlStatement);
+    private void executeStatement(Update updateStatement) {
+        executeUpdateOrDelete(updateStatement);
     }
 
-    private void executeStatement(Delete dmlStatement) {
-        executeUpdateOrDelete(dmlStatement);
+    private void executeStatement(Delete deleteStatement) {
+        executeUpdateOrDelete(deleteStatement);
     }
 
-    private void executeUpdateOrDelete(DMLClause dmlClause) {
+    private void executeUpdateOrDelete(DMLClause updateOrDeleteStatement) {
         PreparedStatement ps = null;
         try {
-            ps = toPreparedStatement(dmlClause);
+            ps = toPreparedStatement(updateOrDeleteStatement);
             ps.executeUpdate();
         } catch (SQLException e) {
             this.close();

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DDLStatement {
     public final String inline;
-    public final List<String> outline = new ArrayList<String>();
+    public final List<String> outline = new ArrayList<>();
 
     public DDLStatement(String inline) {
         this.inline = inline;

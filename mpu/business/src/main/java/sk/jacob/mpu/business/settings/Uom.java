@@ -22,8 +22,8 @@ public class Uom {
 
     @DataTypes(type = "business.uom.add",
                version = "0.1",
-               request = Req1.class,
-               response = Res1.class)
+               reqd = Req1.class,
+               resd = Res1.class)
     public ExecutionContext method1(ExecutionContext ec) {
         System.out.println("===========================================");
         System.out.println("method1");
@@ -34,8 +34,8 @@ public class Uom {
 
     @DataTypes(type = "business.uom.add",
           version = "0.2",
-          request = Req1.class,
-          response = Res1.class)
+          reqd = Req1.class,
+          resd = Res1.class)
     public ExecutionContext method2(ExecutionContext ec) {
         System.out.println("===========================================");
         System.out.println("method2");

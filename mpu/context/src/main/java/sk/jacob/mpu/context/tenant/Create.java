@@ -35,8 +35,8 @@ public class Create {
 
     @DataTypes(type = "context.tenant.create",
                version = "1.0",
-               request = CreateTenantReqd.class,
-               response = CreateTenantResd.class)
+               reqd = CreateTenantReqd.class,
+               resd = CreateTenantResd.class)
     public static ExecutionContext handle(ExecutionContext ec) throws Exception {
         CreateTenantReqd requestData = (CreateTenantReqd) MESSAGE.get(ec).request.reqd;
         String tenantName = requestData.name;

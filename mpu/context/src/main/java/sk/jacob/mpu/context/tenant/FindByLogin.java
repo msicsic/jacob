@@ -50,8 +50,8 @@ public class FindByLogin {
 
     @DataTypes(type = "context.tenant.findByLogin",
                version = "1.0",
-               request = FindByLoginReqd.class,
-               response = FindByLoginResd.class)
+               reqd = FindByLoginReqd.class,
+               resd = FindByLoginResd.class)
     public static ExecutionContext handle(ExecutionContext ec) throws Exception {
         FindByLoginReqd requestData = (FindByLoginReqd) MESSAGE.get(ec).request.reqd;
 

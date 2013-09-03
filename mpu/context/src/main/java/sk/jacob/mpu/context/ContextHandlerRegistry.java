@@ -34,7 +34,7 @@ public class ContextHandlerRegistry extends HandlerRegistry<DataTypes> {
         Request request = new Request();
 
         request.reqh = new Gson().fromJson(jsonRequest.get("reqh"), RequestHeader.class);
-        request.reqd = new Gson().fromJson(jsonRequest.get("reqd"), dataTypes.request());
+        request.reqd = new Gson().fromJson(jsonRequest.get("reqd"), dataTypes.reqd());
 
         MESSAGE.get(ec).request = request;
     }
