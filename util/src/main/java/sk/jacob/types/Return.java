@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Locale;
 
+import static sk.jacob.util.StackTrace.stackToString;
+
 public class Return {
     public static ExecutionContext ERROR(String errorCode, ExecutionContext ec) {
         return ERROR(errorCode, MessageResolver.getMessage(errorCode, new Locale("SK")), ec);
@@ -46,12 +48,6 @@ public class Return {
         exception.code = code;
         exception.text = text;
         return ec;
-    }
-
-    public static String stackToString(Throwable t) {
-        StringWriter stringWriter = new StringWriter();
-        t.printStackTrace(new PrintWriter(stringWriter));
-        return stringWriter.toString();
     }
 
     public static ExecutionContext RESPONSE(ResponseData responseData, ExecutionContext ec) {

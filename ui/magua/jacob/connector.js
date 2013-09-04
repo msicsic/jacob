@@ -12,14 +12,14 @@ define([
     var errorMessages = i18n.getLocalization("jacob", "errors");
     var header = lang.mixin(storage.sessionGet("connector.header"), {
         format: "jacob",
-        version: "0.1",
+        version: "1.0",
         language: kernel.locale
     });
 
     function destorySecurityToken() {
         header = {
             format: "jacob",
-            version: "0.1",
+            version: "1.0",
             language: kernel.locale
         };
         storage.sessionRemove("connector.header");

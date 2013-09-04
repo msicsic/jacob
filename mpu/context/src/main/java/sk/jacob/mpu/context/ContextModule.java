@@ -15,17 +15,19 @@ import sk.jacob.types.Return;
 
 import java.util.*;
 
+import static sk.jacob.util.Log.logger;
+import static sk.jacob.util.StackTrace.stackToString;
+
 public class ContextModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();
     private static final Metadata MODEL = ContextModel.INSTANCE.METADATA;
     private final DbEngine dbEngine;
     private final Properties config;
+    private final HandlerRegistry<DataTypes> handlerRegistry;
 
     static {
         HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.context.tenant.Init.HANDLERS));
     }
-
-    private final HandlerRegistry<DataTypes> handlerRegistry;
 
     public ContextModule(Properties config) {
         this.config = config;
@@ -55,7 +57,9 @@ public class ContextModule implements Module {
             conn.txCommit();
         } catch (Exception e) {
             conn.txRollback();
-            ec = Return.EXCEPTION("context.general.context.exception", e, ec);
+            String errorCode = "context.general.context.exception";
+            logger(this).error(errorCode, e);
+            ec = Return.EXCEPTION(errorCode, e, ec);
         } finally {
             conn.close();
         }

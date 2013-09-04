@@ -19,12 +19,13 @@ public class ContextHandlerRegistry extends HandlerRegistry<DataTypes> {
 
     @Override
     protected String getHandlerKey(DataTypes annotation) {
-        return annotation.type();
+        return annotation.type() + "." + annotation.version();
     }
 
     @Override
     protected String getMessageType(ExecutionContext ec) {
-        return COMMON.getMessage(ec).request.reqh.type;
+        RequestHeader rh = COMMON.getMessage(ec).request.reqh;
+        return rh.type + "." + rh.version;
     }
 
     @Override

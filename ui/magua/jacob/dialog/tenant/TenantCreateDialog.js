@@ -25,7 +25,7 @@ define([
                 connector.call("context.tenant.create", {
                     sync: true,
                     data: {
-                        tenant_name: this.tenantNameInput.get("value"),
+                        tenantName: this.tenantNameInput.get("value"),
                         params: {
                             "magua.tenantColor": this.tenantColorInput.get("value"),
                             "demo": this.tenantDemoInput.get("checked")

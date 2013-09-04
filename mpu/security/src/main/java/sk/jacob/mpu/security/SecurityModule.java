@@ -52,9 +52,9 @@ public class SecurityModule implements Module {
             ec = this.handlerRegistry.process(ec);
             conn.txCommit();
         } catch (Exception e){
+            conn.txRollback();
             String errorCode = "security.general.token.exception";
             logger(this).error(errorCode, e);
-            conn.txRollback();
             ec = Return.EXCEPTION(errorCode, e, ec);
         } finally {
             conn.close();

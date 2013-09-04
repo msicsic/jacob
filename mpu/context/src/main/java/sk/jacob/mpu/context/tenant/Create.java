@@ -22,7 +22,7 @@ import static sk.jacob.sql.dml.Op.eq;
 public class Create {
     private static class CreateTenantReqd extends RequestData {
         @Required
-        public String name;
+        public String tenantName;
         public Map<String, String> params;
     }
 
@@ -39,7 +39,7 @@ public class Create {
                resd = CreateTenantResd.class)
     public static ExecutionContext handle(ExecutionContext ec) throws Exception {
         CreateTenantReqd requestData = (CreateTenantReqd) COMMON.getMessage(ec).request.reqd;
-        String tenantName = requestData.name;
+        String tenantName = requestData.tenantName;
         String tenantId = tenantName.toUpperCase().replace(" ", "");
         Connection conn = (Connection) CONTEXT.CONNECTION.get(ec);
 
