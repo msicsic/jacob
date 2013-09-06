@@ -15,7 +15,7 @@
         <module>sql</module>
         <module>connector</module>
         <module>jacobapp</module>
-        <module>util</module>
+        <module>common</module>
     </modules>
 
     <build>

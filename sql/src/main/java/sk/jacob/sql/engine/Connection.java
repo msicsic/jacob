@@ -18,6 +18,12 @@ import static sk.jacob.sql.dml.DML.cv;
 
 // UNDER CONSTRUCTION
 // TO BE REVIEWED
+/*
+ * In some cases like setting null t not null column H2 besides reporting error closes connection as well
+ * COnsider adding internal closed connection flag and reopen connection at commit or rollback
+ * Please be aware that executing sql statement must not try to reopen connection as this will need to be done
+ * within one session.
+ */
 public class Connection {
     private final DbEngine dbEngine;
     private final java.sql.Connection connection;
