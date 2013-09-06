@@ -8,7 +8,7 @@ public class SECURITY<T> extends ExecutionContextAccessor<T> {
     public static final String CONTEXT_KEY = "SECURITY_CONTEXT";
 
     public static SECURITY<Principal> PRINCIPAL = new SECURITY<>("PRINCIPAL");
-    public static SECURITY<Token> TOKEN = new SECURITY<>("PRINCIPAL");
+    public static SECURITY<Token> TOKEN = new SECURITY<>("TOKEN");
     public static SECURITY<Connection> CONNECTION = new SECURITY<>("CONNECTION");
 
     public SECURITY(String key) {
