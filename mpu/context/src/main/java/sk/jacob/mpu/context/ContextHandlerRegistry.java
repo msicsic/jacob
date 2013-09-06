@@ -2,12 +2,12 @@ package sk.jacob.mpu.context;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import sk.jacob.accessor.COMMON;
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.engine.handler.HandlerRegistry;
-import sk.jacob.types.ExecutionContext;
-import sk.jacob.types.Request;
-import sk.jacob.types.RequestHeader;
+import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.appcommon.types.Request;
+import sk.jacob.appcommon.types.RequestHeader;
 
 import java.lang.annotation.Annotation;
 import java.util.List;

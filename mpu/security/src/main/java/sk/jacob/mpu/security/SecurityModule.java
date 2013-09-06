@@ -1,10 +1,10 @@
 package sk.jacob.mpu.security;
 
-import sk.jacob.accessor.CONFIG;
-import sk.jacob.accessor.SECURITY;
+import sk.jacob.appcommon.accessor.CONFIG;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.TokenTypes;
+import sk.jacob.appcommon.accessor.CONNECTION;
 import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
@@ -12,8 +12,8 @@ import sk.jacob.sql.Metadata;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.DbEngine;
-import sk.jacob.types.ExecutionContext;
-import sk.jacob.types.Return;
+import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.appcommon.types.Return;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ import java.util.Properties;
 
 import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.dml.Op.eq;
-import static sk.jacob.util.Log.logger;
+import static sk.jacob.common.util.Log.logger;
 
 public class SecurityModule implements Module {
     private static final List<Class> HANDLERS = new ArrayList<>();
@@ -46,7 +46,7 @@ public class SecurityModule implements Module {
     @Override
     public ExecutionContext handle(ExecutionContext ec) {
         Connection conn = this.dbEngine.getConnection();
-        SECURITY.CONNECTION.set(ec, conn);
+        CONNECTION.CURRENT.storeValue(conn, ec);
         try {
             conn.txBegin();
             ec = this.handlerRegistry.process(ec);

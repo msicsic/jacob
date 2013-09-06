@@ -1,10 +1,10 @@
 package sk.jacob.mpu.business.settings;
 
-import sk.jacob.accessor.COMMON;
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.engine.handler.DataTypes;
-import sk.jacob.types.ExecutionContext;
-import sk.jacob.types.RequestData;
-import sk.jacob.types.ResponseData;
+import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.appcommon.types.RequestData;
+import sk.jacob.appcommon.types.ResponseData;
 
 public class Uom {
     public class Req1 extends RequestData {

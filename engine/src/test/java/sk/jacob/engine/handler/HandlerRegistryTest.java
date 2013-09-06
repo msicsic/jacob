@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.Ignore;
 import org.junit.Test;
-import sk.jacob.annotation.Required;
-import sk.jacob.types.ExecutionContext;
-import sk.jacob.types.RequestData;
-import sk.jacob.types.ResponseData;
+import sk.jacob.appcommon.annotation.Required;
+import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.appcommon.types.RequestData;
+import sk.jacob.appcommon.types.ResponseData;
 
 import java.lang.reflect.Method;
 import java.util.List;

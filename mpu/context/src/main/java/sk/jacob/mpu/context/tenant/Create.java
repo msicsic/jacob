@@ -1,18 +1,18 @@
 package sk.jacob.mpu.context.tenant;
 
-import sk.jacob.accessor.COMMON;
-import sk.jacob.accessor.CONTEXT;
-import sk.jacob.accessor.SECURITY;
-import sk.jacob.annotation.Required;
+import sk.jacob.appcommon.accessor.COMMON;
+import sk.jacob.appcommon.accessor.CONTEXT;
+import sk.jacob.appcommon.accessor.SECURITY;
+import sk.jacob.appcommon.annotation.Required;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.*;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.JacobResultSet;
-import sk.jacob.types.ExecutionContext;
-import sk.jacob.types.Principal;
-import sk.jacob.types.RequestData;
-import sk.jacob.types.ResponseData;
+import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.appcommon.types.Principal;
+import sk.jacob.appcommon.types.RequestData;
+import sk.jacob.appcommon.types.ResponseData;
 
 import java.util.Map;
 
@@ -50,7 +50,7 @@ public class Create {
 
         // 2. Create tenant user association
         UsersTenants usersTenants = ContextModel.INSTANCE.table(UsersTenants.class);
-        Principal principal = SECURITY.getPrincipal(ec);
+        Principal principal = SECURITY.PRINCIPAL.getFrom(ec);
         conn.execute(insert(usersTenants).values(cv(usersTenants.login, principal.login),
                                                  cv(usersTenants.tenantFk, tenantId)));
 

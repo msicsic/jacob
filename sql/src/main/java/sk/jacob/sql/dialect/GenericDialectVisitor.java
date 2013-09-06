@@ -2,8 +2,8 @@ package sk.jacob.sql.dialect;
 
 import sk.jacob.sql.ddl.*;
 import sk.jacob.sql.dml.*;
-import sk.jacob.util.func.Functional;
-import sk.jacob.util.func.StringReducer;
+import sk.jacob.common.util.func.Functional;
+import sk.jacob.common.util.func.StringReducer;
 
 import java.util.ArrayList;
 import java.util.List;

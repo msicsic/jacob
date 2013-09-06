@@ -1,7 +1,7 @@
 package sk.jacob.engine.handler;
 
-import sk.jacob.types.RequestData;
-import sk.jacob.types.ResponseData;
+import sk.jacob.appcommon.types.RequestData;
+import sk.jacob.appcommon.types.ResponseData;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

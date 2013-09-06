@@ -3,11 +3,11 @@ package sk.jacob;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import sk.jacob.accessor.COMMON;
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.engine.Module;
-import sk.jacob.types.ExecutionContext;
-import sk.jacob.types.Request;
-import sk.jacob.types.RequestHeader;
+import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.appcommon.types.Request;
+import sk.jacob.appcommon.types.RequestHeader;
 
 public class MessageDeserializer implements Module {
     private static final JsonParser JSON_PARSER = new JsonParser();

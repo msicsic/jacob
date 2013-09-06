@@ -2,11 +2,11 @@ package sk.jacob.mpu.security;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import sk.jacob.accessor.COMMON;
-import sk.jacob.accessor.SECURITY;
+import sk.jacob.appcommon.accessor.COMMON;
+import sk.jacob.appcommon.accessor.SECURITY;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.TokenTypes;
-import sk.jacob.types.ExecutionContext;
+import sk.jacob.appcommon.types.ExecutionContext;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -33,7 +33,7 @@ public class SecurityHandlerRegistry extends HandlerRegistry<TokenTypes> {
     protected void deserializeMessageElement(ExecutionContext ec, Annotation annotation) {
         JsonObject securityElement = getSecurityElement(ec);
         TokenTypes tokenTypes = (TokenTypes)annotation;
-        SECURITY.TOKEN.set(ec, GSON.fromJson(securityElement, tokenTypes.token()));
+        SECURITY.TOKEN.storeValue(GSON.fromJson(securityElement, tokenTypes.token()), ec);
     }
 
     private static JsonObject getSecurityElement(ExecutionContext ec) {

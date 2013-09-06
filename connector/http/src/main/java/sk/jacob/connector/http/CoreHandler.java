@@ -2,9 +2,9 @@ package sk.jacob.connector.http;
 
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import sk.jacob.accessor.COMMON;
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.engine.Bus;
-import sk.jacob.types.ExecutionContext;
+import sk.jacob.appcommon.types.ExecutionContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

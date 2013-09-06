@@ -1,16 +1,16 @@
 package sk.jacob;
 
-import sk.jacob.accessor.COMMON;
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.engine.Firmware;
 import sk.jacob.engine.Module;
 import sk.jacob.mpu.business.BusinessModule;
 import sk.jacob.mpu.context.ContextModule;
 import sk.jacob.mpu.security.SecurityModule;
-import sk.jacob.types.ExecutionContext;
+import sk.jacob.appcommon.types.ExecutionContext;
 
 import java.util.*;
 
-import static sk.jacob.util.Log.logger;
+import static sk.jacob.common.util.Log.logger;
 
 public class JacobFirmware implements Firmware {
     public static final String APP_PORT = "APP_PORT";

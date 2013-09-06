@@ -1,11 +1,11 @@
 package sk.jacob.engine;
 
-import sk.jacob.types.ExecutionContext;
+import sk.jacob.appcommon.types.ExecutionContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static sk.jacob.util.Log.logger;
+import static sk.jacob.common.util.Log.logger;
 
 public class Bus {
     private final Firmware firmware;

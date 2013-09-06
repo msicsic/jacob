@@ -1,17 +1,17 @@
 package sk.jacob.mpu.context.tenant;
 
-import sk.jacob.accessor.COMMON;
-import sk.jacob.accessor.CONTEXT;
-import sk.jacob.annotation.Required;
+import sk.jacob.appcommon.accessor.COMMON;
+import sk.jacob.appcommon.accessor.CONTEXT;
+import sk.jacob.appcommon.annotation.Required;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.TenantsParams;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
-import sk.jacob.types.ExecutionContext;
-import sk.jacob.types.RequestData;
-import sk.jacob.types.ResponseData;
-import sk.jacob.types.Return;
+import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.appcommon.types.RequestData;
+import sk.jacob.appcommon.types.ResponseData;
+import sk.jacob.appcommon.types.Return;
 
 import java.sql.ResultSet;
 import java.util.HashMap;

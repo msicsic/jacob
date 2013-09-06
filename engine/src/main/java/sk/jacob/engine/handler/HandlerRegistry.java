@@ -1,7 +1,7 @@
 package sk.jacob.engine.handler;
 
-import sk.jacob.annotation.Required;
-import sk.jacob.types.ExecutionContext;
+import sk.jacob.appcommon.annotation.Required;
+import sk.jacob.appcommon.types.ExecutionContext;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

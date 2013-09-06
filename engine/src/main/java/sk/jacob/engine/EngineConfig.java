@@ -1,6 +1,6 @@
 package sk.jacob.engine;
 
-import sk.jacob.types.ExecutionContext;
+import sk.jacob.appcommon.types.ExecutionContext;
 
 public class EngineConfig implements Module {
     @Override
