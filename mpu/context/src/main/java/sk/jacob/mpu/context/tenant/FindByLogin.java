@@ -55,7 +55,7 @@ public class FindByLogin {
                reqd = FindByLoginReqd.class,
                resd = FindByLoginResd.class)
     public static ExecutionContext handle(ExecutionContext ec) throws Exception {
-        FindByLoginReqd requestData = (FindByLoginReqd) COMMON.getMessage(ec).request.reqd;
+        FindByLoginReqd requestData = (FindByLoginReqd) COMMON.MESSAGE.getFrom(ec).request.reqd;
 
         Tenants tenants = ContextModel.INSTANCE.table(Tenants.class);
         UsersTenants usersTenants = ContextModel.INSTANCE.table(UsersTenants.class);
@@ -64,7 +64,7 @@ public class FindByLogin {
                 .from(tenants)
                 .join(usersTenants, eq(tenants.id, usersTenants.tenantFk))
                 .where(eq(usersTenants.login, requestData.login));
-        Connection conn = (Connection) CONTEXT.CONNECTION.get(ec);
+        Connection conn = CONTEXT.CONNECTION.getFrom(ec);
         JacobResultSet rs = (JacobResultSet) conn.execute(s);
 
         List<FindByLoginResd.TenantResponse> responseTenants = new LinkedList<>();

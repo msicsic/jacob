@@ -1,5 +1,7 @@
 package sk.jacob.engine;
 
+import sk.jacob.appcommon.accessor.COMMON;
+import sk.jacob.appcommon.types.Emitter;
 import sk.jacob.appcommon.types.ExecutionContext;
 
 import java.util.ArrayList;
@@ -7,12 +9,12 @@ import java.util.List;
 
 import static sk.jacob.common.util.Log.logger;
 
-public class Bus {
-    private final Firmware firmware;
+public class Bus implements Emitter {
+    private final Logic logic;
     private final List<Connector> ports = new ArrayList<>();
 
-    public Bus(Firmware firmware) {
-        this.firmware = firmware;
+    public Bus(Logic logic) {
+        this.logic = logic;
     }
 
     public void attach(String portName, Connector connector) {
@@ -29,7 +31,9 @@ public class Bus {
         logger(this).info("Bus started.");
     }
 
+    @Override
     public ExecutionContext send(String portId, ExecutionContext ec) {
-        return firmware.handle(portId, ec);
+        COMMON.EMITTER.set(this, ec);
+        return logic.handle(portId, ec);
     }
 }

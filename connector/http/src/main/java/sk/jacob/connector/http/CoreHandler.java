@@ -25,12 +25,12 @@ public class CoreHandler extends AbstractHandler {
     public void handle(String target, Request baseRequest, HttpServletRequest httpServletRequest,
                        HttpServletResponse httpServletResponse) throws IOException, ServletException {
 
-        ExecutionContext dp = this.bus.send(this.portId, COMMON.createDataPacket(httpServletRequest.getParameter("m")));
+        ExecutionContext ec = this.bus.send(this.portId,
+                                            COMMON.createDataPacket(httpServletRequest.getParameter("m")));
 
         httpServletResponse.setContentType("text/html;charset=utf-8");
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
-
-        httpServletResponse.getWriter().println(COMMON.getMessage(dp).rawResponse);
+        httpServletResponse.getWriter().println(COMMON.MESSAGE.getFrom(ec).rawResponse);
     }
 }

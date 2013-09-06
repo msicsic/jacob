@@ -42,16 +42,16 @@ public class ParamGet {
                reqd = ParamGetReqd.class,
                resd = ParamGetResd.class)
     public static ExecutionContext handle(ExecutionContext ec) throws Exception {
-        ParamGetReqd requestData = (ParamGetReqd) COMMON.getMessage(ec).request.reqd;
+        ParamGetReqd requestData = (ParamGetReqd)COMMON.MESSAGE.getFrom(ec).request.reqd;
 
         TenantsParams tenantsParams = ContextModel.INSTANCE.table(TenantsParams.class);
 
         SqlClause s = select(tenantsParams.paramName, tenantsParams.paramValue)
                 .from(tenantsParams)
                 .where(and(eq(tenantsParams.tenantFk, requestData.tenantId),
-                           eq(tenantsParams.scope, "public"),
+                           eq(tenantsParams.scope, ParamScope.PUBLIC),
                            in(tenantsParams.paramName, requestData.paramNames)));
-        Connection conn = (Connection) CONTEXT.CONNECTION.get(ec);
+        Connection conn = CONTEXT.CONNECTION.getFrom(ec);
         ResultSet rs = (ResultSet) conn.execute(s);
 
         Map<String, String> paramValues = new HashMap<>();

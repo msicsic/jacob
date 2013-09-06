@@ -27,8 +27,8 @@ public class Uom {
     public ExecutionContext method1(ExecutionContext ec) {
         System.out.println("===========================================");
         System.out.println("method1");
-        System.out.println(COMMON.getMessage(ec).rawRequest);
-        System.out.println(COMMON.getMessage(ec).request);
+        System.out.println(COMMON.MESSAGE.getFrom(ec).rawRequest);
+        System.out.println(COMMON.MESSAGE.getFrom(ec).request);
         return ec;
     }
 
@@ -39,8 +39,8 @@ public class Uom {
     public ExecutionContext method2(ExecutionContext ec) {
         System.out.println("===========================================");
         System.out.println("method2");
-        System.out.println(COMMON.getMessage(ec).rawRequest);
-        System.out.println(COMMON.getMessage(ec).request);
+        System.out.println(COMMON.MESSAGE.getFrom(ec).rawRequest);
+        System.out.println(COMMON.MESSAGE.getFrom(ec).request);
         return ec;
     }
 }

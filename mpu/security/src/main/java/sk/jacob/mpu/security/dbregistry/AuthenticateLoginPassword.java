@@ -2,7 +2,6 @@ package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.appcommon.accessor.SECURITY;
 import sk.jacob.engine.handler.TokenTypes;
-import sk.jacob.appcommon.accessor.CONNECTION;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.DMLClause;
@@ -47,7 +46,7 @@ public class AuthenticateLoginPassword {
                 .from(users)
                 .where(and(eq(users.login, token.login),
                            eq(users.md5pwd, md5String(token.password))));
-        Connection conn = CONNECTION.CURRENT.getFrom(ec);
+        Connection conn = SECURITY.CONNECTION.getFrom(ec);
         JacobResultSet rs = (JacobResultSet)conn.execute(s);
         if(rs.next() == false) {
             return Return.ERROR("security.invalid.login.password", ec);
@@ -81,7 +80,7 @@ public class AuthenticateLoginPassword {
         DMLClause s = update(users)
                 .set(cv(users.token, null))
                 .where(eq(users.token, token.value));
-        Connection conn = CONNECTION.CURRENT.getFrom(ec);
+        Connection conn = SECURITY.CONNECTION.getFrom(ec);
         conn.execute(s);
 
         return Return.EMPTY_RESPONSE(ec);

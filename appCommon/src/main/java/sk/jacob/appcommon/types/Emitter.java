@@ -1,4 +1,5 @@
 package sk.jacob.appcommon.types;
 
-public class Emitter {
+public interface Emitter {
+    ExecutionContext send(String portId, ExecutionContext ec);
 }

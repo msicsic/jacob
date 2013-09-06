@@ -24,19 +24,19 @@ public class ContextHandlerRegistry extends HandlerRegistry<DataTypes> {
 
     @Override
     protected String getMessageType(ExecutionContext ec) {
-        RequestHeader rh = COMMON.getMessage(ec).request.reqh;
+        RequestHeader rh = COMMON.MESSAGE.getFrom(ec).request.reqh;
         return rh.type + "." + rh.version;
     }
 
     @Override
     protected void deserializeMessageElement(ExecutionContext ec, Annotation annotation) {
         DataTypes dataTypes = (DataTypes)annotation;
-        JsonObject jsonRequest = COMMON.getMessage(ec).jsonRequest;
+        JsonObject jsonRequest = COMMON.MESSAGE.getFrom(ec).jsonRequest;
         Request request = new Request();
 
         request.reqh = new Gson().fromJson(jsonRequest.get("reqh"), RequestHeader.class);
         request.reqd = new Gson().fromJson(jsonRequest.get("reqd"), dataTypes.reqd());
 
-        COMMON.getMessage(ec).request = request;
+        COMMON.MESSAGE.getFrom(ec).request = request;
     }
 }

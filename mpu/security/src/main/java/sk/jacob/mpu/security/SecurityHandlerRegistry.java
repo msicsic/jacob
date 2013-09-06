@@ -33,11 +33,11 @@ public class SecurityHandlerRegistry extends HandlerRegistry<TokenTypes> {
     protected void deserializeMessageElement(ExecutionContext ec, Annotation annotation) {
         JsonObject securityElement = getSecurityElement(ec);
         TokenTypes tokenTypes = (TokenTypes)annotation;
-        SECURITY.TOKEN.storeValue(GSON.fromJson(securityElement, tokenTypes.token()), ec);
+        SECURITY.TOKEN.set(GSON.fromJson(securityElement, tokenTypes.token()), ec);
     }
 
     private static JsonObject getSecurityElement(ExecutionContext ec) {
-        JsonObject jsonRequest = COMMON.getMessage(ec).jsonRequest;
+        JsonObject jsonRequest = COMMON.MESSAGE.getFrom(ec).jsonRequest;
         JsonObject reqh = jsonRequest.get("reqh").getAsJsonObject();
         return reqh.get("security").getAsJsonObject();
     }

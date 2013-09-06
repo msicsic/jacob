@@ -1,10 +1,10 @@
 package sk.jacob.mpu.security;
 
 import sk.jacob.appcommon.accessor.CONFIG;
+import sk.jacob.appcommon.accessor.SECURITY;
 import sk.jacob.engine.Module;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.TokenTypes;
-import sk.jacob.appcommon.accessor.CONNECTION;
 import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
@@ -46,7 +46,7 @@ public class SecurityModule implements Module {
     @Override
     public ExecutionContext handle(ExecutionContext ec) {
         Connection conn = this.dbEngine.getConnection();
-        CONNECTION.CURRENT.storeValue(conn, ec);
+        SECURITY.CONNECTION.set(conn, ec);
         try {
             conn.txBegin();
             ec = this.handlerRegistry.process(ec);

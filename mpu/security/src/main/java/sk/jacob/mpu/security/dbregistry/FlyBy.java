@@ -2,7 +2,6 @@ package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.appcommon.accessor.SECURITY;
 import sk.jacob.engine.handler.TokenTypes;
-import sk.jacob.appcommon.accessor.CONNECTION;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.SqlClause;
@@ -32,7 +31,7 @@ public class FlyBy {
         SqlClause s = select(users.login, users.username, users.admin)
                 .from(users)
                 .where(eq(users.token, token.value));
-        Connection conn = CONNECTION.CURRENT.getFrom(ec);
+        Connection conn = SECURITY.CONNECTION.getFrom(ec);
         JacobResultSet rs = (JacobResultSet)conn.execute(s);
 
         if(rs.next() == false) {
@@ -43,7 +42,7 @@ public class FlyBy {
                        ? "ADMIN"
                        : rs.getString(users.login);
         String username = rs.getString(users.username);
-        SECURITY.PRINCIPAL.storeValue(new Principal(login, username), ec);
+        SECURITY.PRINCIPAL.set(new Principal(login, username), ec);
 
         return ec;
     }
@@ -63,7 +62,7 @@ public class FlyBy {
                 .from(users)
                 .where(and(eq(users.login, token.login),
                            eq(users.md5pwd, md5String(token.password))));
-        Connection conn = CONNECTION.CURRENT.getFrom(ec);
+        Connection conn = SECURITY.CONNECTION.getFrom(ec);
         JacobResultSet rs = (JacobResultSet)conn.execute(s);
 
         if(rs.next() == false) {
@@ -73,7 +72,7 @@ public class FlyBy {
         String login = rs.getBoolean(users.admin) ? "ADMIN"
                                                   : rs.getString(users.login);
         String username = rs.getString(users.username);
-        SECURITY.PRINCIPAL.storeValue(new Principal(login, username), ec);
+        SECURITY.PRINCIPAL.set(new Principal(login, username), ec);
 
         return ec;
     }

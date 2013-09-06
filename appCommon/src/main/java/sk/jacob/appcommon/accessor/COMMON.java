@@ -1,28 +1,15 @@
 package sk.jacob.appcommon.accessor;
 
-import sk.jacob.appcommon.types.ExecutionContext;
-import sk.jacob.appcommon.types.Message;
+import sk.jacob.appcommon.types.*;
 
-import java.util.HashMap;
-import java.util.Map;
+public class COMMON<T> extends ExecutionContextAccessor<T> {
+    public static final String CONTEXT_KEY = "COMMON_CONTEXT";
 
-public enum COMMON {
-    MESSAGE,
-    BUS;
+    public static COMMON<Message> MESSAGE = new COMMON<>("MESSAGE");
+    public static COMMON<Emitter> EMITTER = new COMMON<>("EMITTER");
 
-    private static final String CONTEXT_KEY = "MESSAGE_CONTEXT";
-
-    public Object get(ExecutionContext ec) {
-        Map<String, Object> bc = ec.INSTANCE.get(CONTEXT_KEY);
-        return bc.get(this.name());
-    }
-
-    public void set(ExecutionContext ec, Object value) {
-        if(ec.INSTANCE.containsKey(CONTEXT_KEY) == false) {
-            ec.INSTANCE.put(CONTEXT_KEY, new HashMap<String, Object>());
-        }
-        Map<String, Object> bc = ec.INSTANCE.get(CONTEXT_KEY);
-        bc.put(this.name(), value);
+    public COMMON(String key) {
+        super(key, CONTEXT_KEY);
     }
 
     public static ExecutionContext createDataPacket(String rawRequest) {
@@ -30,11 +17,7 @@ public enum COMMON {
         Message message;
         message = new Message();
         message.rawRequest = rawRequest;
-        COMMON.MESSAGE.set(ec, message);
+        COMMON.MESSAGE.set(message, ec);
         return ec;
-    }
-
-    public static Message getMessage(ExecutionContext ec) {
-        return (Message)COMMON.MESSAGE.get(ec);
     }
 }

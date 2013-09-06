@@ -38,10 +38,10 @@ public class Create {
                reqd = CreateTenantReqd.class,
                resd = CreateTenantResd.class)
     public static ExecutionContext handle(ExecutionContext ec) throws Exception {
-        CreateTenantReqd requestData = (CreateTenantReqd) COMMON.getMessage(ec).request.reqd;
+        CreateTenantReqd requestData = (CreateTenantReqd) COMMON.MESSAGE.getFrom(ec).request.reqd;
         String tenantName = requestData.tenantName;
         String tenantId = tenantName.toUpperCase().replace(" ", "");
-        Connection conn = (Connection) CONTEXT.CONNECTION.get(ec);
+        Connection conn = (Connection) CONTEXT.CONNECTION.getFrom(ec);
 
         // 1. Create tenant entry
         Tenants tenants = ContextModel.INSTANCE.table(Tenants.class);

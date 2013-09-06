@@ -1,25 +1,14 @@
 package sk.jacob.appcommon.accessor;
 
-import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.sql.engine.Connection;
 
-import java.util.HashMap;
-import java.util.Map;
+public class CONTEXT<T> extends ExecutionContextAccessor<T> {
+    public static final String CONTEXT_KEY = "BUSSINESS_CONTEXT";
 
-public enum CONTEXT {
-    CONNECTION, LDS_BDS;
+    public static CONTEXT<String> LDS_BDS = new CONTEXT<>("LDS_BDS");
+    public static CONTEXT<Connection> CONNECTION = new CONTEXT<>("CONNECTION");
 
-    private static final String CONTEXT_KEY = "BUSSINESS_CONTEXT";
-
-    public Object get(ExecutionContext ec) {
-        Map<String, Object> bc = ec.INSTANCE.get(CONTEXT_KEY);
-        return bc.get(this.name());
-    }
-
-    public void set(ExecutionContext ec, Object value) {
-        if(ec.INSTANCE.containsKey(CONTEXT_KEY) == false) {
-            ec.INSTANCE.put(CONTEXT_KEY, new HashMap<String, Object>());
-        }
-        Map<String, Object> bc = ec.INSTANCE.get(CONTEXT_KEY);
-        bc.put(this.name(), value);
+    public CONTEXT(String key) {
+        super(key, CONTEXT_KEY);
     }
 }

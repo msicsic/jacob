@@ -62,7 +62,7 @@ public class Return {
     }
 
     private static Message initResponse(ExecutionContext ec) {
-        Message message = COMMON.getMessage(ec);
+        Message message = COMMON.MESSAGE.getFrom(ec);
         message.response = new Response();
         message.response.resh = new ResponseHeader();
         return message;

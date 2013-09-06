@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import sk.jacob.appcommon.accessor.COMMON;
+import sk.jacob.appcommon.types.Message;
 import sk.jacob.engine.Module;
 import sk.jacob.appcommon.types.ExecutionContext;
 import sk.jacob.appcommon.types.Request;
@@ -15,16 +16,15 @@ public class MessageDeserializer implements Module {
 
     @Override
     public ExecutionContext handle(ExecutionContext ec) {
-        COMMON.getMessage(ec).jsonRequest =
-                JSON_PARSER.parse(COMMON.getMessage(ec).rawRequest).getAsJsonObject();
-        COMMON.getMessage(ec).request = new Request();
-        COMMON.getMessage(ec).request.reqh =
-                GSON.fromJson(getRequestHeader(ec), RequestHeader.class);
+        Message msg = COMMON.MESSAGE.getFrom(ec);
+        msg.jsonRequest = JSON_PARSER.parse(msg.rawRequest).getAsJsonObject();
+        msg.request = new Request();
+        msg.request.reqh = GSON.fromJson(getRequestHeader(ec), RequestHeader.class);
         return ec;
     }
 
     private JsonObject getRequestHeader(ExecutionContext ec) {
-        JsonObject jsonRequest = COMMON.getMessage(ec).jsonRequest;
+        JsonObject jsonRequest = COMMON.MESSAGE.getFrom(ec).jsonRequest;
         return jsonRequest.get("reqh").getAsJsonObject();
     }
 }

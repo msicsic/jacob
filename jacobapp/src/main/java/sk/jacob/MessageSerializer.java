@@ -2,6 +2,7 @@ package sk.jacob;
 
 import com.google.gson.Gson;
 import sk.jacob.appcommon.accessor.COMMON;
+import sk.jacob.appcommon.types.Message;
 import sk.jacob.engine.Module;
 import sk.jacob.appcommon.types.ExecutionContext;
 
@@ -10,7 +11,8 @@ public class MessageSerializer implements Module {
 
     @Override
     public ExecutionContext handle(ExecutionContext ec) {
-        COMMON.getMessage(ec).rawResponse = this.gson.toJson(COMMON.getMessage(ec).response);
+        Message msg = COMMON.MESSAGE.getFrom(ec);
+        msg.rawResponse = this.gson.toJson(msg.response);
         return ec;
     }
 }

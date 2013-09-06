@@ -19,7 +19,7 @@ public class ExecutionContextAccessor<T>  {
         return keyAccessor.getFrom(kvMap);
     }
 
-    public void storeValue(Object value, ExecutionContext ec) {
+    public void set(Object value, ExecutionContext ec) {
         if(ec.INSTANCE.containsKey(this.mapKey) == false) {
             ec.INSTANCE.put(this.mapKey, new HashMap<String, Object>());
         }
