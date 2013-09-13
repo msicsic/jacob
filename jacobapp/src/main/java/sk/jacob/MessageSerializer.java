@@ -3,10 +3,10 @@ package sk.jacob;
 import com.google.gson.Gson;
 import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.appcommon.types.Message;
-import sk.jacob.engine.Module;
+import sk.jacob.engine.ApplicationModule;
 import sk.jacob.appcommon.types.ExecutionContext;
 
-public class MessageSerializer implements Module {
+public class MessageSerializer implements ApplicationModule {
     private Gson gson = new Gson();
 
     @Override

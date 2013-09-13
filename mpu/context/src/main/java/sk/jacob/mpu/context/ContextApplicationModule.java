@@ -2,7 +2,7 @@ package sk.jacob.mpu.context;
 
 import sk.jacob.appcommon.accessor.CONFIG;
 import sk.jacob.appcommon.accessor.CONTEXT;
-import sk.jacob.engine.Module;
+import sk.jacob.engine.ApplicationModule;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.mpu.context.model.ContextModel;
@@ -17,7 +17,7 @@ import java.util.*;
 
 import static sk.jacob.common.util.Log.logger;
 
-public class ContextModule implements Module {
+public class ContextApplicationModule implements ApplicationModule {
     private static final List<Class> HANDLERS = new ArrayList<>();
     private static final Metadata MODEL = ContextModel.INSTANCE.METADATA;
     private final DbEngine dbEngine;
@@ -28,7 +28,7 @@ public class ContextModule implements Module {
         HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.context.tenant.Init.HANDLERS));
     }
 
-    public ContextModule(Properties config) {
+    public ContextApplicationModule(Properties config) {
         this.config = config;
         this.handlerRegistry = new ContextHandlerRegistry(HANDLERS);
         this.dbEngine = new DbEngine(CONFIG.CONTEXT_URL.get(config),

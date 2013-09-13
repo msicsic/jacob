@@ -2,7 +2,7 @@ package sk.jacob.mpu.security;
 
 import sk.jacob.appcommon.accessor.CONFIG;
 import sk.jacob.appcommon.accessor.SECURITY;
-import sk.jacob.engine.Module;
+import sk.jacob.engine.ApplicationModule;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.engine.handler.TokenTypes;
 import sk.jacob.mpu.security.dbregistry.Init;
@@ -24,7 +24,7 @@ import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.dml.Op.eq;
 import static sk.jacob.common.util.Log.logger;
 
-public class SecurityModule implements Module {
+public class SecurityApplicationModule implements ApplicationModule {
     private static final List<Class> HANDLERS = new ArrayList<>();
     private final HandlerRegistry<TokenTypes> handlerRegistry;
     private final DbEngine dbEngine;
@@ -34,7 +34,7 @@ public class SecurityModule implements Module {
         HANDLERS.addAll(Arrays.asList(Init.HANDLERS));
     }
 
-    public SecurityModule(Properties config) {
+    public SecurityApplicationModule(Properties config) {
         this.handlerRegistry = new SecurityHandlerRegistry(HANDLERS);
         this.dbEngine = new DbEngine(CONFIG.SECURITY_URL.get(config),
                                      CONFIG.SECURITY_USERNAME.get(config),

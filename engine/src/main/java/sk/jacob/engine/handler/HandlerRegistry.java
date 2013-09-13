@@ -30,7 +30,7 @@ public abstract class HandlerRegistry<T extends Annotation> {
                 continue;
             }
             T annotation = method.getAnnotation(supportedAnnotation);
-            mappedHandlers.put(getHandlerKey(annotation), method);
+            mappedHandlers.put(getHandlerType(annotation), method);
         }
         return mappedHandlers;
     }
@@ -44,7 +44,7 @@ public abstract class HandlerRegistry<T extends Annotation> {
         if (this.handlerMap.containsKey(handlerKey)) {
             try {
                 Method handler = this.handlerMap.get(handlerKey);
-                deserializeMessageElement(ec, handler.getAnnotation(this.supportedAnnotation));
+                processRequestClass(ec, handler);
                 ec = (ExecutionContext) handler.invoke(null, ec);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -57,7 +57,7 @@ public abstract class HandlerRegistry<T extends Annotation> {
      * Gets Handler key from given annotation.
      * Method is called at startup when framework builds up handler map.
      */
-    protected abstract String getHandlerKey(T annotation);
+    protected abstract String getHandlerType(T annotation);
 
     /**
      * Gets actual type of message.
@@ -68,5 +68,5 @@ public abstract class HandlerRegistry<T extends Annotation> {
     /**
      * Deserializes JSON raw request to corespondent Java object type.
      */
-    protected abstract void deserializeMessageElement(ExecutionContext ec, Annotation annotation);
+    protected abstract void processRequestClass(ExecutionContext ec, Method method);
 }
