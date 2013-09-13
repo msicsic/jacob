@@ -1,18 +1,14 @@
 package sk.jacob.mpu.context;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import sk.jacob.appcommon.accessor.COMMON;
-import sk.jacob.appcommon.accessor.SECURITY;
 import sk.jacob.appcommon.types.*;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.engine.handler.HandlerRegistry;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.List;
 
-public class ContextHandlerRegistry extends HandlerRegistry<DataTypes> {
+public class ContextHandlerRegistry extends HandlerRegistry<DataTypes, RequestData> {
     public ContextHandlerRegistry(List<Class> messageHandlers) {
         super(DataTypes.class, messageHandlers);
     }
@@ -29,17 +25,11 @@ public class ContextHandlerRegistry extends HandlerRegistry<DataTypes> {
     }
 
     @Override
-    protected void processRequestClass(ExecutionContext ec, Method handler) {
+    protected void processRequestClass(ExecutionContext ec, Class<RequestData> payloadClass) {
         JsonObject jsonRequest = COMMON.MESSAGE.getFrom(ec).jsonRequest;
         Request request = new Request();
-
-        request.reqh = new Gson().fromJson(jsonRequest.get("reqh"), RequestHeader.class);
-        for (Class<?> clazz : handler.getParameterTypes()) {
-            if (clazz.getSuperclass().equals(RequestData.class)) {
-                request.reqd = (RequestData)new Gson().fromJson(jsonRequest.get("reqd"),clazz);
-                COMMON.MESSAGE.getFrom(ec).request = request;
-                break;
-            }
-        }
+        request.reqh = GSON.fromJson(jsonRequest.get("reqh"), RequestHeader.class);
+        request.reqd = GSON.fromJson(jsonRequest.get("reqd"), payloadClass);
+        COMMON.MESSAGE.getFrom(ec).request = request;
     }
 }
