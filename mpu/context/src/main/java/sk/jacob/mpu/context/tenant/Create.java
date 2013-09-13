@@ -1,7 +1,6 @@
 package sk.jacob.mpu.context.tenant;
 
 import sk.jacob.appcommon.annotation.Resource;
-import sk.jacob.appcommon.types.Message;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.*;
 import sk.jacob.sql.dml.SqlClause;
@@ -29,12 +28,12 @@ public class Create {
 
     @DataTypes(type = "context.tenant.create",
                version = "1.0")
-    public static Message<CreateTenantReqd, CreateTenantResd> handle (
-            Message<CreateTenantReqd, CreateTenantResd> message,
+    public static CreateTenantResd handle (
+            CreateTenantReqd requestData,
             @Resource(location = "/abc") Connection conn,
             @Resource(location = "/Principal") Principal principal
     ) throws Exception {
-        String tenantName = message.request.reqd.tenantName;
+        String tenantName = requestData.tenantName;
         String tenantId = tenantName.toUpperCase().replace(" ", "");
 
         // 1. Create tenant entry
@@ -49,7 +48,7 @@ public class Create {
 
         // 3. Insert tenant creation parameters
         TenantsParams tenantsParams = ContextModel.INSTANCE.table(TenantsParams.class);
-        for(Map.Entry<String, String> entry :  message.request.reqd.params.entrySet()) {
+        for(Map.Entry<String, String> entry :  requestData.params.entrySet()) {
             conn.execute(insert(tenantsParams).values(cv(tenantsParams.tenantFk, tenantId),
                                                       cv(tenantsParams.paramName, entry.getKey()),
                                                       cv(tenantsParams.paramValue, entry.getValue()),
@@ -74,6 +73,6 @@ public class Create {
                                                   cv(tenantsParams.paramValue, paramValue),
                                                   cv(tenantsParams.scope, ParamScope.PRIVATE .name())));
 
-        return message;
+        return null;
     }
 }

@@ -40,11 +40,11 @@ public class Return {
         Message message = initResponse(ec);
         message.response.resh.status = MESSAGE_STATUS.INT.name();
 
-        Exception exception = new Exception();
-        message.response.resd = exception;
-        exception.reason = reason;
-        exception.code = code;
-        exception.text = text;
+        EXCEPTION EXCEPTION = new EXCEPTION();
+        message.response.resd = EXCEPTION;
+        EXCEPTION.reason = reason;
+        EXCEPTION.code = code;
+        EXCEPTION.text = text;
         return ec;
     }
 
@@ -55,10 +55,6 @@ public class Return {
         message.response.resh.messageId = message.request.reqh.messageId;
         message.response.resd = responseData;
         return ec;
-    }
-
-    public static ExecutionContext EMPTY_RESPONSE(ExecutionContext ec) {
-        return RESPONSE(new ResponseData(){}, ec);
     }
 
     private static Message initResponse(ExecutionContext ec) {

@@ -1,6 +1,5 @@
 package sk.jacob.mpu.security.dbregistry;
 
-import sk.jacob.appcommon.accessor.SECURITY;
 import sk.jacob.appcommon.annotation.Resource;
 import sk.jacob.appcommon.types.*;
 import sk.jacob.engine.handler.TokenTypes;
@@ -10,9 +9,6 @@ import sk.jacob.sql.dml.DMLClause;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.JacobResultSet;
-
-
-import java.lang.Exception;
 
 import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.dml.Op.and;
@@ -36,10 +32,8 @@ public class AuthenticateLoginPassword {
         public Principal principal = new Principal();
     }
 
-    @TokenTypes(type="security.authenticate.login.password",
-                token=AuthLogPassToken.class,
-                resd=AuthLogPassResd.class)
-    public static ExecutionContext authenticateLoginPassword(
+    @TokenTypes(type="security.authenticate.login.password")
+    public static AuthLogPassResd authenticateLoginPassword(
             AuthLogPassToken token,
             @Resource(location="/ExecutionContext")ExecutionContext ec,
             @Resource(location = "/Security/DB/Connection")Connection conn
@@ -63,26 +57,22 @@ public class AuthenticateLoginPassword {
                                ? "ADMIN"
                                : rs.getString(users.login);
         resd.principal.username = rs.getString(users.username);
-
-        return Return.RESPONSE(resd, ec);
+        return resd;
     }
 
     private static class InvalidateToken extends Token {
         public String value;
     }
 
-    @TokenTypes(type="security.invalidate.token",
-           token=InvalidateToken.class)
-    public static ExecutionContext invalidateToken(ExecutionContext ec) throws Exception {
-        InvalidateToken token = (InvalidateToken) SECURITY.TOKEN.getFrom(ec);
-
+    @TokenTypes(type="security.invalidate.token")
+    public static void invalidateToken(
+            InvalidateToken token,
+            @Resource(location = "/Security/DB/Connection")Connection conn
+    ) throws Exception {
         Users users = SecurityModel.INSTANCE.table(Users.class);
         DMLClause s = update(users)
                 .set(cv(users.token, null))
                 .where(eq(users.token, token.value));
-        Connection conn = SECURITY.CONNECTION.getFrom(ec);
         conn.execute(s);
-
-        return Return.EMPTY_RESPONSE(ec);
     }
 }

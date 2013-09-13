@@ -1,16 +1,14 @@
 package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.appcommon.accessor.SECURITY;
+import sk.jacob.appcommon.annotation.Resource;
+import sk.jacob.appcommon.types.*;
 import sk.jacob.engine.handler.TokenTypes;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.JacobResultSet;
-import sk.jacob.appcommon.types.ExecutionContext;
-import sk.jacob.appcommon.types.Principal;
-import sk.jacob.appcommon.types.Return;
-import sk.jacob.appcommon.types.Token;
 
 import static sk.jacob.sql.dml.DML.select;
 import static sk.jacob.sql.dml.Op.and;
@@ -22,29 +20,23 @@ public class FlyBy {
         public String value;
     }
 
-    @TokenTypes(type="security.flyby.token",
-           token=FlyByToken.class)
-    public static ExecutionContext flyByToken(ExecutionContext ec) throws Exception {
-        FlyByToken token = (FlyByToken)SECURITY.TOKEN.getFrom(ec);
-
+    @TokenTypes(type="security.flyby.token")
+    public static void flyByToken(
+            FlyByToken token,
+            @Resource(location = "/Security/DB/Connection")Connection conn,
+            @Resource(location="/ExecutionContext")ExecutionContext ec
+    ) throws Exception {
         Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
                 .from(users)
                 .where(eq(users.token, token.value));
-        Connection conn = SECURITY.CONNECTION.getFrom(ec);
         JacobResultSet rs = (JacobResultSet)conn.execute(s);
-
-        if(rs.next() == false) {
-            return Return.EXCEPTION("security.invalid.token", ec);
-        }
-
+        ERROR.ifFalse(rs.next()).raise("security.invalid.token");
         String login =   rs.getBoolean(users.admin)
                        ? "ADMIN"
                        : rs.getString(users.login);
         String username = rs.getString(users.username);
         SECURITY.PRINCIPAL.set(new Principal(login, username), ec);
-
-        return ec;
     }
 
     private static class FlyByLoginPassword extends Token {
@@ -52,28 +44,23 @@ public class FlyBy {
         public String password;
     }
 
-    @TokenTypes(type="security.flyby.login.password",
-           token=FlyByLoginPassword.class)
-    public static ExecutionContext flyByLoginPassword(ExecutionContext ec) throws Exception {
-        FlyByLoginPassword token = (FlyByLoginPassword)SECURITY.TOKEN.getFrom(ec);
-
+    @TokenTypes(type="security.flyby.login.password")
+    public static void flyByLoginPassword(
+            FlyByLoginPassword token,
+            @Resource(location = "/Security/DB/Connection")Connection conn,
+            @Resource(location="/ExecutionContext")ExecutionContext ec
+    ) throws Exception {
         Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
                 .from(users)
                 .where(and(eq(users.login, token.login),
                            eq(users.md5pwd, md5String(token.password))));
-        Connection conn = SECURITY.CONNECTION.getFrom(ec);
         JacobResultSet rs = (JacobResultSet)conn.execute(s);
-
-        if(rs.next() == false) {
-            return Return.ERROR("security.invalid.login.password", ec);
-        }
+        ERROR.ifFalse(rs.next()).raise("security.invalid.login.password");
 
         String login = rs.getBoolean(users.admin) ? "ADMIN"
                                                   : rs.getString(users.login);
         String username = rs.getString(users.username);
         SECURITY.PRINCIPAL.set(new Principal(login, username), ec);
-
-        return ec;
     }
 }
