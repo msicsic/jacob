@@ -1,6 +1,6 @@
 package sk.jacob.appcommon.types;
 
-public class Request {
+public class Request<RQD extends RequestData> {
     public RequestHeader reqh;
-    public RequestData reqd;
+    public RQD reqd;
 }

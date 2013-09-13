@@ -1,6 +1,8 @@
 package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.appcommon.accessor.SECURITY;
+import sk.jacob.appcommon.annotation.Resource;
+import sk.jacob.appcommon.types.*;
 import sk.jacob.engine.handler.TokenTypes;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
@@ -8,10 +10,9 @@ import sk.jacob.sql.dml.DMLClause;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.JacobResultSet;
-import sk.jacob.appcommon.types.ExecutionContext;
-import sk.jacob.appcommon.types.ResponseData;
-import sk.jacob.appcommon.types.Return;
-import sk.jacob.appcommon.types.Token;
+
+
+import java.lang.Exception;
 
 import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.dml.Op.and;
@@ -38,19 +39,18 @@ public class AuthenticateLoginPassword {
     @TokenTypes(type="security.authenticate.login.password",
                 token=AuthLogPassToken.class,
                 resd=AuthLogPassResd.class)
-    public static ExecutionContext authenticateLoginPassword(ExecutionContext ec) throws Exception {
-        AuthLogPassToken token = (AuthLogPassToken)SECURITY.TOKEN.getFrom(ec);
-
+    public static ExecutionContext authenticateLoginPassword(
+            AuthLogPassToken token,
+            @Resource(location="/ExecutionContext")ExecutionContext ec,
+            @Resource(location = "/Security/DB/Connection")Connection conn
+    ) throws Exception {
         Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
                 .from(users)
                 .where(and(eq(users.login, token.login),
-                           eq(users.md5pwd, md5String(token.password))));
-        Connection conn = SECURITY.CONNECTION.getFrom(ec);
+                        eq(users.md5pwd, md5String(token.password))));
         JacobResultSet rs = (JacobResultSet)conn.execute(s);
-        if(rs.next() == false) {
-            return Return.ERROR("security.invalid.login.password", ec);
-        }
+        ERROR.ifFalse(rs.next()).raise("security.invalid.login.password");
 
         String generatedToken = uniqueToken();
         SqlClause u = update(users)

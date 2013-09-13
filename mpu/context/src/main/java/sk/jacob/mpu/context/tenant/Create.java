@@ -1,15 +1,12 @@
 package sk.jacob.mpu.context.tenant;
 
-import sk.jacob.appcommon.accessor.COMMON;
-import sk.jacob.appcommon.accessor.CONTEXT;
-import sk.jacob.appcommon.accessor.SECURITY;
-import sk.jacob.appcommon.annotation.Required;
+import sk.jacob.appcommon.annotation.Resource;
+import sk.jacob.appcommon.types.Message;
 import sk.jacob.engine.handler.DataTypes;
 import sk.jacob.mpu.context.model.*;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.JacobResultSet;
-import sk.jacob.appcommon.types.ExecutionContext;
 import sk.jacob.appcommon.types.Principal;
 import sk.jacob.appcommon.types.RequestData;
 import sk.jacob.appcommon.types.ResponseData;
@@ -21,27 +18,24 @@ import static sk.jacob.sql.dml.Op.eq;
 
 public class Create {
     private static class CreateTenantReqd extends RequestData {
-        @Required
         public String tenantName;
         public Map<String, String> params;
     }
 
     private static class CreateTenantResd extends ResponseData {
-        @Required
         public String tenantId;
-        @Required
         public String tenantName;
     }
 
     @DataTypes(type = "context.tenant.create",
-               version = "1.0",
-               reqd = CreateTenantReqd.class,
-               resd = CreateTenantResd.class)
-    public static ExecutionContext handle(ExecutionContext ec) throws Exception {
-        CreateTenantReqd requestData = (CreateTenantReqd) COMMON.MESSAGE.getFrom(ec).request.reqd;
-        String tenantName = requestData.tenantName;
+               version = "1.0")
+    public static Message<CreateTenantReqd, CreateTenantResd> handle (
+            Message<CreateTenantReqd, CreateTenantResd> message,
+            @Resource(location = "/abc") Connection conn,
+            @Resource(location = "/Principal") Principal principal
+    ) throws Exception {
+        String tenantName = message.request.reqd.tenantName;
         String tenantId = tenantName.toUpperCase().replace(" ", "");
-        Connection conn = (Connection) CONTEXT.CONNECTION.getFrom(ec);
 
         // 1. Create tenant entry
         Tenants tenants = ContextModel.INSTANCE.table(Tenants.class);
@@ -50,13 +44,12 @@ public class Create {
 
         // 2. Create tenant user association
         UsersTenants usersTenants = ContextModel.INSTANCE.table(UsersTenants.class);
-        Principal principal = SECURITY.PRINCIPAL.getFrom(ec);
         conn.execute(insert(usersTenants).values(cv(usersTenants.login, principal.login),
                                                  cv(usersTenants.tenantFk, tenantId)));
 
         // 3. Insert tenant creation parameters
         TenantsParams tenantsParams = ContextModel.INSTANCE.table(TenantsParams.class);
-        for(Map.Entry<String, String> entry :  requestData.params.entrySet()) {
+        for(Map.Entry<String, String> entry :  message.request.reqd.params.entrySet()) {
             conn.execute(insert(tenantsParams).values(cv(tenantsParams.tenantFk, tenantId),
                                                       cv(tenantsParams.paramName, entry.getKey()),
                                                       cv(tenantsParams.paramValue, entry.getValue()),
@@ -81,6 +74,6 @@ public class Create {
                                                   cv(tenantsParams.paramValue, paramValue),
                                                   cv(tenantsParams.scope, ParamScope.PRIVATE .name())));
 
-        return ec;
+        return message;
     }
 }

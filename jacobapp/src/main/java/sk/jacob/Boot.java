@@ -11,8 +11,8 @@ public class Boot {
     public static void main(String[] args) {
         Properties config = loadConfig(args[0]);
 
-        Bus bus = new Bus(new JacobLogic(config));
-        bus.attach(JacobLogic.APP_PORT, new HttpConnector(config));
+        Bus bus = new Bus(new JacobApplication(config));
+        bus.attach(JacobApplication.APP_PORT, new HttpConnector(config));
         bus.start();
     }
 

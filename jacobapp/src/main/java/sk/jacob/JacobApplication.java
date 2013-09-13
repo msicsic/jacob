@@ -1,7 +1,7 @@
 package sk.jacob;
 
 import sk.jacob.appcommon.accessor.COMMON;
-import sk.jacob.engine.Logic;
+import sk.jacob.engine.Application;
 import sk.jacob.engine.Module;
 import sk.jacob.mpu.business.BusinessModule;
 import sk.jacob.mpu.context.ContextModule;
@@ -12,12 +12,12 @@ import java.util.*;
 
 import static sk.jacob.common.util.Log.logger;
 
-public class JacobLogic implements Logic {
+public class JacobApplication implements Application {
     public static final String APP_PORT = "APP_PORT";
     public static final String LOGGER_PORT = "LOGGER_PORT";
     private final Map<String, List<Module>> paths = new HashMap<>();
 
-    public JacobLogic(Properties config) {
+    public JacobApplication(Properties config) {
         initModules(config);
     }
 

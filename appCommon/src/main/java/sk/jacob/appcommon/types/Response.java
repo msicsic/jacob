@@ -1,6 +1,6 @@
 package sk.jacob.appcommon.types;
 
-public class Response {
+public class Response<RSD extends ResponseData> {
     public ResponseHeader resh;
-    public ResponseData resd;
+    public RSD resd;
 }

@@ -6,7 +6,7 @@ public class COMMON<T> extends ExecutionContextAccessor<T> {
     public static final String CONTEXT_KEY = "COMMON_CONTEXT";
 
     public static COMMON<Message> MESSAGE = new COMMON<>("MESSAGE");
-    public static COMMON<Emitter> EMITTER = new COMMON<>("EMITTER");
+    public static COMMON<IBus> EMITTER = new COMMON<>("EMITTER");
 
     public COMMON(String key) {
         super(key, CONTEXT_KEY);
