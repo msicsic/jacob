@@ -41,7 +41,7 @@ public class FindByLogin {
     }
 
     @DataTypes(type = "context.tenant.findByLogin", version = "1.0")
-    public static FindByLoginResd handle(
+    public static FindByLoginResd tenantFindByLogin(
             FindByLoginReqd requestData,
             @Resource(location = "/Resources/context/connection") Connection conn
     ) throws Exception {

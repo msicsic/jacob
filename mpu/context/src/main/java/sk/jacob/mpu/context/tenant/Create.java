@@ -28,7 +28,7 @@ public class Create {
 
     @DataTypes(type = "context.tenant.create",
                version = "1.0")
-    public static CreateTenantResd handle (
+    public static CreateTenantResd tenantCrete (
             CreateTenantReqd requestData,
             @Resource(location = "/abc") Connection conn,
             @Resource(location = "/Principal") Principal principal

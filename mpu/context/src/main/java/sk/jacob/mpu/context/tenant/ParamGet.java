@@ -34,7 +34,7 @@ public class ParamGet {
     }
 
     @DataTypes(type = "context.tenant.paramGet", version = "1.0")
-    public static ParamGetResd handle(
+    public static ParamGetResd paramGet(
             ParamGetReqd requestData,
             @Resource(location = "/Resources/context/connection") Connection conn
     ) throws Exception {
