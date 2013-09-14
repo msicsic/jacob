@@ -15,7 +15,7 @@ public class BusinessApplicationModule implements IApplicationModule {
     }
 
     @Override
-    public ExecutionContext handle(ExecutionContext ec) {
+    public ExecutionContext onRequest(ExecutionContext ec) {
         return ec;
     }
 }

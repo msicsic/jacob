@@ -3,7 +3,7 @@ package sk.jacob.mpu.context.tenant;
 import sk.jacob.appcommon.annotation.Required;
 import sk.jacob.appcommon.annotation.Resource;
 import sk.jacob.appcommon.types.*;
-import sk.jacob.engine.handler.DataTypes;
+import sk.jacob.engine.handler.Handler;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.TenantsParams;
 import sk.jacob.sql.dml.SqlClause;
@@ -33,7 +33,7 @@ public class ParamGet {
         }
     }
 
-    @DataTypes(type = "context.tenant.paramGet", version = "1.0")
+    @Handler(type = "context.tenant.paramGet", version = "1.0")
     public static ParamGetResd paramGet(
             ParamGetReqd requestData,
             @Resource(location = "/Resources/context/connection") Connection conn

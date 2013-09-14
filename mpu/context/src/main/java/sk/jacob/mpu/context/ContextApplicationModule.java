@@ -1,44 +1,43 @@
 package sk.jacob.mpu.context;
 
+import com.google.gson.JsonObject;
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.appcommon.accessor.CONFIG;
 import sk.jacob.appcommon.accessor.CONTEXT;
+import sk.jacob.appcommon.types.*;
+import sk.jacob.engine.ApplicationModule;
 import sk.jacob.engine.IApplicationModule;
-import sk.jacob.engine.handler.DataTypes;
+import sk.jacob.engine.handler.Handler;
 import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.engine.Connection;
 import sk.jacob.sql.engine.DbEngine;
-import sk.jacob.appcommon.types.EXECUTION_CONTEXT;
-import sk.jacob.appcommon.types.ExecutionContext;
-import sk.jacob.appcommon.types.Return;
 
 import java.util.*;
 
 import static sk.jacob.common.util.Log.logger;
 
-public class ContextApplicationModule implements IApplicationModule {
-    private static final List<Class> HANDLERS = new ArrayList<>();
+public class ContextApplicationModule extends ApplicationModule<Handler, RequestData> {
     private static final Metadata MODEL = ContextModel.INSTANCE.METADATA;
     private final DbEngine dbEngine;
     private final Properties config;
-    private final HandlerRegistry<DataTypes> handlerRegistry;
-
-    static {
-        HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.context.tenant.Init.HANDLERS));
-    }
 
     public ContextApplicationModule(Properties config) {
+        super(Handler.class, RequestData.class, handlerClasses());
         this.config = config;
-        this.handlerRegistry = new ContextHandlerRegistry(HANDLERS);
         this.dbEngine = new DbEngine(CONFIG.CONTEXT_URL.get(config),
                                      CONFIG.CONTEXT_USERNAME.get(config),
                                      CONFIG.CONTEXT_PASSWORD.get(config));
         this.initDatabase();
     }
 
+    private static List<Class> handlerClasses() {
+        return Arrays.asList(sk.jacob.mpu.context.tenant.Init.HANDLERS);
+    }
+
     @Override
-    public ExecutionContext handle(ExecutionContext ec) {
+    public ExecutionContext onRequest(ExecutionContext ec) {
         if (ec.status == EXECUTION_CONTEXT.FIN)
             return ec;
 
@@ -52,7 +51,7 @@ public class ContextApplicationModule implements IApplicationModule {
 
         try {
             conn.txBegin();
-            ec = this.handlerRegistry.process(ec);
+            ec = super.process(ec);
             conn.txCommit();
         } catch (Exception e) {
             conn.txRollback();
@@ -68,5 +67,20 @@ public class ContextApplicationModule implements IApplicationModule {
 
     private void initDatabase() {
         MODEL.createAll(this.dbEngine);
+    }
+
+    @Override
+    protected String getMessageType(ExecutionContext ec) {
+        RequestHeader rh = COMMON.MESSAGE.getFrom(ec).request.reqh;
+        return rh.type + "." + rh.version;
+    }
+
+    @Override
+    protected void processPayload(ExecutionContext ec, Class<RequestData> payloadClass) {
+        JsonObject jsonRequest = COMMON.MESSAGE.getFrom(ec).jsonRequest;
+        Request request = new Request();
+        request.reqh = GSON.fromJson(jsonRequest.get("reqh"), RequestHeader.class);
+        request.reqd = GSON.fromJson(jsonRequest.get("reqd"), payloadClass);
+        COMMON.MESSAGE.getFrom(ec).request = request;
     }
 }

@@ -15,7 +15,7 @@ public class MessageDeserializer implements IApplicationModule {
     private static final Gson GSON = new Gson();
 
     @Override
-    public ExecutionContext handle(ExecutionContext ec) {
+    public ExecutionContext onRequest(ExecutionContext ec) {
         Message msg = COMMON.MESSAGE.getFrom(ec);
         msg.jsonRequest = JSON_PARSER.parse(msg.rawRequest).getAsJsonObject();
         msg.request = new Request();

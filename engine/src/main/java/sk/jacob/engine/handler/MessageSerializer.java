@@ -27,7 +27,7 @@ public class MessageSerializer {
 //
 //    public static Map<String, Object> serializeMethod(Method method) {
 //        Map<String, Object> handlerMap = new HashMap<>();
-//        DataTypes dataTypesAnnotation = method.getAnnotation(DataTypes.class);
+//        Handler dataTypesAnnotation = method.getAnnotation(Handler.class);
 //
 //        handlerMap.put("id", dataTypesAnnotation.type());
 //        handlerMap.put("version", dataTypesAnnotation.version());

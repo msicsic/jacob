@@ -3,7 +3,8 @@ package sk.jacob.mpu.security.dbregistry;
 import sk.jacob.appcommon.accessor.SECURITY;
 import sk.jacob.appcommon.annotation.Resource;
 import sk.jacob.appcommon.types.*;
-import sk.jacob.engine.handler.TokenTypes;
+import sk.jacob.engine.handler.Handler;
+import sk.jacob.engine.handler.Payload;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.SqlClause;
@@ -20,9 +21,9 @@ public class FlyBy {
         public String value;
     }
 
-    @TokenTypes(type="security.flyby.token")
+    @Handler(type="security.flyby.token")
     public static void flyByToken(
-            FlyByToken token,
+            @Payload FlyByToken token,
             @Resource(location = "/Security/DB/Connection")Connection conn,
             @Resource(location="/ExecutionContext")ExecutionContext ec
     ) throws Exception {
@@ -44,9 +45,9 @@ public class FlyBy {
         public String password;
     }
 
-    @TokenTypes(type="security.flyby.login.password")
+    @Handler(type="security.flyby.login.password")
     public static void flyByLoginPassword(
-            FlyByLoginPassword token,
+            @Payload FlyByLoginPassword token,
             @Resource(location = "/Security/DB/Connection")Connection conn,
             @Resource(location="/ExecutionContext")ExecutionContext ec
     ) throws Exception {

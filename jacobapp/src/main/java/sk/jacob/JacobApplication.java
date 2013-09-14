@@ -32,7 +32,7 @@ public class JacobApplication implements Application {
     public ExecutionContext handle(String portId, ExecutionContext ec) {
         logger(this).info(portId + " --->>> " + COMMON.MESSAGE.getFrom(ec).rawRequest);
         for(IApplicationModule applicationModule : paths.get(portId)) {
-            ec = applicationModule.handle(ec);
+            ec = applicationModule.onRequest(ec);
         }
         logger(this).info(portId + " <<<--- " + COMMON.MESSAGE.getFrom(ec).rawResponse);
         return ec;

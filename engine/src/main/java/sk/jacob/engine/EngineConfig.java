@@ -4,7 +4,7 @@ import sk.jacob.appcommon.types.ExecutionContext;
 
 public class EngineConfig implements IApplicationModule {
     @Override
-    public ExecutionContext handle(ExecutionContext ec) {
+    public ExecutionContext onRequest(ExecutionContext ec) {
         return ec;
     }
 }

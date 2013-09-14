@@ -1,7 +1,7 @@
 package sk.jacob.mpu.context.tenant;
 
 import sk.jacob.appcommon.annotation.Resource;
-import sk.jacob.engine.handler.DataTypes;
+import sk.jacob.engine.handler.Handler;
 import sk.jacob.mpu.context.model.*;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;
@@ -26,7 +26,7 @@ public class Create {
         public String tenantName;
     }
 
-    @DataTypes(type = "context.tenant.create",
+    @Handler(type = "context.tenant.create",
                version = "1.0")
     public static CreateTenantResd tenantCrete (
             CreateTenantReqd requestData,

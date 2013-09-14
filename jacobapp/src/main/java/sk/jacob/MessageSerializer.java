@@ -10,7 +10,7 @@ public class MessageSerializer implements IApplicationModule {
     private Gson gson = new Gson();
 
     @Override
-    public ExecutionContext handle(ExecutionContext ec) {
+    public ExecutionContext onRequest(ExecutionContext ec) {
         Message msg = COMMON.MESSAGE.getFrom(ec);
         msg.rawResponse = this.gson.toJson(msg.response);
         return ec;

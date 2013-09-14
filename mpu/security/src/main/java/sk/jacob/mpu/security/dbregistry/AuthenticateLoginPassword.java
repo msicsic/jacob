@@ -2,7 +2,8 @@ package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.appcommon.annotation.Resource;
 import sk.jacob.appcommon.types.*;
-import sk.jacob.engine.handler.TokenTypes;
+import sk.jacob.engine.handler.Handler;
+import sk.jacob.engine.handler.Payload;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.DMLClause;
@@ -32,9 +33,9 @@ public class AuthenticateLoginPassword {
         public Principal principal = new Principal();
     }
 
-    @TokenTypes(type="security.authenticate.login.password")
+    @Handler(type="security.authenticate.login.password")
     public static AuthLogPassResd authenticateLoginPassword(
-            AuthLogPassToken token,
+            @Payload AuthLogPassToken token,
             @Resource(location="/ExecutionContext")ExecutionContext ec,
             @Resource(location = "/Security/DB/Connection")Connection conn
     ) throws Exception {
@@ -64,9 +65,9 @@ public class AuthenticateLoginPassword {
         public String value;
     }
 
-    @TokenTypes(type="security.invalidate.token")
+    @Handler(type="security.invalidate.token")
     public static void invalidateToken(
-            InvalidateToken token,
+            @Payload InvalidateToken token,
             @Resource(location = "/Security/DB/Connection")Connection conn
     ) throws Exception {
         Users users = SecurityModel.INSTANCE.table(Users.class);

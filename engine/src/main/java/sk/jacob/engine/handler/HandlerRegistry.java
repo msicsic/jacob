@@ -42,7 +42,6 @@ public abstract class HandlerRegistry<T extends Annotation, K> {
         return method.isAnnotationPresent(supportedAnnotation);
     }
 
-
     public final ExecutionContext process(ExecutionContext ec) {
         String handlerKey = this.getMessageType(ec);
         return invokeMethod(handlerKey, ec);
@@ -51,9 +50,9 @@ public abstract class HandlerRegistry<T extends Annotation, K> {
     private ExecutionContext invokeMethod(String handlerKey, ExecutionContext ec) {
         if (this.handlerMap.containsKey(handlerKey)) {
             try {
-                Method handler = this.handlerMap.get(handlerKey);
-                Class<K> payloadClass = getPayloadClass(handler);
-                processRequestClass(ec, payloadClass);
+                HandlerConfig handlerConfig = this.handlerMap.get(handlerKey);
+                Method handler = handlerConfig.handler;
+                processPayload(ec, handlerConfig.payloadClass);
                 ec = (ExecutionContext) handler.invoke(null, ec);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -63,19 +62,13 @@ public abstract class HandlerRegistry<T extends Annotation, K> {
     }
 
     /**
-     * Gets Handler key from given annotation.
-     * Method is called at startup when framework builds up handler map.
-     */
-    protected abstract String getHandlerType(T annotation);
-
-    /**
      * Gets actual type of message.
-     * DataTypes type is then used by framework to lookup handler method.
+     * Handler type is then used by framework to lookup handler method.
      */
     protected abstract String getMessageType(ExecutionContext ec);
 
     /**
      * Deserializes JSON raw request to corespondent Java object type.
      */
-    protected abstract void processRequestClass(ExecutionContext ec, Class<K> payloadClass);
+    protected abstract void processPayload(ExecutionContext ec, Class<K> payloadClass);
 }

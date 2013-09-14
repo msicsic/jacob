@@ -1,11 +1,12 @@
 package sk.jacob.mpu.security;
 
+import com.google.gson.JsonObject;
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.appcommon.accessor.CONFIG;
 import sk.jacob.appcommon.accessor.SECURITY;
+import sk.jacob.appcommon.types.Token;
 import sk.jacob.engine.ApplicationModule;
-import sk.jacob.engine.IApplicationModule;
-import sk.jacob.engine.handler.HandlerRegistry;
-import sk.jacob.engine.handler.TokenTypes;
+import sk.jacob.engine.handler.Handler;
 import sk.jacob.mpu.security.dbregistry.Init;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
@@ -16,7 +17,6 @@ import sk.jacob.sql.engine.DbEngine;
 import sk.jacob.appcommon.types.ExecutionContext;
 import sk.jacob.appcommon.types.Return;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -25,18 +25,12 @@ import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.dml.Op.eq;
 import static sk.jacob.common.util.Log.logger;
 
-public class SecurityApplicationModule extends ApplicationModule {
-    private static final List<Class> HANDLERS = new ArrayList<>();
-    private final HandlerRegistry<TokenTypes> handlerRegistry;
+public class SecurityApplicationModule extends ApplicationModule<Handler, Token> {
     private final DbEngine dbEngine;
     private final Metadata MODEL = SecurityModel.INSTANCE.METADATA;
 
-    static {
-        HANDLERS.addAll(Arrays.asList(Init.HANDLERS));
-    }
-
     public SecurityApplicationModule(Properties config) {
-        this.handlerRegistry = new SecurityHandlerRegistry(HANDLERS);
+        super(Handler.class, Token.class, handlerClasses());
         this.dbEngine = new DbEngine(CONFIG.SECURITY_URL.get(config),
                                      CONFIG.SECURITY_USERNAME.get(config),
                                      CONFIG.SECURITY_PASSWORD.get(config));
@@ -44,13 +38,17 @@ public class SecurityApplicationModule extends ApplicationModule {
                           CONFIG.ADMIN_PASSWORD.get(config));
     }
 
+    private static List<Class> handlerClasses() {
+        return Arrays.asList(Init.HANDLERS);
+    }
+
     @Override
-    public ExecutionContext handle(ExecutionContext ec) {
+    public ExecutionContext onRequest(ExecutionContext ec) {
         Connection conn = this.dbEngine.getConnection();
         SECURITY.CONNECTION.set(conn, ec);
         try {
             conn.txBegin();
-            ec = this.handlerRegistry.process(ec);
+            ec = super.process(ec);
             conn.txCommit();
         } catch (Exception e){
             conn.txRollback();
@@ -83,6 +81,24 @@ public class SecurityApplicationModule extends ApplicationModule {
         conn.execute(insertDMLClause);
         conn.txCommit();
         conn.close();
+    }
+
+    @Override
+    protected String getMessageType(ExecutionContext ec) {
+        JsonObject securityElement = getSecurityElement(ec);
+        return securityElement.get("type").getAsString();
+    }
+
+    @Override
+    protected void processPayload(ExecutionContext ec, Class<Token> payloadClass) {
+        JsonObject securityElement = getSecurityElement(ec);
+        SECURITY.TOKEN.set(GSON.fromJson(securityElement, payloadClass), ec);
+    }
+
+    private static JsonObject getSecurityElement(ExecutionContext ec) {
+        JsonObject jsonRequest = COMMON.MESSAGE.getFrom(ec).jsonRequest;
+        JsonObject reqh = jsonRequest.get("reqh").getAsJsonObject();
+        return reqh.get("security").getAsJsonObject();
     }
 }
 

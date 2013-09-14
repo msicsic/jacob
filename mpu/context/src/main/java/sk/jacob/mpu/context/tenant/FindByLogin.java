@@ -2,7 +2,7 @@ package sk.jacob.mpu.context.tenant;
 
 import sk.jacob.appcommon.annotation.Resource;
 import sk.jacob.appcommon.types.*;
-import sk.jacob.engine.handler.DataTypes;
+import sk.jacob.engine.handler.Handler;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.Tenants;
 import sk.jacob.mpu.context.model.UsersTenants;
@@ -40,7 +40,7 @@ public class FindByLogin {
         }
     }
 
-    @DataTypes(type = "context.tenant.findByLogin", version = "1.0")
+    @Handler(type = "context.tenant.findByLogin", version = "1.0")
     public static FindByLoginResd tenantFindByLogin(
             FindByLoginReqd requestData,
             @Resource(location = "/Resources/context/connection") Connection conn
