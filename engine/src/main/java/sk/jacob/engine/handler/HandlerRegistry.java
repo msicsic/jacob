@@ -4,38 +4,44 @@ import com.google.gson.Gson;
 import sk.jacob.appcommon.types.ExecutionContext;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 public abstract class HandlerRegistry<T extends Annotation, K> {
     protected static final Gson GSON = new Gson();
     private final Class<T> supportedAnnotation;
-    protected Map<String, Method> handlerMap = new HashMap<>();
+    private final Class<K> payloadSuperClass;
+    protected Map<String, HandlerConfig> handlerMap = new HashMap<>();
 
-    protected HandlerRegistry(Class<T> supportedAnnotation, List<Class> messageHandlers) {
+    protected HandlerRegistry(Class<T> supportedAnnotation, Class<K> payloadSuperClass, List<Class> handlerClasses) {
         this.supportedAnnotation = supportedAnnotation;
-        this.handlerMap = map(messageHandlers);
+        this.payloadSuperClass = payloadSuperClass;
+        this.handlerMap = mapHandlers(handlerClasses);
     }
 
-    private Map<String, Method> map(List<Class> handlers) {
-        Map<String, Method> mappedHandlers = new HashMap<>();
+    private Map<String, HandlerConfig> mapHandlers(List<Class> handlers) {
+        Map<String, HandlerConfig> mappedHandlers = new HashMap<>();
         for (Class<?> handler : handlers) {
             mappedHandlers.putAll(inspect(handler));
         }
         return mappedHandlers;
     }
 
-    private Map<String, Method> inspect(Class<?> handler) {
-        Map<String, Method> mappedHandlers = new HashMap<>();
-        for (Method method : handler.getDeclaredMethods()) {
-            if (!method.isAnnotationPresent(supportedAnnotation)) {
-                continue;
+    private Map<String, HandlerConfig> inspect(Class<?> handlerClass) {
+        Map<String, HandlerConfig> mappedHandlers = new HashMap<>();
+        for (Method method : handlerClass.getDeclaredMethods()) {
+            if (isHandler(method)) {
+                HandlerConfig handlerConfig = HandlerConfig.getInstance(method, payloadSuperClass);
+                mappedHandlers.put(handlerConfig.handlerKey, handlerConfig);
+                break;
             }
-            T annotation = method.getAnnotation(supportedAnnotation);
-            mappedHandlers.put(getHandlerType(annotation), method);
         }
         return mappedHandlers;
     }
+
+    private boolean isHandler(Method method) {
+        return method.isAnnotationPresent(supportedAnnotation);
+    }
+
 
     public final ExecutionContext process(ExecutionContext ec) {
         String handlerKey = this.getMessageType(ec);
@@ -46,7 +52,7 @@ public abstract class HandlerRegistry<T extends Annotation, K> {
         if (this.handlerMap.containsKey(handlerKey)) {
             try {
                 Method handler = this.handlerMap.get(handlerKey);
-                Class<K> payloadClass = queryRequestClass(handler);
+                Class<K> payloadClass = getPayloadClass(handler);
                 processRequestClass(ec, payloadClass);
                 ec = (ExecutionContext) handler.invoke(null, ec);
             } catch (Exception e) {
@@ -54,19 +60,6 @@ public abstract class HandlerRegistry<T extends Annotation, K> {
             }
         }
         return ec;
-    }
-
-    private Class<K> queryRequestClass(Method handler) {
-        for (Class<?> clazz : handler.getParameterTypes()) {
-            ParameterizedType superclass = (ParameterizedType)getClass().getGenericSuperclass();
-            Class<K> genericClass = (Class<K>) superclass.getActualTypeArguments()[0];
-            if (clazz.getSuperclass().equals(genericClass)) {
-                return genericClass;
-            } else {
-                return null;
-            }
-        }
-        return null;
     }
 
     /**

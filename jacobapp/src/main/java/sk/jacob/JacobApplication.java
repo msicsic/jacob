@@ -2,7 +2,7 @@ package sk.jacob;
 
 import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.engine.Application;
-import sk.jacob.engine.ApplicationModule;
+import sk.jacob.engine.IApplicationModule;
 import sk.jacob.mpu.business.BusinessApplicationModule;
 import sk.jacob.mpu.context.ContextApplicationModule;
 import sk.jacob.mpu.security.SecurityApplicationModule;
@@ -15,7 +15,7 @@ import static sk.jacob.common.util.Log.logger;
 public class JacobApplication implements Application {
     public static final String APP_PORT = "APP_PORT";
     public static final String LOGGER_PORT = "LOGGER_PORT";
-    private final Map<String, List<ApplicationModule>> paths = new HashMap<>();
+    private final Map<String, List<IApplicationModule>> paths = new HashMap<>();
 
     public JacobApplication(Properties config) {
         initModules(config);
@@ -31,7 +31,7 @@ public class JacobApplication implements Application {
 
     public ExecutionContext handle(String portId, ExecutionContext ec) {
         logger(this).info(portId + " --->>> " + COMMON.MESSAGE.getFrom(ec).rawRequest);
-        for(ApplicationModule applicationModule : paths.get(portId)) {
+        for(IApplicationModule applicationModule : paths.get(portId)) {
             ec = applicationModule.handle(ec);
         }
         logger(this).info(portId + " <<<--- " + COMMON.MESSAGE.getFrom(ec).rawResponse);

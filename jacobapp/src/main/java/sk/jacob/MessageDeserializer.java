@@ -5,12 +5,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.appcommon.types.Message;
-import sk.jacob.engine.ApplicationModule;
+import sk.jacob.engine.IApplicationModule;
 import sk.jacob.appcommon.types.ExecutionContext;
 import sk.jacob.appcommon.types.Request;
 import sk.jacob.appcommon.types.RequestHeader;
 
-public class MessageDeserializer implements ApplicationModule {
+public class MessageDeserializer implements IApplicationModule {
     private static final JsonParser JSON_PARSER = new JsonParser();
     private static final Gson GSON = new Gson();
 
