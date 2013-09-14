@@ -1,10 +1,10 @@
 package sk.jacob.mpu.security.dbregistry;
 
 import sk.jacob.appcommon.accessor.SECURITY;
-import sk.jacob.appcommon.annotation.Resource;
+import sk.jacob.engine.handler.annotation.Resource;
 import sk.jacob.appcommon.types.*;
-import sk.jacob.engine.handler.Handler;
-import sk.jacob.engine.handler.Payload;
+import sk.jacob.engine.handler.annotation.Handler;
+import sk.jacob.engine.handler.annotation.Payload;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.SqlClause;
@@ -37,7 +37,7 @@ public class FlyBy {
                        ? "ADMIN"
                        : rs.getString(users.login);
         String username = rs.getString(users.username);
-        SECURITY.PRINCIPAL.set(new Principal(login, username), ec);
+        SECURITY.PRINCIPAL.storeValue(new Principal(login, username), ec);
     }
 
     private static class FlyByLoginPassword extends Token {
@@ -62,6 +62,6 @@ public class FlyBy {
         String login = rs.getBoolean(users.admin) ? "ADMIN"
                                                   : rs.getString(users.login);
         String username = rs.getString(users.username);
-        SECURITY.PRINCIPAL.set(new Principal(login, username), ec);
+        SECURITY.PRINCIPAL.storeValue(new Principal(login, username), ec);
     }
 }

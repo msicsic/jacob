@@ -44,7 +44,7 @@ public class SecurityApplicationModule extends ApplicationModule<Token> {
     @Override
     public ExecutionContext onRequest(ExecutionContext ec) {
         Connection conn = this.dbEngine.getConnection();
-        SECURITY.CONNECTION.set(conn, ec);
+        SECURITY.CONNECTION.storeValue(conn, ec);
         try {
             conn.txBegin();
             ec = super.process(ec);
@@ -91,7 +91,7 @@ public class SecurityApplicationModule extends ApplicationModule<Token> {
     @Override
     protected void processPayload(ExecutionContext ec, Class<Token> payloadClass) {
         JsonObject securityElement = getSecurityElement(ec);
-        SECURITY.TOKEN.set(GSON.fromJson(securityElement, payloadClass), ec);
+        SECURITY.TOKEN.storeValue(GSON.fromJson(securityElement, payloadClass), ec);
     }
 
     private static JsonObject getSecurityElement(ExecutionContext ec) {

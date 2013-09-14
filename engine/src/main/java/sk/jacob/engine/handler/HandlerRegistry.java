@@ -2,6 +2,8 @@ package sk.jacob.engine.handler;
 
 import com.google.gson.Gson;
 import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.engine.handler.annotation.Handler;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;

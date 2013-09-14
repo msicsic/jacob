@@ -1,9 +1,8 @@
 package sk.jacob.mpu.context.tenant;
 
-import sk.jacob.appcommon.annotation.Required;
-import sk.jacob.appcommon.annotation.Resource;
+import sk.jacob.engine.handler.annotation.Resource;
 import sk.jacob.appcommon.types.*;
-import sk.jacob.engine.handler.Handler;
+import sk.jacob.engine.handler.annotation.Handler;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.mpu.context.model.TenantsParams;
 import sk.jacob.sql.dml.SqlClause;
@@ -19,13 +18,11 @@ import static sk.jacob.sql.dml.Op.*;
 
 public class ParamGet {
     private static class ParamGetReqd extends RequestData {
-        @Required
         public String tenantId;
         public Set<String> paramNames;
     }
 
     private static class ParamGetResd extends ResponseData {
-        @Required
         public Map<String, String> paramValues;
 
         public ParamGetResd(Map<String, String> paramValues) {

@@ -4,14 +4,9 @@ import sk.jacob.appcommon.types.Principal;
 import sk.jacob.appcommon.types.Token;
 import sk.jacob.sql.engine.Connection;
 
-public class SECURITY<T> extends ExecutionContextAccessor<T> {
-    public static final String CONTEXT_KEY = "SECURITY_CONTEXT";
-
-    public static SECURITY<Principal> PRINCIPAL = new SECURITY<>("PRINCIPAL");
-    public static SECURITY<Token> TOKEN = new SECURITY<>("TOKEN");
-    public static SECURITY<Connection> CONNECTION = new SECURITY<>("CONNECTION");
-
-    public SECURITY(String key) {
-        super(key, CONTEXT_KEY);
-    }
+public class SECURITY {
+    public static final String CONNECTION_KEY = "/RESOURCES/SECURITY/CONNECTION";
+    public static final ECAcessor<Principal> PRINCIPAL = new ECAcessor<>("/RESOURCES/SECURITY/PRINCIPAL");
+    public static final ECAcessor<Token> TOKEN = new ECAcessor<>("/RESOURCES/SECURITY/TOKEN");
+    public static final ECAcessor<Connection> CONNECTION = new ECAcessor<>(CONNECTION_KEY);
 }

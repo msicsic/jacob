@@ -1,4 +1,4 @@
-package sk.jacob.engine.handler;
+package sk.jacob.engine.handler.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,9 +6,5 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
-public @interface Length {
-    int min() default 0;
-
-    int max();
-}
+@Target({ElementType.PARAMETER})
+public @interface Payload {}

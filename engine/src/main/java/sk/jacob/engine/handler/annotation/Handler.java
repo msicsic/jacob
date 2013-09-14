@@ -1,4 +1,4 @@
-package sk.jacob.appcommon.annotation;
+package sk.jacob.engine.handler.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER})
-public @interface Resource {
-    String location();
+@Target({ElementType.METHOD})
+public @interface Handler {
+    String type();
+    String version() default "";
 }

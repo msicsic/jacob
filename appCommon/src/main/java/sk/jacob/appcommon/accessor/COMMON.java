@@ -2,14 +2,9 @@ package sk.jacob.appcommon.accessor;
 
 import sk.jacob.appcommon.types.*;
 
-public class COMMON<T> extends ExecutionContextAccessor<T> {
-    public static final String CONTEXT_KEY = "COMMON_CONTEXT";
-
-    public static COMMON<Message> MESSAGE = new COMMON<>("MESSAGE");
-
-    public COMMON(String key) {
-        super(key, CONTEXT_KEY);
-    }
+public class COMMON {
+    public static ECAcessor<Message> MESSAGE = new ECAcessor<>("/COMMON/MESSAGE");
+    public static ECAcessor<ExecutionContext> EXECUTION_CONTEXT = new ECAcessor<>("/COMMON/EXECUTION_CONTEXT");
 
     public static Message createMessage(String rawRequest) {
         Message message;

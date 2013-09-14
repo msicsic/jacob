@@ -1,6 +1,5 @@
 package sk.jacob.appcommon.types;
 
-import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.common.util.locale.Bundle;
 
 import java.util.Locale;
@@ -58,10 +57,11 @@ public class Return {
     }
 
     private static Message initResponse(ExecutionContext ec) {
-        Message message = COMMON.MESSAGE.getFrom(ec);
-        message.response = new Response();
-        message.response.resh = new ResponseHeader();
-        return message;
+//        Message message = COMMON.MESSAGE.getFrom(ec);
+//        message.response = new Response();
+//        message.response.resh = new ResponseHeader();
+//        return message;
+        return null;
     }
 
     private static ExecutionContext FIN(ExecutionContext ec) {

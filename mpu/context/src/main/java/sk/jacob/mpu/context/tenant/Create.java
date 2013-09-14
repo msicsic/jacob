@@ -1,7 +1,7 @@
 package sk.jacob.mpu.context.tenant;
 
-import sk.jacob.appcommon.annotation.Resource;
-import sk.jacob.engine.handler.Handler;
+import sk.jacob.engine.handler.annotation.Resource;
+import sk.jacob.engine.handler.annotation.Handler;
 import sk.jacob.mpu.context.model.*;
 import sk.jacob.sql.dml.SqlClause;
 import sk.jacob.sql.engine.Connection;

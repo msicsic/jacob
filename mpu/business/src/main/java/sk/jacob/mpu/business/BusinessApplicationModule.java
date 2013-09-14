@@ -2,6 +2,7 @@ package sk.jacob.mpu.business;
 
 import sk.jacob.engine.IApplicationModule;
 import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.mpu.business.settings.Uom;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +12,7 @@ public class BusinessApplicationModule implements IApplicationModule {
     private static final List<Class> HANDLERS = new ArrayList<>();
 
     static {
-        HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.business.settings.Init.HANDLERS));
+        HANDLERS.add(Uom.class);
     }
 
     @Override

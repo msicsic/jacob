@@ -1,4 +1,9 @@
 package sk.jacob.engine;
 
-public interface OutPort {
+public class OutPort {
+    public final String id;
+
+    public OutPort(String id) {
+        this.id = id;
+    }
 }

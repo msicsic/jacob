@@ -39,8 +39,8 @@ public class ContextApplicationModule extends ApplicationModule<RequestData> {
             return ec;
 
         Connection conn = this.dbEngine.getConnection();
-        CONTEXT.CONNECTION.set(conn, ec);
-        CONTEXT.LDS_BDS.set(new HashMap<CONFIG, String>() {{
+        CONTEXT.CONNECTION.storeValue(conn, ec);
+        CONTEXT.LDS_BDS.storeValue(new HashMap<CONFIG, String>() {{
             put(CONFIG.LDS_BDS_TEMPLATE_URL, CONFIG.LDS_BDS_TEMPLATE_URL.get(config));
             put(CONFIG.LDS_BDS_TEMPLATE_USERNAME, CONFIG.LDS_BDS_TEMPLATE_USERNAME.get(config));
             put(CONFIG.LDS_BDS_TEMPLATE_PASSWORD, CONFIG.LDS_BDS_TEMPLATE_PASSWORD.get(config));

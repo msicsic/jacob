@@ -30,7 +30,7 @@ public class InPort {
     public Message onRequest(Message message) {
         logger(this).info(id + " --->>> " + message.rawRequest);
         ExecutionContext ec = new ExecutionContext();
-        COMMON.MESSAGE.set(message, ec);
+        COMMON.MESSAGE.storeValue(message, ec);
         ec = bus.onRequest(ec);
         logger(this).info(id + " <<<--- " + COMMON.MESSAGE.getFrom(ec).rawResponse);
         return COMMON.MESSAGE.getFrom(ec);

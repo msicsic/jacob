@@ -1,6 +1,6 @@
 package sk.jacob.mpu.business.settings;
 
-import sk.jacob.engine.handler.Handler;
+import sk.jacob.engine.handler.annotation.Handler;
 import sk.jacob.appcommon.types.RequestData;
 import sk.jacob.appcommon.types.ResponseData;
 
