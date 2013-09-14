@@ -6,9 +6,6 @@ import sk.jacob.appcommon.accessor.CONFIG;
 import sk.jacob.appcommon.accessor.CONTEXT;
 import sk.jacob.appcommon.types.*;
 import sk.jacob.engine.ApplicationModule;
-import sk.jacob.engine.IApplicationModule;
-import sk.jacob.engine.handler.Handler;
-import sk.jacob.engine.handler.HandlerRegistry;
 import sk.jacob.mpu.context.model.ContextModel;
 import sk.jacob.sql.Metadata;
 import sk.jacob.sql.engine.Connection;
@@ -18,13 +15,13 @@ import java.util.*;
 
 import static sk.jacob.common.util.Log.logger;
 
-public class ContextApplicationModule extends ApplicationModule<Handler, RequestData> {
+public class ContextApplicationModule extends ApplicationModule<RequestData> {
     private static final Metadata MODEL = ContextModel.INSTANCE.METADATA;
     private final DbEngine dbEngine;
     private final Properties config;
 
     public ContextApplicationModule(Properties config) {
-        super(Handler.class, RequestData.class, handlerClasses());
+        super(RequestData.class, handlerClasses());
         this.config = config;
         this.dbEngine = new DbEngine(CONFIG.CONTEXT_URL.get(config),
                                      CONFIG.CONTEXT_USERNAME.get(config),

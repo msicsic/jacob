@@ -28,7 +28,7 @@ public class GenericDialectVisitor implements DialectVisitor {
     }
 
     protected List<String> normalizeColumnExpressions(List columnExpressions) {
-        List<String> normalizedExpressions = new ArrayList<String>();
+        List<String> normalizedExpressions = new ArrayList<>();
         for(Object expression : columnExpressions) {
             normalizedExpressions.add(normalizeColumnExpression(expression));
         }
@@ -122,7 +122,7 @@ public class GenericDialectVisitor implements DialectVisitor {
     }
 
     protected List<String> normalizeTableExpressions(List tableExpressions) {
-        List<String> normalizedPredicates = new ArrayList<String>();
+        List<String> normalizedPredicates = new ArrayList<>();
         for(Object expression : tableExpressions) {
             normalizedPredicates.add(normalizeTableExpression(expression));
         }
@@ -208,7 +208,7 @@ public class GenericDialectVisitor implements DialectVisitor {
     @Override
     public String sql(Op.And and) {
         StringBuffer sb = new StringBuffer("(");
-        List<String> coSql = new ArrayList<String>(and.conditionalOperations.size());
+        List<String> coSql = new ArrayList<>(and.conditionalOperations.size());
         for (ConditionalOperation co : and.conditionalOperations) {
             coSql.add(co.sql(this));
         }
@@ -285,8 +285,8 @@ public class GenericDialectVisitor implements DialectVisitor {
         StringBuffer sb = new StringBuffer("CREATE TABLE IF NOT EXISTS ");
         sb.append(table.name);
         sb.append(" (\n");
-        List<String> columnInlineStatements = new ArrayList<String>();
-        List<String> outlineStatements = new ArrayList<String>();
+        List<String> columnInlineStatements = new ArrayList<>();
+        List<String> outlineStatements = new ArrayList<>();
         for(Column column : table.columns ) {
             DDLStatement csl = column.create(this);
             columnInlineStatements.add(csl.inline);
@@ -312,7 +312,7 @@ public class GenericDialectVisitor implements DialectVisitor {
     @Override
     public DDLStatement create(ColumnOptions columnOptions) {
         StringBuffer inlineSb = new StringBuffer();
-        List<String> outline = new ArrayList<String>();
+        List<String> outline = new ArrayList<>();
 
         if(columnOptions.isPrimaryKey() == true) {
             inlineSb.append(" PRIMARY KEY ");
@@ -348,7 +348,7 @@ public class GenericDialectVisitor implements DialectVisitor {
         sb.append("(");
         sb.append(foreignKey.refColumnName);
         sb.append(");");
-        List<String> outline = new ArrayList<String>();
+        List<String> outline = new ArrayList<>();
         outline.add(sb.toString());
         return new DDLStatement(null, outline);
     }

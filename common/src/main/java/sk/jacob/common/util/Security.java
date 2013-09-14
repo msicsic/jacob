@@ -14,8 +14,8 @@ public class Security {
             byte[] dig = md.digest();
             StringBuffer sb = new StringBuffer();
 
-            for (int i=0; i < dig.length; i++) {
-                sb.append(Integer.toString( ( dig[i] & 0xff ) + 0x100, 16).substring( 1 ));
+            for (byte aDig : dig) {
+                sb.append(Integer.toString((aDig & 0xff) + 0x100, 16).substring(1));
             }
             md5String = sb.toString();
         } catch (NoSuchAlgorithmException e) {

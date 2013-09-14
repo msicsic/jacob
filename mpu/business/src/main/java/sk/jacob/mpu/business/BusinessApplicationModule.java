@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BusinessApplicationModule implements IApplicationModule {
-    private static final List<Class> HANDLERS = new ArrayList<Class>();
+    private static final List<Class> HANDLERS = new ArrayList<>();
 
     static {
         HANDLERS.addAll(Arrays.asList(sk.jacob.mpu.business.settings.Init.HANDLERS));

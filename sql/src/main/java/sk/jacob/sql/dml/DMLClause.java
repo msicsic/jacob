@@ -15,7 +15,7 @@ public abstract class DMLClause implements SqlClause {
 
     public static class ParamCounter {
         private Integer counter = new Integer(1);
-        private Map<String, Object> bindParams = new HashMap<String, Object>();
+        private Map<String, Object> bindParams = new HashMap<>();
 
         public String addParam(String columnName, Object paramValue) {
             StringBuffer sb = new StringBuffer(":");

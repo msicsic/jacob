@@ -37,5 +37,5 @@ public abstract class DbObject implements DDLClause {
             sb.append(outline);
         }
         return sb.toString();
-    };
+    }
 }

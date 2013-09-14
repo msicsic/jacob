@@ -2,15 +2,13 @@ package sk.jacob.engine;
 
 import sk.jacob.engine.handler.HandlerRegistry;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
-public abstract class ApplicationModule<T extends Annotation, K>
-        extends HandlerRegistry<T, K>
+public abstract class ApplicationModule<PAYLOAD>
+        extends HandlerRegistry<PAYLOAD>
         implements IApplicationModule {
-    protected ApplicationModule(Class<T> supportedAnnotation,
-                                Class<K> payloadSuperClass,
+    protected ApplicationModule(Class<PAYLOAD> payloadSuperClass,
                                 List<Class> messageHandlers) {
-        super(supportedAnnotation, payloadSuperClass, messageHandlers);
+        super(payloadSuperClass, messageHandlers);
     }
 }

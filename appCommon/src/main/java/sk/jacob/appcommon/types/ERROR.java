@@ -13,7 +13,7 @@ public abstract class ERROR {
         public void raise(String errorCode) {}
     };
 
-    private ERROR(){};
+    private ERROR(){}
 
     public static ERROR ifFalse(boolean ready) {
         if (ready) return READY;

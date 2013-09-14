@@ -88,14 +88,14 @@ public class Op {
     
     public static class In extends ConditionalOperation {
         public final Object column;
-        public final Collection<? extends Object> values;
+        public final Collection<?> values;
 
-        public In(String columnName, Collection<? extends Object> values) {
+        public In(String columnName, Collection<?> values) {
             this.column = columnName;
             this.values = values;
         }
 
-        public In(Column column, Collection<? extends Object> values) {
+        public In(Column column, Collection<?> values) {
             this.column = column;
             this.values = values;
         }
@@ -106,11 +106,11 @@ public class Op {
         }
     }
         
-    public static ConditionalOperation in(String columnName, Collection<? extends Object> values) {
+    public static ConditionalOperation in(String columnName, Collection<?> values) {
         return new In(columnName, values);
     }
 
-    public static ConditionalOperation in(Column column, Collection<? extends Object> values) {
+    public static ConditionalOperation in(Column column, Collection<?> values) {
         return new In(column, values);
     }
 }

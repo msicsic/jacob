@@ -11,7 +11,7 @@ import java.util.List;
 public class Insert extends DMLClause implements InsertClause {
     public final Table table;
     public final String tableName;
-    private final List<ColumnValue> columnValues = new ArrayList<ColumnValue>();
+    private final List<ColumnValue> columnValues = new ArrayList<>();
 
     public Insert(String tableName) {
         this.tableName = tableName;

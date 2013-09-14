@@ -6,14 +6,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public abstract class HandlerRegistry<T extends Annotation, K> {
+public abstract class HandlerRegistry<PAYLOAD> {
     protected static final Gson GSON = new Gson();
-    private final Class<T> supportedAnnotation;
-    private final Class<K> payloadSuperClass;
+    private final Class<? extends Annotation> supportedAnnotation = Handler.class;
+    private final Class<PAYLOAD> payloadSuperClass;
     protected Map<String, HandlerConfig> handlerMap = new HashMap<>();
 
-    protected HandlerRegistry(Class<T> supportedAnnotation, Class<K> payloadSuperClass, List<Class> handlerClasses) {
-        this.supportedAnnotation = supportedAnnotation;
+    protected HandlerRegistry(Class<PAYLOAD> payloadSuperClass, List<Class> handlerClasses) {
         this.payloadSuperClass = payloadSuperClass;
         this.handlerMap = mapHandlers(handlerClasses);
     }
@@ -70,5 +69,5 @@ public abstract class HandlerRegistry<T extends Annotation, K> {
     /**
      * Deserializes JSON raw request to corespondent Java object type.
      */
-    protected abstract void processPayload(ExecutionContext ec, Class<K> payloadClass);
+    protected abstract void processPayload(ExecutionContext ec, Class<PAYLOAD> payloadClass);
 }

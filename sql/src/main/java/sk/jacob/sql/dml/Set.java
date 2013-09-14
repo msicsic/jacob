@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Set extends DMLClause {
-    private final List<ColumnValue> columnValues = new ArrayList<ColumnValue>();
+    private final List<ColumnValue> columnValues = new ArrayList<>();
     private Where where;
 
     public Set(DMLClause parentDMLClause, ColumnValue... columnValues) {

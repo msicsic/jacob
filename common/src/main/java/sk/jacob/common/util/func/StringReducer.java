@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class StringReducer implements Functional.Reducer {
     private final String delimiter;
-    private static final Map<String, StringReducer> reducers = new HashMap<String, StringReducer>();
+    private static final Map<String, StringReducer> reducers = new HashMap<>();
 
     private StringReducer(String delimiter) {
         this.delimiter = delimiter;

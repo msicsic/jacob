@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Table extends DbObject {
-    public final List<Column> columns = new ArrayList<Column>();
+    public final List<Column> columns = new ArrayList<>();
 
     public Table(String name, Metadata metadata) {
         super(name);
