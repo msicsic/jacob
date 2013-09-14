@@ -9,6 +9,7 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import sk.jacob.engine.Bus;
 import sk.jacob.engine.Connector;
+import sk.jacob.engine.InPort;
 
 import java.util.Properties;
 
@@ -20,8 +21,7 @@ public class HttpConnector implements Connector {
     private final String guiName;
 
     private Server connectorInstance;
-    private Bus bus;
-    private String busPortId;
+    private InPort inPort;
 
     private static final String GUI_CONTEXT_PATH = "/ui";
 
@@ -40,14 +40,8 @@ public class HttpConnector implements Connector {
     }
 
     @Override
-    public void init(String busPortId, Bus bus) {
-        this.busPortId = busPortId;
-        this.bus = bus;
-    }
-
-    @Override
-    public String portId() {
-        return this.busPortId;
+    public void associateWith(InPort inPort) {
+        this.inPort = inPort;
     }
 
     @Override
@@ -107,7 +101,7 @@ public class HttpConnector implements Connector {
         context.setClassLoader(Thread.currentThread().getContextClassLoader());
         context.setAllowNullPathInfo(true);
 
-        CoreHandler coreHandler = new CoreHandler(this.busPortId, this.bus);
+        CoreHandler coreHandler = new CoreHandler(this.inPort);
         context.setHandler(coreHandler);
         return context;
     }

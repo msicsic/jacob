@@ -1,4 +1,4 @@
 package sk.jacob.engine;
 
-public interface Port {
+public interface OutPort {
 }
