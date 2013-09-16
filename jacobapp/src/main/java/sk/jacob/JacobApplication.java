@@ -23,9 +23,18 @@ public class JacobApplication implements Application {
 
     @Override
     public ExecutionContext onRequest(ExecutionContext ec) {
-        for(IApplicationModule applicationModule : moduleSequence) {
-            ec = applicationModule.onRequest(ec);
+        try {
+            for(IApplicationModule applicationModule : moduleSequence) {
+                ec = applicationModule.onRequest(ec);
+            }
+        } catch (Throwable t) {
+            onException(ec, t);
+        } finally {
+            return ec;
         }
-        return ec;
+    }
+
+    @Override
+    public void onException(ExecutionContext ec, Throwable t) {
     }
 }

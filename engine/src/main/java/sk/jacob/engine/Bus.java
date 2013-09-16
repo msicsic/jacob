@@ -11,8 +11,8 @@ import static sk.jacob.common.util.Log.logger;
 
 public class Bus {
     private final Application application;
-    private final Map<String, InPort> inPorts = new HashMap<>();
-    private final Map<String, OutPort> outPorts = new HashMap<>();
+    private final Map<String, InPort> inPortResources = new HashMap<>();
+    private final Map<String, OutPort> outPortResources = new HashMap<>();
 
     public Bus(Application application) {
         this.application = application;
@@ -20,18 +20,22 @@ public class Bus {
 
     public void attach(InPort inPort) {
         inPort.associateWith(this);
-        inPorts.put("/RESOURCES/PORTS/IN/" + inPort.id, inPort);
+        inPortResources.put("/RESOURCES/PORTS/IN/" + inPort.id, inPort);
     }
 
     public void attach(OutPort outPort) {
-        outPorts.put("/RESOURCES/PORTS/OUT/" + outPort.id, outPort);
+        outPortResources.put("/RESOURCES/PORTS/OUT/" + outPort.id, outPort);
     }
 
     public void start() {
         logger(this).info("Starting BUS ...");
-        for (InPort inPort : inPorts.values()) {
+        for (InPort inPort : inPortResources.values()) {
             logger(this).info("Starting CONNECTOR: " + inPort.id);
             inPort.start();
+        }
+        for (OutPort outPort : outPortResources.values()) {
+            logger(this).info("Starting CONNECTOR: " + outPort.id);
+            outPort.start();
         }
         logger(this).info("Bus started.");
     }
@@ -45,7 +49,7 @@ public class Bus {
     }
 
     private void injectPortResources(ExecutionContext ec) {
-        ec.INSTANCE.putAll(inPorts);
-        ec.INSTANCE.putAll(outPorts);
+        ec.INSTANCE.putAll(inPortResources);
+        ec.INSTANCE.putAll(outPortResources);
     }
 }

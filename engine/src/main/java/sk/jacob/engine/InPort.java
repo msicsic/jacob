@@ -6,7 +6,7 @@ import java.util.List;
 
 import static sk.jacob.common.util.Log.logger;
 
-public class InPort {
+public class InPort implements Port {
     public final String id;
     private Bus bus;
     private final List<Connector> connectors = new ArrayList<>();
@@ -33,6 +33,7 @@ public class InPort {
         return rawResponse;
     }
 
+    @Override
     public void start() {
         for(Connector connector : connectors) {
             connector.start();
