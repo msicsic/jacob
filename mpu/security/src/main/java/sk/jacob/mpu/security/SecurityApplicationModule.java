@@ -83,7 +83,7 @@ public class SecurityApplicationModule extends ApplicationModule {
     }
 
     @Override
-    protected String getMessageType(ExecutionContext ec) {
+    protected String getHandlerKeyFromMessage(ExecutionContext ec) {
         JsonObject securityElement = getSecurityElement(ec);
         return securityElement.get("type").getAsString();
     }

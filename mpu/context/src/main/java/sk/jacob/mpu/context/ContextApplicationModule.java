@@ -67,7 +67,7 @@ public class ContextApplicationModule extends ApplicationModule {
     }
 
     @Override
-    protected String getMessageType(ExecutionContext ec) {
+    protected String getHandlerKeyFromMessage(ExecutionContext ec) {
         RequestHeader rh = COMMON.MESSAGE.getFrom(ec).request.reqh;
         return rh.type + "." + rh.version;
     }

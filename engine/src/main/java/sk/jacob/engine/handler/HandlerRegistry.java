@@ -10,7 +10,6 @@ import java.util.*;
 
 public abstract class HandlerRegistry {
     protected static final Gson GSON = new Gson();
-    private final Class<? extends Annotation> handlerAnnotation = Handler.class;
     protected Map<String, HandlerConfig> handlerMap = new HashMap<>();
 
     protected HandlerRegistry(List<Class> handlerClasses) {
@@ -38,11 +37,11 @@ public abstract class HandlerRegistry {
     }
 
     private boolean isHandler(Method method) {
-        return method.isAnnotationPresent(handlerAnnotation);
+        return method.isAnnotationPresent(HandlerConfig.HANDLER_MARKER);
     }
 
     public final ExecutionContext process(ExecutionContext ec) {
-        String handlerKey = this.getMessageType(ec);
+        String handlerKey = this.getHandlerKeyFromMessage(ec);
         return invokeMethod(handlerKey, ec);
     }
 
@@ -64,7 +63,7 @@ public abstract class HandlerRegistry {
      * Gets actual type of message.
      * Handler type is then used by framework to lookup handler method.
      */
-    protected abstract String getMessageType(ExecutionContext ec);
+    protected abstract String getHandlerKeyFromMessage(ExecutionContext ec);
 
     /**
      * Deserializes JSON raw request to corespondent Java object type.
