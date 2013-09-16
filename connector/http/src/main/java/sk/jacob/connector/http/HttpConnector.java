@@ -9,9 +9,6 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import sk.jacob.appcommon.accessor.COMMON;
-import sk.jacob.appcommon.types.Message;
-import sk.jacob.engine.Bus;
 import sk.jacob.engine.Connector;
 import sk.jacob.engine.InPort;
 
@@ -49,6 +46,7 @@ public class HttpConnector implements Connector {
 
     @Override
     public void associateWith(InPort inPort) {
+        if(inPort != null) throw new RuntimeException("Connector already associated");
         this.inPort = inPort;
     }
 
@@ -142,6 +140,5 @@ public class HttpConnector implements Connector {
             httpServletResponse.getWriter().println(rawResponse);
         }
     }
-
 }
 

@@ -24,7 +24,7 @@ import static sk.jacob.sql.dml.DML.*;
 import static sk.jacob.sql.dml.Op.eq;
 import static sk.jacob.common.util.Log.logger;
 
-public class SecurityApplicationModule extends ApplicationModule<Token> {
+public class SecurityApplicationModule extends ApplicationModule {
     private final DbEngine dbEngine;
     private final Metadata MODEL = SecurityModel.INSTANCE.METADATA;
 
@@ -89,7 +89,7 @@ public class SecurityApplicationModule extends ApplicationModule<Token> {
     }
 
     @Override
-    protected void processPayload(ExecutionContext ec, Class<Token> payloadClass) {
+    protected void processPayload(ExecutionContext ec, Class<?> payloadClass) {
         JsonObject securityElement = getSecurityElement(ec);
         SECURITY.TOKEN.storeValue(GSON.fromJson(securityElement, payloadClass), ec);
     }

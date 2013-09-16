@@ -8,13 +8,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public abstract class HandlerRegistry<PAYLOAD> {
+public abstract class HandlerRegistry {
     protected static final Gson GSON = new Gson();
-    private final Class<? extends Annotation> supportedAnnotation = Handler.class;
-    private final Class<PAYLOAD> payloadSuperClass;
+    private final Class<? extends Annotation> handlerAnnotation = Handler.class;
+    private final Class<?> payloadSuperClass;
     protected Map<String, HandlerConfig> handlerMap = new HashMap<>();
 
-    protected HandlerRegistry(Class<PAYLOAD> payloadSuperClass, List<Class> handlerClasses) {
+    protected HandlerRegistry(Class<?> payloadSuperClass, List<Class> handlerClasses) {
         this.payloadSuperClass = payloadSuperClass;
         this.handlerMap = mapHandlers(handlerClasses);
     }
@@ -40,7 +40,7 @@ public abstract class HandlerRegistry<PAYLOAD> {
     }
 
     private boolean isHandler(Method method) {
-        return method.isAnnotationPresent(supportedAnnotation);
+        return method.isAnnotationPresent(handlerAnnotation);
     }
 
     public final ExecutionContext process(ExecutionContext ec) {
@@ -71,5 +71,5 @@ public abstract class HandlerRegistry<PAYLOAD> {
     /**
      * Deserializes JSON raw request to corespondent Java object type.
      */
-    protected abstract void processPayload(ExecutionContext ec, Class<PAYLOAD> payloadClass);
+    protected abstract void processPayload(ExecutionContext ec, Class<?> payloadClass);
 }

@@ -4,10 +4,10 @@ import sk.jacob.engine.handler.HandlerRegistry;
 
 import java.util.List;
 
-public abstract class ApplicationModule<PAYLOAD>
-        extends HandlerRegistry<PAYLOAD>
+public abstract class ApplicationModule
+        extends HandlerRegistry
         implements IApplicationModule {
-    protected ApplicationModule(Class<PAYLOAD> payloadSuperClass,
+    protected ApplicationModule(Class<?> payloadSuperClass,
                                 List<Class> messageHandlers) {
         super(payloadSuperClass, messageHandlers);
     }

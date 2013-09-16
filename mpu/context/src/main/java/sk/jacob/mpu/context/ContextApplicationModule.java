@@ -15,7 +15,7 @@ import java.util.*;
 
 import static sk.jacob.common.util.Log.logger;
 
-public class ContextApplicationModule extends ApplicationModule<RequestData> {
+public class ContextApplicationModule extends ApplicationModule {
     private static final Metadata MODEL = ContextModel.INSTANCE.METADATA;
     private final DbEngine dbEngine;
     private final Properties config;
@@ -73,9 +73,9 @@ public class ContextApplicationModule extends ApplicationModule<RequestData> {
     }
 
     @Override
-    protected void processPayload(ExecutionContext ec, Class<RequestData> payloadClass) {
+    protected void processPayload(ExecutionContext ec, Class<?> payloadClass) {
         Message message = COMMON.MESSAGE.getFrom(ec);
         JsonObject jsonRequest = message.jsonRequest;
-        message.request.reqd = GSON.fromJson(jsonRequest.get("reqd"), payloadClass);
+        message.request.reqd = (RequestData)GSON.fromJson(jsonRequest.get("reqd"), payloadClass);
     }
 }
