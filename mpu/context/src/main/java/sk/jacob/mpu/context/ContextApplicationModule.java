@@ -21,7 +21,7 @@ public class ContextApplicationModule extends ApplicationModule {
     private final Properties config;
 
     public ContextApplicationModule(Properties config) {
-        super(RequestData.class, handlerClasses());
+        super(handlerClasses());
         this.config = config;
         this.dbEngine = new DbEngine(CONFIG.CONTEXT_URL.get(config),
                                      CONFIG.CONTEXT_USERNAME.get(config),

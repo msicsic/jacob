@@ -11,11 +11,9 @@ import java.util.*;
 public abstract class HandlerRegistry {
     protected static final Gson GSON = new Gson();
     private final Class<? extends Annotation> handlerAnnotation = Handler.class;
-    private final Class<?> payloadSuperClass;
     protected Map<String, HandlerConfig> handlerMap = new HashMap<>();
 
-    protected HandlerRegistry(Class<?> payloadSuperClass, List<Class> handlerClasses) {
-        this.payloadSuperClass = payloadSuperClass;
+    protected HandlerRegistry(List<Class> handlerClasses) {
         this.handlerMap = mapHandlers(handlerClasses);
     }
 
@@ -31,7 +29,7 @@ public abstract class HandlerRegistry {
         Map<String, HandlerConfig> mappedHandlers = new HashMap<>();
         for (Method method : handlerClass.getDeclaredMethods()) {
             if (isHandler(method)) {
-                HandlerConfig handlerConfig = HandlerConfig.getInstance(method, payloadSuperClass);
+                HandlerConfig handlerConfig = HandlerConfig.getInstance(method);
                 mappedHandlers.put(handlerConfig.handlerKey, handlerConfig);
                 break;
             }

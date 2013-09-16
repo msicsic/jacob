@@ -29,7 +29,7 @@ public class SecurityApplicationModule extends ApplicationModule {
     private final Metadata MODEL = SecurityModel.INSTANCE.METADATA;
 
     public SecurityApplicationModule(Properties config) {
-        super(Token.class, handlerClasses());
+        super(handlerClasses());
         this.dbEngine = new DbEngine(CONFIG.SECURITY_URL.get(config),
                                      CONFIG.SECURITY_USERNAME.get(config),
                                      CONFIG.SECURITY_PASSWORD.get(config));

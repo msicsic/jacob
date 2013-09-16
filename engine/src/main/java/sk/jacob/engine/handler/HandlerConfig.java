@@ -21,19 +21,20 @@ public class HandlerConfig {
         this.handlerParameters = handlerParameters;
     }
 
-    public static HandlerConfig getInstance(Method handler, Class payloadSuperType) {
+    public static HandlerConfig getInstance(Method handler) {
         Class<?>[] handleParameters = handler.getParameterTypes();
         Class<?> payloadClass = lookupPayloadClass(handler, handleParameters);
         String handlerKey = null;
         return new HandlerConfig(handlerKey, handler, payloadClass, handleParameters);
     }
 
+    // TODO: Needs optimization
     private static Class lookupPayloadClass(Method handler, Class<?>[] handlerParameters) {
         Class returnValue = null;
         int i = 0;
         for(Annotation[] annotations : handler.getParameterAnnotations()) {
-            if (annotations.length == 1
-                && annotations[0].equals(Payload.class) ) {
+            if (   annotations.length == 1
+                && annotations[0].annotationType().equals(Payload.class) ) {
                 returnValue = handlerParameters[i];
                 break;
             }
