@@ -3,14 +3,22 @@ package sk.jacob.connector.http;
 import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import sk.jacob.appcommon.accessor.COMMON;
+import sk.jacob.appcommon.types.Message;
 import sk.jacob.engine.Bus;
 import sk.jacob.engine.Connector;
 import sk.jacob.engine.InPort;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Properties;
 
 public class HttpConnector implements Connector {
@@ -115,5 +123,25 @@ public class HttpConnector implements Connector {
         rewrite.addRule(redirect);
         return rewrite;
     }
+
+    private static class CoreHandler extends AbstractHandler {
+        private final InPort inPort;
+
+        public CoreHandler(InPort inPort) {
+            super();
+            this.inPort = inPort;
+        }
+
+        @Override
+        public void handle(String target, Request baseRequest, HttpServletRequest httpServletRequest,
+                           HttpServletResponse httpServletResponse) throws IOException, ServletException {
+            String rawResponse = this.inPort.onRequest(httpServletRequest.getParameter("m"));
+            httpServletResponse.setContentType("text/html;charset=utf-8");
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            baseRequest.setHandled(true);
+            httpServletResponse.getWriter().println(rawResponse);
+        }
+    }
+
 }
 

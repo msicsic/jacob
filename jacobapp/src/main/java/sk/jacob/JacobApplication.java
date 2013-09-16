@@ -16,11 +16,9 @@ public class JacobApplication implements Application {
     }
 
     private void initModules(final Properties config) {
-        moduleSequence.add(new MessageDeserializer());
         moduleSequence.add(new SecurityApplicationModule(config));
         moduleSequence.add(new ContextApplicationModule(config));
         moduleSequence.add(new BusinessApplicationModule());
-        moduleSequence.add(new MessageSerializer());
     }
 
     @Override

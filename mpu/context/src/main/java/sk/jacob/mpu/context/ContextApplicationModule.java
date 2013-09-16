@@ -74,10 +74,8 @@ public class ContextApplicationModule extends ApplicationModule<RequestData> {
 
     @Override
     protected void processPayload(ExecutionContext ec, Class<RequestData> payloadClass) {
-        JsonObject jsonRequest = COMMON.MESSAGE.getFrom(ec).jsonRequest;
-        Request request = new Request();
-        request.reqh = GSON.fromJson(jsonRequest.get("reqh"), RequestHeader.class);
-        request.reqd = GSON.fromJson(jsonRequest.get("reqd"), payloadClass);
-        COMMON.MESSAGE.getFrom(ec).request = request;
+        Message message = COMMON.MESSAGE.getFrom(ec);
+        JsonObject jsonRequest = message.jsonRequest;
+        message.request.reqd = GSON.fromJson(jsonRequest.get("reqd"), payloadClass);
     }
 }

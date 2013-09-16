@@ -1,6 +1,8 @@
 package sk.jacob.engine;
 
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.appcommon.types.Message;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,9 +36,12 @@ public class Bus {
         logger(this).info("Bus started.");
     }
 
-    public ExecutionContext onRequest(ExecutionContext ec) {
+    public Message onRequest(Message message) {
+        ExecutionContext ec = new ExecutionContext();
+        COMMON.MESSAGE.storeValue(message, ec);
         injectPortResources(ec);
-        return application.onRequest(ec);
+        ec = application.onRequest(ec);
+        return COMMON.MESSAGE.getFrom(ec);
     }
 
     private void injectPortResources(ExecutionContext ec) {

@@ -1,9 +1,6 @@
 package sk.jacob.engine;
 
-import sk.jacob.appcommon.accessor.COMMON;
-import sk.jacob.appcommon.types.ExecutionContext;
 import sk.jacob.appcommon.types.Message;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +24,13 @@ public class InPort {
         connectors.add(connector);
     }
 
-    public Message onRequest(Message message) {
-        logger(this).info(id + " --->>> " + message.rawRequest);
-        ExecutionContext ec = new ExecutionContext();
-        COMMON.MESSAGE.storeValue(message, ec);
-        ec = bus.onRequest(ec);
-        logger(this).info(id + " <<<--- " + COMMON.MESSAGE.getFrom(ec).rawResponse);
-        return COMMON.MESSAGE.getFrom(ec);
+    public String onRequest(String rawMessage) {
+        logger(this).info(id + " --->>> " + rawMessage);
+        Message message = Message.getInstance(rawMessage);
+        message = bus.onRequest(message);
+        String rawResponse = message.getRawResponse();
+        logger(this).info(id + " <<<--- " + rawResponse);
+        return rawResponse;
     }
 
     public void start() {

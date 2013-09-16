@@ -11,6 +11,8 @@ import java.util.Properties;
 
 public class Boot {
     public static void main(String[] args) {
+        if(args.length == 0) throw new RuntimeException("Missing config file argument.");
+
         Properties config = loadConfig(args[0]);
         InPort defaultInPort = new InPort("DEFAULT_PORT");
         defaultInPort.attach(new HttpConnector(config));
