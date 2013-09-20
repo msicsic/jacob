@@ -1,10 +1,11 @@
 package sk.jacob.engine.handler;
 
 import com.google.gson.Gson;
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.appcommon.types.ExecutionContext;
-import sk.jacob.engine.handler.annotation.Handler;
+import sk.jacob.appcommon.types.ResponseData;
 
-import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -50,9 +51,10 @@ public abstract class HandlerRegistry {
             try {
                 HandlerConfig handlerConfig = this.handlerMap.get(handlerKey);
                 Method handler = handlerConfig.handler;
-                processPayload(ec, handlerConfig.payloadClass);
-                ec = (ExecutionContext) handler.invoke(null, ec);
-            } catch (Exception e) {
+                mapPayload(ec, handlerConfig.payloadClass);
+                ResponseData responseData = (ResponseData) handler.invoke(null, ec);
+                COMMON.MESSAGE.getFrom(ec).response.resd = responseData;
+            } catch (InvocationTargetException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -68,5 +70,5 @@ public abstract class HandlerRegistry {
     /**
      * Deserializes JSON raw request to corespondent Java object type.
      */
-    protected abstract void processPayload(ExecutionContext ec, Class<?> payloadClass);
+    protected abstract void mapPayload(ExecutionContext ec, Class<?> payloadClass);
 }

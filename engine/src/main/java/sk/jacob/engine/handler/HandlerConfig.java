@@ -41,12 +41,12 @@ public class HandlerConfig {
 
     // TODO: Needs optimization
     private static Class lookupPayloadClass(Method handler) {
-        Class<?>[] handlerParameters = handler.getParameterTypes();
         Class returnValue = null;
         int i = 0;
         for(Annotation[] annotations : handler.getParameterAnnotations()) {
             if (   annotations.length == 1
                 && annotations[0].annotationType().equals(PAYLOAD_MARKER) ) {
+                Class<?>[] handlerParameters = handler.getParameterTypes();
                 returnValue = handlerParameters[i];
                 break;
             }
