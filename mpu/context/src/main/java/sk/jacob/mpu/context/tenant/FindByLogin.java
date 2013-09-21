@@ -1,5 +1,6 @@
 package sk.jacob.mpu.context.tenant;
 
+import sk.jacob.engine.handler.annotation.Payload;
 import sk.jacob.engine.handler.annotation.Resource;
 import sk.jacob.appcommon.types.*;
 import sk.jacob.engine.handler.annotation.Handler;
@@ -42,7 +43,7 @@ public class FindByLogin {
 
     @Handler(type = "context.tenant.findByLogin", version = "1.0")
     public static FindByLoginResd tenantFindByLogin(
-            FindByLoginReqd requestData,
+            @Payload FindByLoginReqd requestData,
             @Resource(location = "/Resources/context/connection") Connection conn
     ) throws Exception {
         Tenants tenants = ContextModel.INSTANCE.table(Tenants.class);

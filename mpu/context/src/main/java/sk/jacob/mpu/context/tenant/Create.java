@@ -1,5 +1,6 @@
 package sk.jacob.mpu.context.tenant;
 
+import sk.jacob.engine.handler.annotation.Payload;
 import sk.jacob.engine.handler.annotation.Resource;
 import sk.jacob.engine.handler.annotation.Handler;
 import sk.jacob.mpu.context.model.*;
@@ -29,7 +30,7 @@ public class Create {
     @Handler(type = "context.tenant.create",
                version = "1.0")
     public static CreateTenantResd tenantCrete (
-            CreateTenantReqd requestData,
+            @Payload CreateTenantReqd requestData,
             @Resource(location = "/abc") Connection conn,
             @Resource(location = "/Principal") Principal principal
     ) throws Exception {

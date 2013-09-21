@@ -73,9 +73,11 @@ public class ContextApplicationModule extends ApplicationModule {
     }
 
     @Override
-    protected void mapPayload(ExecutionContext ec, Class<?> payloadClass) {
+    protected Object mapPayload(ExecutionContext ec, Class<?> payloadClass) {
         Message message = COMMON.MESSAGE.getFrom(ec);
         JsonObject jsonRequest = message.jsonRequest;
-        message.request.reqd = (RequestData)GSON.fromJson(jsonRequest.get("reqd"), payloadClass);
+        RequestData payload = (RequestData)GSON.fromJson(jsonRequest.get("reqd"), payloadClass);
+        message.request.reqd = payload;
+        return payload;
     }
 }

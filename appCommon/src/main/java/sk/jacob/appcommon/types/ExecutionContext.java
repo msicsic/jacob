@@ -5,5 +5,7 @@ import java.util.Map;
 
 public class ExecutionContext {
     public EXECUTION_CONTEXT status = EXECUTION_CONTEXT.AFP;
-    public final Map<String, Object> INSTANCE = new HashMap<>();
+    public final Map<String, Object> INSTANCE = new HashMap<String, Object>() {{
+        put("/EXECUTION_CONTEXT", this);
+    }};
 }

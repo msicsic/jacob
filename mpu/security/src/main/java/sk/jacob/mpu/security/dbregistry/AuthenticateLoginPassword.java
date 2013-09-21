@@ -68,7 +68,7 @@ public class AuthenticateLoginPassword {
     @Handler(type="security.invalidate.token")
     public static void invalidateToken(
             @Payload InvalidateToken token,
-            @Resource(location = "/Security/DB/Connection")Connection conn
+            @Resource(location = SECURITY.CONNECTION_KEY)Connection conn
     ) throws Exception {
         Users users = SecurityModel.INSTANCE.table(Users.class);
         DMLClause s = update(users)

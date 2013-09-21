@@ -89,9 +89,11 @@ public class SecurityApplicationModule extends ApplicationModule {
     }
 
     @Override
-    protected void mapPayload(ExecutionContext ec, Class<?> payloadClass) {
+    protected Object mapPayload(ExecutionContext ec, Class<?> payloadClass) {
         JsonObject securityElement = getSecurityElement(ec);
-        SECURITY.TOKEN.storeValue(GSON.fromJson(securityElement, payloadClass), ec);
+        Object payload = GSON.fromJson(securityElement, payloadClass);
+        SECURITY.TOKEN.storeValue(payload, ec);
+        return payload;
     }
 
     private static JsonObject getSecurityElement(ExecutionContext ec) {

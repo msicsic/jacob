@@ -24,8 +24,8 @@ public class FlyBy {
     @Handler(type="security.flyby.token")
     public static void flyByToken(
             @Payload FlyByToken token,
-            @Resource(location = "/Security/DB/Connection")Connection conn,
-            @Resource(location = "/ExecutionContext")ExecutionContext ec
+            @Resource(location = SECURITY.CONNECTION_KEY)Connection conn,
+            @Resource(location = "/EXECUTION_CONTEXT")ExecutionContext ec
     ) throws Exception {
         Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
@@ -48,8 +48,8 @@ public class FlyBy {
     @Handler(type="security.flyby.login.password")
     public static void flyByLoginPassword(
             @Payload FlyByLoginPassword token,
-            @Resource(location = "/Security/DB/Connection")Connection conn,
-            @Resource(location = "/ExecutionContext")ExecutionContext ec
+            @Resource(location = SECURITY.CONNECTION_KEY)Connection conn,
+            @Resource(location = "/EXECUTION_CONTEXT")ExecutionContext ec
     ) throws Exception {
         Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)

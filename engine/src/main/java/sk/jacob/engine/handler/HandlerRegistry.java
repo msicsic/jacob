@@ -3,8 +3,12 @@ package sk.jacob.engine.handler;
 import com.google.gson.Gson;
 import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.appcommon.types.ExecutionContext;
+import sk.jacob.appcommon.types.Message;
 import sk.jacob.appcommon.types.ResponseData;
+import sk.jacob.appcommon.types.Return;
+import sk.jacob.engine.handler.annotation.Resource;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -31,7 +35,6 @@ public abstract class HandlerRegistry {
             if (isHandler(method)) {
                 HandlerConfig handlerConfig = HandlerConfig.getInstance(method);
                 mappedHandlers.put(handlerConfig.handlerKey, handlerConfig);
-                break;
             }
         }
         return mappedHandlers;
@@ -51,14 +54,46 @@ public abstract class HandlerRegistry {
             try {
                 HandlerConfig handlerConfig = this.handlerMap.get(handlerKey);
                 Method handler = handlerConfig.handler;
-                mapPayload(ec, handlerConfig.payloadClass);
-                ResponseData responseData = (ResponseData) handler.invoke(null, ec);
-                COMMON.MESSAGE.getFrom(ec).response.resd = responseData;
+                Object payload = mapPayload(ec, handlerConfig.payloadClass);
+                Object[] callArguments = createCallArguments(handlerConfig, payload, ec);
+                ResponseData responseData = (ResponseData) handler.invoke(null, callArguments);
+                ec = Return.RESPONSE(responseData, ec);
             } catch (InvocationTargetException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
         return ec;
+    }
+
+    private Object[] createCallArguments(HandlerConfig handlerConfig, Object payload, ExecutionContext ec) {
+        int argsLength = handlerConfig.parameterAnnotations.length;
+        Object[] callArgshandler = new Object[argsLength];
+        Annotation[][] parameterAnnotations = handlerConfig.parameterAnnotations;
+        for(int i = 0; i < argsLength; i++ ) {
+            if (parameterAnnotations[i].length == 0)
+                throw new RuntimeException(
+                        "Parameter without annotation found in handler ["
+                        + handlerConfig.handler
+                        + "] at parameter index ["
+                        + i
+                        + "]");
+            Class<?> annotationType = parameterAnnotations[i][0].annotationType();
+            //TODO: Factor out.
+            if (annotationType.equals(HandlerConfig.PAYLOAD_MARKER)) {
+                callArgshandler[i] = payload;
+            } else if (annotationType.equals(HandlerConfig.RESOURCE_MARKER)) {
+                String payloadLocation = ((Resource)parameterAnnotations[i][0]).location();
+                callArgshandler[i] = ec.INSTANCE.get(payloadLocation);
+            } else {
+                throw new RuntimeException(
+                        "Unknown annotation found in handler ["
+                                + handlerConfig.handler
+                                + "] at parameter index ["
+                                + i
+                                + "]");
+            }
+        }
+        return callArgshandler;
     }
 
     /**
@@ -68,7 +103,7 @@ public abstract class HandlerRegistry {
     protected abstract String getHandlerKeyFromMessage(ExecutionContext ec);
 
     /**
-     * Deserializes JSON raw request to corespondent Java object type.
+     * Maps message payload to module specific class.
      */
-    protected abstract void mapPayload(ExecutionContext ec, Class<?> payloadClass);
+    protected abstract Object mapPayload(ExecutionContext ec, Class<?> payloadClass);
 }

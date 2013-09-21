@@ -46,7 +46,7 @@ public class HttpConnector implements Connector {
 
     @Override
     public void associateWith(InPort inPort) {
-        if(inPort != null) throw new RuntimeException("Connector already associated");
+        if(this.inPort != null) throw new RuntimeException("Connector already associated");
         this.inPort = inPort;
     }
 

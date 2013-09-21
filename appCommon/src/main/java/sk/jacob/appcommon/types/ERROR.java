@@ -15,9 +15,9 @@ public abstract class ERROR {
 
     private ERROR(){}
 
-    public static ERROR ifFalse(boolean ready) {
-        if (ready) return READY;
-        else return SILENT;
+    public static ERROR ifFalse(boolean isOK) {
+        if (isOK) return SILENT;
+        else return READY;
     }
 
     abstract public void raise(String errorCode);

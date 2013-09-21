@@ -1,5 +1,6 @@
 package sk.jacob.mpu.context.tenant;
 
+import sk.jacob.engine.handler.annotation.Payload;
 import sk.jacob.engine.handler.annotation.Resource;
 import sk.jacob.appcommon.types.*;
 import sk.jacob.engine.handler.annotation.Handler;
@@ -32,7 +33,7 @@ public class ParamGet {
 
     @Handler(type = "context.tenant.paramGet", version = "1.0")
     public static ParamGetResd paramGet(
-            ParamGetReqd requestData,
+            @Payload ParamGetReqd requestData,
             @Resource(location = "/Resources/context/connection") Connection conn
     ) throws Exception {
         TenantsParams tenantsParams = ContextModel.INSTANCE.table(TenantsParams.class);

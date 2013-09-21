@@ -1,5 +1,6 @@
 package sk.jacob.appcommon.types;
 
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.common.util.locale.Bundle;
 
 import java.util.Locale;
@@ -36,7 +37,7 @@ public class Return {
 
     private static ExecutionContext ERROR_AND_EXCEPTION(String reason, String code, String text, ExecutionContext ec) {
         ec = FIN(ec);
-        Message message = initResponse(ec);
+        Message message = COMMON.MESSAGE.getFrom(ec);
         message.response.resh.status = MESSAGE_STATUS.INT.name();
 
         EXCEPTION EXCEPTION = new EXCEPTION();
@@ -49,19 +50,11 @@ public class Return {
 
     public static ExecutionContext RESPONSE(ResponseData responseData, ExecutionContext ec) {
         ec = FIN(ec);
-        Message message = initResponse(ec);
+        Message message = COMMON.MESSAGE.getFrom(ec);
         message.response.resh.status = MESSAGE_STATUS.OK.name();
         message.response.resh.messageId = message.request.reqh.messageId;
         message.response.resd = responseData;
         return ec;
-    }
-
-    private static Message initResponse(ExecutionContext ec) {
-//        Message message = COMMON.MESSAGE.getFrom(ec);
-//        message.response = new Response();
-//        message.response.resh = new ResponseHeader();
-//        return message;
-        return null;
     }
 
     private static ExecutionContext FIN(ExecutionContext ec) {
