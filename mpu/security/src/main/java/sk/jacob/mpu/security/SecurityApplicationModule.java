@@ -53,7 +53,7 @@ public class SecurityApplicationModule extends ApplicationModule {
             conn.txRollback();
             String errorCode = "security.general.token.exception";
             logger(this).error(errorCode, e);
-            ec = Return.EXCEPTION(errorCode, e, ec);
+            throw e;
         } finally {
             conn.close();
         }

@@ -56,7 +56,9 @@ public abstract class HandlerRegistry {
                 Object[] callArguments = createCallArguments(handlerConfig, payload, ec);
                 ResponseData responseData = (ResponseData) handler.invoke(null, callArguments);
                 ec = Return.RESPONSE(responseData, ec);
-            } catch (InvocationTargetException | IllegalAccessException e) {
+            } catch (InvocationTargetException e){
+                throw new RuntimeException(e.getTargetException());
+            } catch( IllegalAccessException e ) {
                 throw new RuntimeException(e);
             }
         }

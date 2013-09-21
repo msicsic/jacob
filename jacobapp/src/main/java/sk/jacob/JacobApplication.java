@@ -27,14 +27,15 @@ public class JacobApplication implements Application {
             for(IApplicationModule applicationModule : moduleSequence) {
                 ec = applicationModule.onRequest(ec);
             }
-        } catch (Throwable t) {
-            onException(ec, t);
+        } catch (RuntimeException e) {
+            onException(ec, e);
         } finally {
             return ec;
         }
     }
 
     @Override
-    public void onException(ExecutionContext ec, Throwable t) {
+    public void onException(ExecutionContext ec, Exception e) {
+        e.getCause();
     }
 }
