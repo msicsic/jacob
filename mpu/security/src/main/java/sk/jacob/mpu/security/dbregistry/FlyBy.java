@@ -1,5 +1,6 @@
 package sk.jacob.mpu.security.dbregistry;
 
+import sk.jacob.appcommon.accessor.COMMON;
 import sk.jacob.appcommon.accessor.SECURITY;
 import sk.jacob.engine.handler.annotation.Resource;
 import sk.jacob.appcommon.types.*;
@@ -25,7 +26,7 @@ public class FlyBy {
     public static void flyByToken(
             @Payload FlyByToken token,
             @Resource(location = SECURITY.CONNECTION_KEY)Connection conn,
-            @Resource(location = "/EXECUTION_CONTEXT")ExecutionContext ec
+            @Resource(location = COMMON.EXECUTION_CONTEXT_KEY)ExecutionContext ec
     ) throws Exception {
         Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)
@@ -49,7 +50,7 @@ public class FlyBy {
     public static void flyByLoginPassword(
             @Payload FlyByLoginPassword token,
             @Resource(location = SECURITY.CONNECTION_KEY)Connection conn,
-            @Resource(location = "/EXECUTION_CONTEXT")ExecutionContext ec
+            @Resource(location = COMMON.EXECUTION_CONTEXT_KEY)ExecutionContext ec
     ) throws Exception {
         Users users = SecurityModel.INSTANCE.table(Users.class);
         SqlClause s = select(users.login, users.username, users.admin)

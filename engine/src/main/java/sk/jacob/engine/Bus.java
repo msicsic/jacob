@@ -43,6 +43,7 @@ public class Bus {
     public Message onRequest(Message message) {
         ExecutionContext ec = new ExecutionContext();
         COMMON.MESSAGE.storeValue(message, ec);
+        COMMON.EXECUTION_CONTEXT.storeValue(ec, ec);
         injectPortResources(ec);
         ec = application.onRequest(ec);
         return COMMON.MESSAGE.getFrom(ec);
