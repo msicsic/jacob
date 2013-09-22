@@ -1,5 +1,9 @@
 package sk.jacob;
 
+import sk.jacob.appcommon.ApplicationException;
+import sk.jacob.appcommon.accessor.COMMON;
+import sk.jacob.appcommon.types.Interrupt;
+import sk.jacob.appcommon.types.Return;
 import sk.jacob.engine.Application;
 import sk.jacob.engine.IApplicationModule;
 import sk.jacob.mpu.business.BusinessApplicationModule;
@@ -27,15 +31,23 @@ public class JacobApplication implements Application {
             for(IApplicationModule applicationModule : moduleSequence) {
                 ec = applicationModule.onRequest(ec);
             }
-        } catch (RuntimeException e) {
-            onException(ec, e);
+        } catch (ApplicationException ae) {
+            ec = toErrorMessage(ec, ae);
+        } catch (Throwable t) {
+            ec = onException(ec, t);
         } finally {
             return ec;
         }
     }
 
     @Override
-    public void onException(ExecutionContext ec, Exception e) {
-        e.getCause();
+    public ExecutionContext onException(ExecutionContext ec, Throwable t) {
+        Return.INTERRUPT(Interrupt.Type.EXCEPTION, "ass", t, ec);
+        return ec;
+    }
+
+    public ExecutionContext toErrorMessage(ExecutionContext ec, ApplicationException ae) {
+        COMMON.MESSAGE.storeValue(ae.message, ec);
+        return ec;
     }
 }

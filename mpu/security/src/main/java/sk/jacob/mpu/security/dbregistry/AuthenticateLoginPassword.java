@@ -5,6 +5,7 @@ import sk.jacob.engine.handler.annotation.Resource;
 import sk.jacob.appcommon.types.*;
 import sk.jacob.engine.handler.annotation.Handler;
 import sk.jacob.engine.handler.annotation.Payload;
+import sk.jacob.mpu.security.dbregistry.codes.SecurityINT;
 import sk.jacob.mpu.security.dbregistry.model.SecurityModel;
 import sk.jacob.mpu.security.dbregistry.model.Users;
 import sk.jacob.sql.dml.DMLClause;
@@ -45,7 +46,7 @@ public class AuthenticateLoginPassword {
                 .where(and(eq(users.login, token.login),
                         eq(users.md5pwd, md5String(token.password))));
         JacobResultSet rs = (JacobResultSet)conn.execute(s);
-        ERROR.ifFalse(rs.next()).raise("security.invalid.login.password");
+        Interrupt.ifFalse(rs.next()).raise(SecurityINT.INVALID_LOGIN_PASSWORD);
 
         String generatedToken = uniqueToken();
         SqlClause u = update(users)
