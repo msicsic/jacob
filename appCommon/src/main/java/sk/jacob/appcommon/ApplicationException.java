@@ -5,7 +5,7 @@ import sk.jacob.appcommon.types.Message;
 public class ApplicationException extends RuntimeException {
     public final Message message;
 
-    public ApplicationException(Raisable raisable) {
+    public ApplicationException(Message message) {
         this.message = null;
     }
 }

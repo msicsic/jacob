@@ -42,7 +42,8 @@ public class JacobApplication implements Application {
 
     @Override
     public ExecutionContext onException(ExecutionContext ec, Throwable t) {
-        Return.INTERRUPT(Interrupt.Type.EXCEPTION, "ass", t, ec);
+        // TODO: setup interrupted message
+        //Return.INTERRUPT(Interrupt.Type.EXCEPTION, "ass", t, ec);
         return ec;
     }
 

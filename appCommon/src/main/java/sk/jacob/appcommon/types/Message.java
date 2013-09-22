@@ -14,6 +14,11 @@ public class Message<RQD extends RequestData, RSD extends ResponseData> {
     public final Request<RQD> request = new Request();
     public final Response<RSD> response = new Response<>();
 
+    public Message() {
+        this.rawRequest = null;
+        this.jsonRequest = null;
+    }
+
     private Message(String rawRequest) {
         this.rawRequest = rawRequest;
         this.jsonRequest = JSON_PARSER.parse(this.rawRequest).getAsJsonObject();

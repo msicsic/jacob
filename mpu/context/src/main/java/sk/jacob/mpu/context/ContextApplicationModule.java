@@ -54,7 +54,8 @@ public class ContextApplicationModule extends ApplicationModule {
             conn.txRollback();
             String errorCode = "context.general.context.exception";
             logger(this).error(errorCode, e);
-            ec = Return.INTERRUPT(Interrupt.Type.EXCEPTION, errorCode, e, ec);
+            //TODO: Raise Interrupt
+            //ec = Return.INTERRUPT(Interrupt.Type.EXCEPTION, errorCode, e, ec);
         } finally {
             conn.close();
         }
